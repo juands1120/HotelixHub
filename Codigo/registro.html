@@ -221,25 +221,26 @@
         </div>
         <div class="register-section">
             <h2>Registro</h2>
-            <form id="registro">
-                <input type="text" id="nombrec" placeholder="Ingrese su Nombre Completo">
-                <select id="tipodocumento">
+            <form id="registro" method="POST">
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su Nombre Completo">  
+                <input type="text" id="apellido" name="apellido" placeholder="Ingrese su Apellido Completo"> 
+                <select id="tipodocumento" name="tipodocumento">
                     <option value="">Seleccione Tipo de Documento</option>
                     <option value="CC">Cédula de Ciudadanía</option>
-                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="PA">Tarjeta de Identidad</option> 
                 </select>
-                <input type="text" id="numerodoc" placeholder="Ingrese su Número de Documento">
-                <input type="tel" id="numerotel" placeholder="Ingrese su Número de Celular">
-                <input type="email" id="correo" placeholder="Ingrese su email">
-                <select id="paisresi">
-                    <option value="">Seleccione tu País de Residencia</option>
-                    <option value="CO">Colombia</option>
-                    <option value="MX">México</option>
-                    <option value="ES">España</option>
-                </select>
-                <input type="password" id="password" placeholder="Ingrese su contraseña">
-                <button type="submit" class="btn">Registrarse</button>
+                <input type="text" id="numeroDocumento" name="numeroDocumento" placeholder="Ingrese su Número de Documento">
+                <input type="tel" id="numeroTelefono" name="numeroTelefono" placeholder="Ingrese su Número de Celular">
+                <input type="email" id="correo" name="correo" placeholder="Ingrese su email">
+                <input id="paisProcedencia" name="paisProcedencia" placeholder="Ingrese su País de Procedencia">
+                <input type="password" id="contraseña" name="contraseña" placeholder="Ingrese su contraseña">
+                <button type="submit" name="registro" class="btn" >Registrarse</button>
             </form>
+
+            <?php
+             include 'registrar.php';
+            ?>
+
         </div>
     </div>
 
@@ -278,40 +279,22 @@
         };
 
         document.getElementById('registro').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const nombrec = document.getElementById('nombrec').value.trim();
+            const nombre = document.getElementById('nombre').value.trim();
+            const apellido = document.getElementById('apellido').value.trim();
             const tipodocumento = document.getElementById('tipodocumento').value;
-            const numerodoc = document.getElementById('numerodoc').value.trim();
-            const numerotel = document.getElementById('numerotel').value.trim();
+            const numeroDocumento = document.getElementById('numeroDocumento').value.trim();
+            const numeroTelefono = document.getElementById('numeroTelefono').value.trim();
             const correo = document.getElementById('correo').value.trim();
-            const paisresi = document.getElementById('paisresi').value;
-            const password = document.getElementById('password').value;
+            const paisProcedencia = document.getElementById('paisProcedencia').value.trim();
+            const contraseña = document.getElementById('contraseña').value.trim();
 
-            // Validación simple de campos vacíos
-            if (!nombrec || !tipodocumento || !numerodoc || !numerotel || !correo || !paisresi || !password) {
+
+            if (!nombre || !apellido || !tipodocumento || !numeroDocumento || !numeroTelefono || !correo || !paisProcedencia || !contraseña) {
+                e.preventDefault(); 
                 showModal("Error", "Por favor, completa todos los campos antes de registrarte.");
-                return;
             }
-
-            // Guardar temporalmente en sessionStorage
-            const datosUsuario = {
-                nombrec,
-                tipodocumento,
-                numerodoc,
-                numerotel,
-                correo,
-                paisresi,
-                password
-            };
-
-            sessionStorage.setItem('datosRegistro', JSON.stringify(datosUsuario));
-
-            showModal("Éxito", "Datos registrados temporalmente en la sesión.");
-
-            // Opcional: limpiar el formulario
-            document.getElementById('registro').reset();
         });
+
     </script>
 </body>
 </html>
