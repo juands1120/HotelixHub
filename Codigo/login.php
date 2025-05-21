@@ -171,14 +171,14 @@
   <div class="container">
     <div class="login-box">
       <h3 class="text-center">Inicio de Sesión</h3>
-      <form id="loginForm" method="POST" action="verificarLogin.php">
+      <form id="loginForm" method="POST">
         <div class="form-group">
           <label>Correo Electrónico</label>
-          <input type="email" name="email" id="email" placeholder="Ingrese su email">
+          <input type="email" name="correo" id="correo" placeholder="Ingrese su email">
         </div>
         <div class="form-group">
           <label>Contraseña</label>
-          <input type="password" name="password" id="password" placeholder="Ingrese su contraseña">
+          <input type="password" name="contraseña" id="contraseña" placeholder="Ingrese su contraseña">
           <div class="text-end"><a href="#">¿Olvidó su contraseña?</a></div>
         </div>
         <button type="submit" class="btn">Iniciar Sesión</button>
@@ -200,62 +200,41 @@
     </div>
   </div>
 
-  <script>
-    function mostrarModal(mensaje) {
-      const modal = document.getElementById('customModal');
-      const mensajeElemento = document.getElementById('modalMessage');
-      mensajeElemento.textContent = mensaje;
-      modal.style.display = 'block';
-  
-      setTimeout(() => {
-        modal.style.display = 'none';
-      }, 3000);
+<script>
+  function mostrarModal(mensaje) {
+    const modal = document.getElementById('customModal');
+    const mensajeElemento = document.getElementById('modalMessage');
+    mensajeElemento.textContent = mensaje;
+    modal.style.display = 'block';
+
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 3000);
+  }
+
+  document.querySelector('.close').addEventListener('click', function () {
+    document.getElementById('customModal').style.display = 'none';
+  });
+
+  window.addEventListener('click', function (event) {
+    const modal = document.getElementById('customModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
     }
-  
-    document.querySelector('.close').addEventListener('click', function () {
-      document.getElementById('customModal').style.display = 'none';
-    });
-  
-    window.addEventListener('click', function (event) {
-      const modal = document.getElementById('customModal');
-      if (event.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-  //local storage//
-    document.getElementById('loginForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-  
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-  
-      const validEmail = "admin@hotelix.com";
-      const validPassword = "hotel123";
-  
-      if (email === '' || password === '') {
-        mostrarModal('Por favor, complete todos los campos.');
-        return;
-      }
-  
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        mostrarModal('Por favor, ingrese un correo electrónico válido.');
-        return;
-      }
-  
-      if (email === validEmail && password === validPassword) {
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('userEmail', email);
-  
-        mostrarModal('Inicio de sesión exitoso.');
-        setTimeout(() => {
-          window.location.href = "dashAdmin.html"; // redirección al dashboard admin
-        }, 1000);
-      } else {
-        mostrarModal('Correo o contraseña incorrectos.');
-      }
-    });
-  </script>
+  });
+
+  // Validación simple del formulario (solo para asegurarse que no esté vacío)
+  document.getElementById('loginForm').addEventListener('submit', function (event) {
+    const correo = document.getElementById('correo').value.trim();
+    const contraseña = document.getElementById('contraseña').value.trim();
+
+    if (correo === '' || contraseña === '') {
+      event.preventDefault(); // evitar envío
+      mostrarModal('Por favor, complete todos los campos.');
+    }
+  });
+</script>
+
   
   
 </body>
