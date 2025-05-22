@@ -227,7 +227,7 @@
                 <select id="tipodocumento" name="tipodocumento">
                     <option value="">Seleccione Tipo de Documento</option>
                     <option value="CC">Cédula de Ciudadanía</option>
-                    <option value="PA">Tarjeta de Identidad</option> 
+                    <option value="PA">Pasaporte</option> 
                 </select>
                 <input type="text" id="numeroDocumento" name="numeroDocumento" placeholder="Ingrese su Número de Documento">
                 <input type="tel" id="numeroTelefono" name="numeroTelefono" placeholder="Ingrese su Número de Celular">
