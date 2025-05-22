@@ -200,8 +200,10 @@
         .profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: flex-end;
+            gap: 13px;
             cursor: pointer;
+            padding-left: 1440px;
         }
 
         .profile-img {
@@ -415,6 +417,22 @@
             margin-top: 20px;
         }
 
+        .notification-item a{
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            gap: 10px;
+        }
+
+        .notification-item a{
+            text-decoration: none;
+            display: flex;
+
+        }   
+
         .notification-item {
             display: flex;
             align-items: center;
@@ -438,7 +456,7 @@
         }
 
         .notification-item-content {
-            flex: 1;
+            flex: 0.95;
         }
 
         .notification-item-name {
@@ -455,10 +473,10 @@
         .notification-item-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
         }
 
         .action-icon {
+            padding-left: 120px;
             color: #999;
             cursor: pointer;
         }
@@ -514,33 +532,30 @@
     </style>
 </head>
 <body>
-            <div class="barra-lateral">
+    <div class="barra-lateral">
 
-            <div class="logo">
-                <img src="img/Logo Positivo.png" alt="Logo" width="200px" height="70px">
-            </div>
-            <br><br>
+        <div class="logo">
+            <img src="img/Logo Positivo.png" alt="Logo" width="200px" height="70px">
+        </div>
+        <br><br>
             
-            <a href="dashAdmin.html"><div class="menu-item">Inicio</div></a>
-            <div class="menu-item">Habitaciones</div>
+        <a href="dashAdmin.html"><div class="menu-item">Inicio</div></a>
+        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
 
-            <div class="usu">
-                <button id="usuario">Usuarios</button>
-                <div class="usu-contenido">
-                    <a href="dashEmpleados.html">Empleados   </a>
-                    <a href="dashClientes.html">Clientes</a>
-                </div>
-            </div>
+        <div class="usu">
+            <button id="usuario">Usuarios</button>
+            <div class="usu-contenido">
+                <a href="dashEmpleados.html">Empleados   </a>
+                <a href="dashClientes.html">Clientes</a>
+        </div>
+        </div>
             <a href="productos.html"><div class="menu-item">Productos</div></a>
-        </div>    
+            <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
+        </div>
+    </div>    
 
     <div class="main-content">
         <div class="header">
-            <div class="search-bar">
-                <input type="text" placeholder="Buscar">
-                <button>🔍</button>
-                <button class="filter-btn">🔍</button>
-            </div>
             <div class="profile">
                 <span>Jose Cuervo</span>
                 <div class="profile-img">JC</div>
@@ -549,14 +564,13 @@
 
         <div class="welcome">
             <h2>Bienvenido, Jose</h2>
-            <p>Tienes 10 habitaciones disponibles en Pasarela</p>
         </div>
 
         <div class="dashboard-content">
             <div class="dashboard-left">
                 <div class="room-stats">
                     <div class="room-category">
-                        <h3>Habitaciones Pasarela</h3>
+                        <h3>Habitaciones Piso 2</h3>
                         <div class="stats-grid">
                             <div class="stat-box">
                                 <div class="stat-number">30</div>
@@ -572,13 +586,21 @@
                             </div>
                             <div class="stat-box">
                                 <div class="stat-number">15</div>
-                                <div class="stat-label">Check-In</div>
+                                <div class="stat-label">Ocupadas</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">15</div>
+                                <div class="stat-label">Check-Out</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">15</div>
+                                <div class="stat-label">Check-Out</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="room-category">
-                        <h3>Habitaciones Blackwater</h3>
+                        <h3>Habitaciones Piso 3</h3>
                         <div class="stats-grid">
                             <div class="stat-box">
                                 <div class="stat-number">20</div>
@@ -594,14 +616,77 @@
                             </div>
                             <div class="stat-box">
                                 <div class="stat-number">5</div>
+                                <div class="stat-label">Ocupadas</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
                                 <div class="stat-label">Check-In</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Check-Out</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="add-new">
-                        <div class="add-icon">+</div>
-                        <div class="add-text">Agregar Piso Nuevo</div>
+                        <div class="room-category">
+                        <h3>Habitaciones Piso 4</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-number">20</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Limpiando</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">10</div>
+                                <div class="stat-label">Disponibles</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Ocupadas</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Check-In</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Check-Out</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="room-category">
+                        <h3>Habitaciones Piso 5</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-number">20</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Limpiando</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">10</div>
+                                <div class="stat-label">Disponibles</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Disponibles</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Check-In</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Check-Out</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -619,6 +704,7 @@
             <div class="dashboard-right">
                 <h3 class="notifications-title">Notificaciones</h3>
                 <div class="notification-card active">
+                    
                     <div class="notification-user">
                         <div class="notification-avatar">J</div>
                         <div class="notification-name">Juan Mauricio Perez Florez</div>
@@ -636,13 +722,11 @@
                             <div class="notification-item-name">Juan Mauricio Perez Florez</div>
                             <div class="notification-item-room">301</div>
                         </div>
-                        <div class="notification-item-actions">
-                            <span class="action-icon">📋</span>
+                        <a id="notificacion" href="">
+                            <div class="notification-item-actions">
+                            <span class="action-icon">🟣</span>
                         </div>
+                        </a>
                     </div>
-
                     <div class="notification-item">
-                        <div class="notification-item-avatar">I</div>
-                        <div class="notification-item-content">
-                            <div class="notification-item-name">Ingrid Lorena Acevedo</div>
-                            <div
+</body>
