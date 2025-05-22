@@ -12,6 +12,7 @@ if (isset($_POST["registro"])) {
         strlen($_POST["paisProcedencia"]) >= 1 &&
         strlen($_POST["contraseña"]) >= 1
     ) {
+        $id_rol = 5; // Asigna el rol de cliente por defecto
         $nombre = trim($_POST["nombre"]);
         $apellido = trim($_POST["apellido"]);
         $tipodocumento = trim($_POST["tipodocumento"]);
@@ -31,8 +32,8 @@ if (isset($_POST["registro"])) {
             echo '<h3 class="bad">Este correo ya está registrado. Intenta con otro.</h3>';
         } else {
             // Insertar nuevo usuario
-            $stmt = $conexion->prepare("INSERT INTO usuario (nombre, apellido, tipodocumento, numeroDocumento, numeroTelefono, correo, paisProcedencia, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssssss", $nombre, $apellido, $tipodocumento, $numeroDocumento, $numeroTelefono, $correo, $paisProcedencia, $contraseña);
+            $stmt = $conexion->prepare("INSERT INTO usuario (id_rol, nombre, apellido, tipodocumento, numeroDocumento, numeroTelefono, correo, paisProcedencia, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("issssssss", $id_rol, $nombre, $apellido, $tipodocumento, $numeroDocumento, $numeroTelefono, $correo, $paisProcedencia, $contraseña);
 
             if ($stmt->execute()) {
                 echo '<h3 class="ok">Usuario registrado correctamente</h3>';
