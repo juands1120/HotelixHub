@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura con Barra Lateral</title>
+    <link rel="stylesheet" href="./css/ProductosClientes.css">
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<body>
+    <div class="contenido-principal">
+
+        <!--BARRA LATERAL-->    
+        <div class="barra-lateral">
+            <div class="logo">
+                <a href="Home.html"><img src="img_Home/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+            </div>
+            <button class="menu-btn" id="btnServicios">Servicios</button>
+            <button class="menu-btn" id="btnProductos">Productos</button>
+            <button class="cerrar-s">Cerrar Sesion</button>
+        </div>
+
+
+        <!--INFORMACION DEL CONTENIDO PRINCIPAL-->
+        <section class="informacion-contenido-principal">
+            <!-- Barra de búsqueda -->
+            <div class="barra-busqueda">
+                <button class="toggle-menu" onclick="document.querySelector('.barra-lateral').classList.toggle('abierta')">☰</button>
+                <input type="text" placeholder="Buscar producto..." id="input-busqueda">
+                <button id="btn-buscar">
+                    <img src="img_ProductosCliente/lupa busqueda.png" alt="Buscar" width="25px" height="25px">
+                </button>
+            </div>
+
+
+            <!-- Carrusel de Anuncios-->
+            <div class="carrusel-anuncios" id="carrusel">
+                <div class="texto-anuncio">
+                    <h3 id="textoCarruselTitulo"></h3>
+                    <p id="textoCarruselDescripcion"></p>
+                </div>
+                <img src="img/promocion.png" alt="Anuncio actual">
+            </div>
+
+
+            <!-- Categorías de productos -->
+            <h2 class="titulo-categoria">Productos</h2>
+
+            <div class="categorias">
+                <button class="btn-categoria" data-categoria="comida">
+                    <img src="img_ProductosCliente/restaurante 1.png" alt="comida">
+                    <p>Comida</p>
+                </button>
+
+                <button class="btn-categoria" data-categoria="bebidas">
+                    <img src="img_ProductosCliente/martini 1.png" alt="bebidas">
+                    <p>Bebida</p>
+                </button>
+
+                <button class="btn-categoria" data-categoria="aseo">
+                    <img src="img_ProductosCliente/jabon 1.png" alt="aseo">
+                    <p>Aseo</p>
+                </button>
+            </div>
+
+
+            <!--PRODCUTOS-->
+            <div class="seccion-productos">
+                <button class="btn-scroll" id="btn-izq">←</button>
+                <div class="contenedor-productos">
+                    <!--PRIMER PRODUCTO-->
+                    <div class="tarjeta-producto" data-tipo="producto" data-categoria="bebida">
+                        <div class="producto-info">
+                            <img class="img-producto" src="img_ProductosCliente/producto1.png" alt="Vino de Marchesi Antinori">
+                            <div class="contenido-producto">
+                                <h3>Vino de Marchesi Antinori</h3>
+                                <p>
+                                    Vino homónimo con una mezcla de 80% 
+                                    Cabernet Sauvignon, 20% Cabernet Franc,
+                                    aunque ahora ha evolucionado a una 
+                                    mezcla de 75% Cabernet Sauvignon, 5% 
+                                    Cabernet Franc, 20% Sangiovese
+                                </p>
+                                <span class="precio">$ 95.700</span>
+                            </div>
+                        </div>
+                        <div class="acciones-producto">
+                            <button class="btn-cantidad">−</button>
+                            <span class="cantidad">1</span>
+                            <button class="btn-cantidad">+</button>
+                            <button class="btn-agregar">Agregar al carrito</button>
+                        </div>
+                    </div>
+
+                    <!--SEGUNDO PRODUCTO-->
+                    <div class="tarjeta-producto" data-tipo="producto" data-categoria="comida">
+                        <div class="producto-info">
+                            <img class="img-producto" src="img_ProductosCliente/Producto2.png" alt="Godzilla Roll">
+                            <div class="contenido-producto">
+                                <h3>Godzilla Roll</h3>
+                                <p>
+                                    Sushi de camarón tempura, aguacate, queso crema,
+                                    envuelto en salmón y bañado en salsa spicy. 
+                                    ¡Una explosión de sabor!
+                                </p>
+                                <span class="precio">$ 87.300</span>
+                            </div>
+                        </div>
+                        <div class="acciones-producto">
+                            <button class="btn-cantidad">−</button>
+                            <span class="cantidad">1</span>
+                            <button class="btn-cantidad">+</button>
+                            <button class="btn-agregar">Agregar al carrito</button>
+                        </div>
+                    </div>
+
+                    <!--TERCER PRODUCTO-->
+                    <div class="tarjeta-producto" data-tipo="producto" data-categoria="aseo">
+                        <div class="producto-info">
+                            <img class="img-producto" src="img_ProductosCliente/Producto3.png" alt="Jabón de Lavanda Deluxe">
+                            <div class="contenido-producto">
+                                <h3>Jabón de Lavanda Deluxe</h3>
+                                <p>
+                                    Jabón artesanal con extracto de lavanda, ideal para 
+                                    relajarte después de un largo día. Fragancia duradera 
+                                    y sensación de frescura.
+                                </p>
+                                <span class="precio">$ 15.900</span>
+                            </div>
+                        </div>
+                        <div class="acciones-producto">
+                            <button class="btn-cantidad">−</button>
+                            <span class="cantidad">1</span>
+                            <button class="btn-cantidad">+</button>
+                            <button class="btn-agregar">Agregar al carrito</button>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta-producto" data-tipo="servicio" data-categoria="spa">
+                        <div class="producto-info">
+                            <img class="img-producto" src="img_ProductosCliente/Servicio1.png" alt="Spa Relax Premium">
+                            <div class="contenido-producto">
+                                <h3>Spa Relax Premium</h3>
+                                <p>
+                                    Sesión de spa de 60 minutos que incluye masaje relajante,
+                                    aromaterapia y acceso a jacuzzi privado. 
+                                    ¡El descanso que mereces!
+                                </p>
+                                <span class="precio">$ 120.000</span>
+                            </div>
+                        </div>
+                        <div class="acciones-producto">
+                            <button class="btn-cantidad">−</button>
+                            <span class="cantidad">1</span>
+                            <button class="btn-cantidad">+</button>
+                            <button class="btn-agregar">Agregar al carrito</button>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <button class="btn-scroll" id="btn-der">→</button>
+            </div>
+        </section>
+        
+        
+        <!--INFORMACION DEL USUARIO-->
+        <div class="info-usuario">
+            <div class="iniciales">LS</div>
+            <div class="nombre-email">
+                <h5>Luis Suares</h5>
+                <p>luisuares@gmail.com</p>
+            </div>
+            <div class="dropdown-sesion">
+                <button class="btn-sesion" onclick="toggleSesionMenu()">
+                    <img src="img_ProductosCliente/sesion.png" alt="sesion" >
+                </button>
+                <div class="menu-sesion" id="menuSesion">
+                    <button onclick="cerrarSesion()">Cerrar sesión</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!--INFORMACION DEL CARRITO-->
+        <div class="carrito">
+            <h3>Carrito</h3>
+            <div class="Orden">
+                <h3>Orden</h3>
+                <div class="lista-carrito">
+                    <div class="item-carrito">
+                        <img src="./img_ProductosCliente/producto1.png" alt="vino">
+                        <p>Vino de Marchesi Antinori</p>
+                        <p>$95.700 x 1</p>
+                    </div>
+                </div>
+            </div>
+            <div class="resumen-compra" id="resumen-compra">
+                <p>Subtotal: <span id="subtotal">$0</span></p>
+                <p>IVA (19%): <span id="iva">$0</span></p>
+                <p>Total: <span id="total">$0</span></p>
+            </div>
+            <button class="btnCompra">Realizar compra</button>
+        </div>
+
+
+    <!--AQUI CIERRA CONTENIDO PRINCIPAL-->
+    </div>
+
+    <!-- MODAL DE COMPRA -->
+    <div class="modal-compra" id="modalCompra">
+    <div class="contenido-modal">
+        <h2>Finalizar Compra</h2>
+
+        <!-- Resumen dinámico -->
+        <div id="resumenCompraModal" style="margin-bottom: 20px;"></div>
+
+        <form id="formPago" novalidate>
+        <div class="form-group">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" required pattern="^[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,}$" placeholder="Ej. Laura Martínez">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" required placeholder="Ej. laura@email.com">
+        </div>
+
+        <div class="form-group">
+            <label for="metodo">Método de pago</label>
+            <select id="metodo" name="metodo" required>
+            <option value="">Selecciona un método</option>
+            <option value="credito">Tarjeta de crédito</option>
+            <option value="debito">Tarjeta de débito</option>
+            <option value="efectivo">Pago en efectivo</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="grupo-tarjeta">
+            <label for="tarjeta">Número de tarjeta</label>
+            <input type="text" id="tarjeta" name="tarjeta" maxlength="16" minlength="13" pattern="\d{13,16}" placeholder="Ej. 1234567890123">
+        </div>
+
+
+        <div class="form-group botones">
+            <button type="submit" id="btnConfirmarCompra">Confirmar Compra</button>
+            <button type="button" onclick="cerrarModalCompra()">Cancelar</button>
+        </div>
+        </form>
+    </div>
+    </div>
+
+
+    <!--FUNCIONES Y VALIDACIONES JAVA SCRIPT-->
+    <script src="./JS/ProductosClientes.js"></script>
+</body>
+</html>
