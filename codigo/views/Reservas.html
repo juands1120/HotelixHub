@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas</title>
+    <link rel="stylesheet" href="./css/Reservas.css"> <!-- Enlace al archivo CSS -->
+</head>
+<body>
+    <!-- Contenedor principal del dashboard -->
+    <div class="dashboard-container">
+        <!-- BARRA DE NAVEGACIÓN -->
+        <div class="nav">
+            <!-- Logo y enlace a Home -->
+            <div class="nav-izquierda">
+                <a href="Home.html"><img src="img_Home/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+            </div>
+          
+            <!-- Título y subtítulo de la página -->
+            <div class="nav-centro">
+              <h2>Reservas</h2>
+              <p>Tu descanso empieza aquí</p>
+            </div>
+          
+            <!-- Botón para ver reservas existentes -->
+            <div class="nav-derecha">
+              <button id="btn-nav">Mis Reservas</button>
+            </div>
+        </div>
+          
+        <!-- SECCIÓN DE HABITACIONES DISPONIBLES -->
+        <section class="habitaciones">
+            <!-- Tarjeta de Habitación Sencilla -->
+            <div class="card-hab">
+              <img src="img_Reservas/sencilla (1).jpg" alt="Habitación Sencilla">
+              <h3>Habitación Sencilla</h3>
+              <ul>
+                <li> 1 cama individual</li>
+                <li> TV</li>
+                <li> Wifi</li>
+              </ul>
+              <p class="precio">$150.000 <span>cop</span></p>
+              <!-- Botón que redirige al formulario y pasa el tipo de habitación como dato -->
+              <a href="#formulario-reserva" class="btn-reservar" data-tipo="sencilla">Reservar</a>
+            </div>
+          
+            <!-- Tarjeta de Habitación Doble -->
+            <div class="card-hab">
+              <img src="img_Reservas/doble (1).webp" alt="Habitación Doble">
+              <h3>Habitación Doble</h3>
+              <ul>
+                <li>2 camas individuales</li>
+                <li>TV</li>
+                <li>Wifi</li>
+              </ul>
+              <p class="precio">$220.000 <span>cop</span></p>
+              <a href="#formulario-reserva" class="btn-reservar" data-tipo="doble">Reservar</a>
+            </div>
+          
+            <!-- Tarjeta de Habitación Triple -->
+            <div class="card-hab">
+              <img src="img_Reservas/triple (1).webp" alt="Habitación Triple">
+              <h3>Habitación Triple</h3>
+              <ul>
+                <li> 3 camas individuales</li>
+                <li> TV</li>
+                <li> Wifi</li>
+              </ul>
+              <p class="precio">$300.000 <span>cop</span></p>
+              <a href="#formulario-reserva" class="btn-reservar" data-tipo="triple">Reservar</a>
+            </div>
+        </section>
+          
+        <!-- CONTENIDO PRINCIPAL - FORMULARIO DE RESERVA -->
+        <div class="main-content">
+            <!-- Encabezado del formulario -->
+            <div class="header">
+                <h1>Nueva Reserva</h1>
+                <p>Completa el formulario para realizar tu reserva</p>
+            </div>
+
+            <!-- FORMULARIO DE RESERVA -->
+            <form class="reserva-form" id="formulario-reserva">
+                <!-- Sección 1: Datos personales -->
+                <div class="form-seccion">
+                    <h3>Introduce tus Datos</h3>
+                    
+                    <!-- Grupo: Nombre completo -->
+                    <div class="form-grupo">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" placeholder="Ingrese su nombre completo" required>
+                    </div>
+                    
+                    <!-- Grupo: Teléfono -->
+                    <div class="form-grupo">
+                        <label for="telf">Teléfono</label>
+                        <input type="tel" id="telf" placeholder="Ingrese su numero de telefono" autocomplete="phone" required>
+                    </div>
+                    
+                    <!-- Grupo: Número de huéspedes -->
+                    <div class="form-grupo">
+                        <label for="huesped">Número de Huéspedes</label>
+                        <input type="number" id="huesped" placeholder="Ingrese el numero de personas" min="1" required>
+                    </div>
+                    
+                    <!-- Grupo: Correo electrónico -->
+                    <div class="form-grupo">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" placeholder="Ingrese su correo" autocomplete="email" required>
+                    </div>
+
+                    <!-- Grupo: Tipo de habitación (selección) -->
+                    <div class="form-grupo">
+                        <label for="tipo-habitacion">Tipo de Habitación</label>
+                        <select id="tipo-habitacion" required>
+                            <option value="">Seleccione...</option>
+                            <option value="sencilla">Sencilla</option>
+                            <option value="doble">Doble</option>
+                            <option value="triple">Triple</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sección 2: Detalles de la estancia -->
+                <div class="form-seccion">
+                    <h3>Detalles de la Estancia</h3>
+                    
+                    <!-- Grupo: Fecha de entrada -->
+                    <div class="form-grupo">
+                        <label for="check-in">Fecha de Entrada</label>
+                        <input type="date" id="check-in" required>
+                    </div>
+                    
+                    <!-- Grupo: Fecha de salida -->
+                    <div class="form-grupo">
+                        <label for="check-out">Fecha de Salida</label>
+                        <input type="date" id="check-out" required>
+                    </div>
+                    
+                    <!-- Grupo: Servicios adicionales (checkboxes) -->
+                    <div class="form-grupo">
+                        <h4><strong>Servicios Adicionales</strong></h4>
+                        <div class="servicios-container">
+                            <!-- Opción 1: Spa -->
+                            <div class="servicio-option">
+                                <input type="checkbox" id="servicio-spa" name="servicios" value="Spa">
+                                <label for="servicio-spa">Spa Relajante (+$80.000)</label>
+                            </div>
+                            <!-- Opción 2: Desayuno -->
+                            <div class="servicio-option">
+                                <input type="checkbox" id="servicio-desayuno" name="servicios" value="Desayuno Buffet">
+                                <label for="servicio-desayuno">Desayuno Buffet (+$35.000 por persona)</label>
+                            </div>
+                            <!-- Opción 3: Parqueadero -->
+                            <div class="servicio-option">
+                                <input type="checkbox" id="servicio-parqueadero" name="servicios" value="Parqueadero">
+                                <label for="servicio-parqueadero">Parqueadero Cubierto (+$20.000 por noche)</label>
+                            </div>
+                            <!-- Opción 4: Lavandería -->
+                            <div class="servicio-option">
+                                <input type="checkbox" id="servicio-lavanderia" name="servicios" value="Lavandería">
+                                <label for="servicio-lavanderia">Servicio de Lavandería (+$45.000)</label>
+                            </div>
+                            <!-- Opción 5: Transporte -->
+                            <div class="servicio-option">
+                                <input type="checkbox" id="servicio-transporte" name="servicios" value="Transporte">
+                                <label for="servicio-transporte">Transporte Aeropuerto (+$60.000)</label>
+                            </div>
+                        </div>
+                        <!-- Mensaje de error (oculto inicialmente) -->
+                        <small id="error-servicios" style="color: red; display: none;">Máximo 3 servicios permitidos.</small>
+                    </div>
+                </div>
+
+                <!-- Botón de envío del formulario -->
+                <button type="submit" class="btn btn-block"><strong>Confirmar Reserva</strong></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE HISTORIAL DE RESERVAS (oculto inicialmente) -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <!-- Botón para cerrar el modal -->
+            <span class="close-modal">&times;</span>
+            <h2>Historial de Reservas</h2>
+            <!-- Contenedor donde se cargarán dinámicamente las reservas -->
+            <div class="historial-contenedor">
+                <!-- Mensaje por defecto cuando no hay reservas -->
+                <p>No hay reservas registradas.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JavaScript (con defer para ejecutar después de cargar el HTML) -->
+    <script src="./JS/Reservas.js" defer></script>
+</body>
+</html>
