@@ -28,7 +28,7 @@ if (isset($_SESSION['usuario'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HotelixHub - Inicio de Sesión</title>
-  <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" href="../asets/css/login.css">
 </head>
 <?php if (isset($_GET['error'])): ?>
   <script>

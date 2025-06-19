@@ -28,7 +28,8 @@ if (isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - HotelixHub</title>
-    <link rel="stylesheet" href="../css/registro.css">
+    <link rel="stylesheet" href="../asets/css/registro.css">
+
 </head>
 <body>
     <div class="header">
@@ -44,7 +45,7 @@ if (isset($_SESSION['usuario'])) {
         </div>
         <div class="register-section">
             <h2>Registro</h2>
-            <form id="registro" method="POST" action="../../controlador/guardarRegistro.php">
+            <form id="registro" method="POST" action="../controller/guardarRegistro.php">
                 <input type="text" id="nombre" name="nombre" placeholder="Ingrese su Nombre Completo" required>  
                 <input type="text" id="apellido" name="apellido" placeholder="Ingrese su Apellido Completo" required> 
                 <select id="tipodocumento" name="tipodocumento" required>

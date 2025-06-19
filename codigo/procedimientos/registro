@@ -1,0 +1,31 @@
+http://localhost/codigo/HotelixHub/codigo/views/login.php
+
+
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_registrar_usuario(
+    IN P_usu_idrol INT,
+    IN P_nombre VARCHAR(100),
+    IN P_apellido VARCHAR(100),
+    IN P_tipoDocumento VARCHAR(10),
+    IN P_numeroDocumento VARCHAR(100),
+    IN P_numeroTelefono VARCHAR(20),
+    IN P_paisProcedencia VARCHAR(100),
+    IN P_email VARCHAR(100),
+    IN P_password VARCHAR(255),
+    IN P_reset_token VARCHAR(255),
+    IN P_token_expires DATETIME
+)
+BEGIN
+    INSERT INTO usuarios (
+        usu_idrol, nombre, apellido, tipoDocumento, numeroDocumento, numeroTelefono, paisProcedencia, email, password, reset_token, token_expires
+    )
+    VALUES (
+        P_usu_idrol, P_nombre, P_apellido, P_tipoDocumento, P_numeroDocumento, P_numeroTelefono, P_paisProcedencia, P_email, P_password, P_reset_token, P_token_expires
+    );
+END $$
+
+DELIMITER ;

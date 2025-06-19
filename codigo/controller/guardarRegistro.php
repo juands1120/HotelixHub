@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../modelo/usuarioRegistro.php';
-require_once __DIR__ . '/../conexion/conexionbd.php';
-require_once __DIR__ . '/ServicioEmail.php'; 
+require_once __DIR__ . '/../models/usuarioRegistro.php';
+require_once __DIR__ . '/../config/conexionbd.php';
+require_once __DIR__ . '/../services/ServicioEmail.php'; 
 session_start();
 
 $usuario = new UsuarioRegistro($pdo);
@@ -9,7 +9,7 @@ $usuario = new UsuarioRegistro($pdo);
 // Registro
 if (isset($_POST['registrarse'])) {
     $data = [
-        'usu_idrol' => 2, // Rol por defecto
+        'usu_idrol' => 2, // Rol por defecto (cliente)
         'nombre' => $_POST['nombre'],
         'apellido' => $_POST['apellido'],
         'tipodocumento' => $_POST['tipodocumento'],
@@ -20,7 +20,20 @@ if (isset($_POST['registrarse'])) {
         'password' => $_POST['password'],
     ];
 
-    $registroExitoso = $usuario->registrar($data);
+    // Llamada al método con valores individuales
+    $registroExitoso = $usuario->registrar(
+        $data['usu_idrol'],
+        $data['nombre'],
+        $data['apellido'],
+        $data['tipodocumento'],
+        $data['numeroDocumento'],
+        $data['numeroTelefono'],
+        $data['paisProcedencia'],
+        $data['email'],
+        $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT),
+        null, // reset_token
+        null  // token_expires
+    );
 
     if ($registroExitoso) {
         // Enviar correo de bienvenida
@@ -31,6 +44,6 @@ if (isset($_POST['registrarse'])) {
         $servicioEmail->enviarCorreoBienvenida($correo, $nombre);
     }
 
-    header('Location: ../vista/dash/login.php');
+    header('Location: ../views/login.php');
     exit;
 }

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../conexion/conexionbd.php';
+require_once __DIR__ . '/../config/conexionbd.php';
 
 class UsuarioRegistro {
     private $pdo;
@@ -8,15 +8,21 @@ class UsuarioRegistro {
         $this->pdo = $pdo;
     }
 
-    public function registrar($data) {
-        $sql = "INSERT INTO usuarios (usu_idrol, nombre, apellido, tipodocumento, numeroDocumento, numeroTelefono, paisProcedencia, email, password)
-                VALUES (:usu_idrol,:nombre, :apellido, :tipodocumento, :numeroDocumento, :numeroTelefono, :paisProcedencia, :email, :password)";
+    public function registrar($usu_idrol, $nombre, $apellido, $tipodocumento, $numeroDocumento, $numeroTelefono, $paisProcedencia, $email, $password, $reset_token = null, $token_expires = null) {
+        $sql = "CALL sp_registrar_usuario(:usu_idrol, :nombre, :apellido, :tipodocumento, :numeroDocumento, :numeroTelefono, :paisProcedencia, :email, :password, :reset_token, :token_expires)";
         $stmt = $this->pdo->prepare($sql);
-        //encriptar la contraseña
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-        // Asignar el rol por defecto
-        $data['usu_idrol'] = 2;
-        return $stmt->execute($data);
+        $stmt->bindParam(':usu_idrol', $usu_idrol);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        $stmt->bindParam(':tipodocumento', $tipodocumento);
+        $stmt->bindParam(':numeroDocumento', $numeroDocumento);
+        $stmt->bindParam(':numeroTelefono', $numeroTelefono);
+        $stmt->bindParam(':paisProcedencia', $paisProcedencia);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':reset_token', $reset_token);
+        $stmt->bindParam(':token_expires', $token_expires);
+        return $stmt->execute();
     }
 
         // Método para buscar usuario por correo
