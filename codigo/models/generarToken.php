@@ -13,15 +13,15 @@ class PasswordController {
     }
 
     public function forgotPasswordForm() {
-        include_once __DIR__. '/../vista/dash/verificarCorreoToken.php';
+        include_once __DIR__. '/../views/verificarCorreoToken.php';
     }
 
     public function sendResetLink() {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         if (!$email) {
-            $error = "El correo ingresado no es válido.";
-            include __DIR__.'/../vista/dash/verificarCorreoToken.php';
-            return;
+            $message = "El correo que ingreso no es valido. Error: $enviado";
+                $mostrar_modal = true;
+                include __DIR__ . '/../views/verificarCorreoToken.php';
         }
 
         $user = $this->userModel->findByEmail($email);
@@ -29,20 +29,27 @@ class PasswordController {
             $token   = bin2hex(random_bytes(16));
             $expires = date("Y-m-d H:i:s", strtotime("+1 hour"));
             $this->userModel->updateResetToken($user['id_usuario'], $token, $expires);
-            $resetLink = "http://localhost/Codigo/vista/dash/nuevaContraseña.php?token=" . $token;
+            $resetLink = "http://localhost/Codigo/views/nuevaContraseña.php?token=" . $token;
 
             $enviado = $this->emailService->enviarCorreoRecuperacion($email, $user['nombre'], $resetLink);
 
             if ($enviado === true) {
                 $message = "Se ha enviado un enlace para recuperar tu contraseña al correo indicado.";
-                include __DIR__. '/../vista/dash/mensajeCorreo.php';
+                $mostrar_modal = true;
+                include __DIR__ . '/../views/verificarCorreoToken.php';
+
             } else {
-                $error = "No se pudo enviar el correo. Error: $enviado";
-                include __DIR__.'/../vista/dash/verificarCorreoToken.php';
+                $message = "No se pudo enviar el correo. Error: $enviado";
+                $mostrar_modal = true;
+                include __DIR__ . '/../views/verificarCorreoToken.php';
+
             }
         } else {
             $error = "El correo no está registrado en el sistema.";
-            include __DIR__.'/../vista/dash/verificarCorreoToken.php';
+            $mostrar_modal = true;
+            $message = $error;
+            include __DIR__.'/../views/verificarCorreoToken.php';
+
         }
     }
 }
