@@ -29,7 +29,7 @@ class PasswordController {
             $token   = bin2hex(random_bytes(16));
             $expires = date("Y-m-d H:i:s", strtotime("+1 hour"));
             $this->userModel->updateResetToken($user['id_usuario'], $token, $expires);
-            $resetLink = "http://localhost/Codigo/views/nuevaContraseña.php?token=" . $token;
+            $resetLink = "http://localhost/codigo/HotelixHub/codigo/views/nuevaContraseña.php?token=" . $token;
 
             $enviado = $this->emailService->enviarCorreoRecuperacion($email, $user['nombre'], $resetLink);
 

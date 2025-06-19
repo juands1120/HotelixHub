@@ -5,7 +5,7 @@
   <title>Restablecer Contraseña - HotelixHub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/nuevaContraseña.css">
+  <link rel="stylesheet" href="../assets/css/nuevaContraseña.css">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
   <div class="container">
     <div class="form-container">
       <h2>Restablecer <span style="color:#4c318f;">Contraseña</span></h2>
-      <form id="resetForm" method="POST" action="../../controlador/guardarNuevaContraseña.php?token=<?= htmlspecialchars($_GET['token']) ?>">
+      <form id="resetForm" method="POST" action="../controller/guardarNuevaContraseña.php?token=<?= htmlspecialchars($_GET['token']) ?>">
         <div class="input-group">
           <label for="newPassword">Nueva Contraseña</label>
           <input type="password" id="newPassword" name="nueva_contrasena" placeholder="Nueva Contraseña">

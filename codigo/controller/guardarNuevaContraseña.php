@@ -37,7 +37,7 @@ if ($userModel->updatePassword($user['id_usuario'], $nuevaContrasena)) {
     $userModel->clearResetToken($user['id_usuario']);
 
     // Redirigir a login con mensaje de éxito
-    header("Location: ../vista/dash/login.php?reset=success");
+    header("Location: ../views/login.php?reset=success");
     exit;
 } else {
     die("Error al actualizar la contraseña.");
