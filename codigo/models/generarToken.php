@@ -13,7 +13,7 @@ class PasswordController {
     }
 
     public function forgotPasswordForm() {
-        include_once __DIR__ . '/../views/verificarCorreoToken.php';
+        include_once __DIR__. '/../vista/dash/verificarCorreoToken.php';
     }
 
     public function sendResetLink() {

@@ -33,7 +33,7 @@ if (isset($_SESSION['usuario'])) {
 </head>
 <body>
     <div class="header">
-        <img src="/Codigo/vista/img/img_LoginYRegistro/Logo principal (2).png" alt="HotelixHub"  class="logo">
+        <img src="../asets/img/imgLoginRegistro/logoPrincipal.png" alt="HotelixHub"  class="logo">
     </div>
     <div class="container">
         <div class="login-section">
