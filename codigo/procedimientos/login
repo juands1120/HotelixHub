@@ -1,0 +1,8 @@
+DELIMITER $$
+
+CREATE PROCEDURE sp_login_usuario(IN p_email VARCHAR(100))
+BEGIN
+    SELECT * FROM usuarios WHERE email = p_email;
+END $$
+
+DELIMITER ;

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="/Codigo/vista/css/verificarCorreToken.css">
+<link rel="stylesheet" href="/../assets/css/verificarCorreoToken.css">
 </head>
 <body>
 
@@ -24,7 +24,7 @@
   <i class="fas fa-lock"></i>
     </div>
 
-      <form id="resetForm" method="post" action="/Codigo/controlador/generarToken.php">
+      <form id="resetForm" method="post" action="../models/generarToken.php">
         <div class="input-group">
           <input type="email" id="email" name="email" placeholder="📧 Ingrese su email" required>
         </div>

@@ -4,6 +4,6 @@ session_unset();
 session_destroy();
 
 // Redirige al login con un mensaje opcional
-header("Location: /codigo/vista/dash/login.php");
+header("Location: ../views/login.php");
 exit();
 

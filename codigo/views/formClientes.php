@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../controlador/sessionManager.php';
+require_once __DIR__ . '/../services/sessionManager.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HotelixHub - Clientes</title>
-  <link rel="stylesheet" href="../css/FormClientes.css">
+  <link rel="stylesheet" href="../assets/css/FormClientes.css">
 </head>
 <body>
   <div class="barra-lateral">

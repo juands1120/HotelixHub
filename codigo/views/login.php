@@ -28,7 +28,7 @@ if (isset($_SESSION['usuario'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HotelixHub - Inicio de Sesión</title>
-  <link rel="stylesheet" href="../asets/css/login.css">
+  <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 <?php if (isset($_GET['error'])): ?>
   <script>
@@ -44,7 +44,7 @@ if (isset($_SESSION['usuario'])) {
   <div class="container">
     <div class="login-box">
       <h3 class="text-center">Inicio de Sesión</h3>
-      <form id="loginForm" method="POST" action="../../controlador/iniciarLogin.php">
+      <form id="loginForm" method="POST" action="../controller/iniciarLogin.php">
         <div class="form-group">
           <label>Correo Electrónico</label>
           <input type="email" name="email" id="email" placeholder="Ingrese su email">

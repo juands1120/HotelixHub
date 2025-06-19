@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../conexion/conexionbd.php';
-require_once __DIR__ . '/../modelo/usuarioRegistro.php';
+require_once __DIR__ . '/../config/conexionbd.php';
+require_once __DIR__ . '/../models/usuarioRegistro.php';
 
 $userModel = new UsuarioRegistro($pdo);
 

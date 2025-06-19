@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../controlador/sessionManager.php';
+require_once __DIR__ . '/../services/sessionManager.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HotelixHub - Empleados</title>
-  <link rel="stylesheet" href="../css/DashEmpleados.css">
+  <link rel="stylesheet" href="../assets/css/formEmpleados.css">
 </head>
 <body>
           <div class="barra-lateral">
@@ -23,8 +23,8 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
             <div class="usu">
                 <button id="usuario">Usuarios</button>
                 <div class="usu-contenido">
-                    <a href="DashEmpleados.html">Empleados   </a>
-                    <a href="DashClientes.html">Clientes</a>
+                    <a href="formEmpleados.php">Empleados   </a>
+                    <a href="formClientes.php">Clientes</a>
                 </div>
             </div>
             <a href="ProductosAdmin.html"><div class="menu-item">Productos</div></a>
@@ -45,6 +45,12 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
 
     <h1 class="page-title">Empleados</h1>
     <h2 class="page-subtitle">Detalles</h2>
+
+    <section class="agregar-empleado">
+      <button>
+        Agregar Empleado
+      </button>
+    </section>
 
     <section class="employee-details">
       <div class="employee-detail-header">

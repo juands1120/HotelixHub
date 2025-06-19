@@ -1,35 +1,45 @@
 <?php
-require_once __DIR__ . '/../modelo/usuarioLogin.php';
-require_once __DIR__ . '/../conexion/conexionbd.php';
+require_once __DIR__ . '/../models/usuarioLogin.php';
+require_once __DIR__ . '/../config/conexionbd.php';
 session_start();
 
 $usuario = new Usuario($pdo);
 
 // Login
 if (isset($_POST['login'])) {
-    $user = $usuario->login($_POST['email'], $_POST['password']);
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $user = $usuario->login($email, $password);
     if ($user) {
         $_SESSION['usuario'] = $user;
 
         // Redireccionar según rol
         switch ($user['usu_idrol']) {
             case 1:
-                header('Location: ../vista/dash/dashAdmin.php');
+                header('Location: ../views/dashAdmin.php');
                 break;
             case 2:
-                header('Location: ../vista/dash/dashCliente.php');
+                header('Location: ../views/dashCliente.php');
                 break;
             case 3:
-                header('Location: ../vista/dash/dashOtro.php');
+                header('Location: ../views/dashOtro.php');
                 break;
             default:
-                // Si no tiene rol válido, cerrar sesión y mostrar error
                 session_destroy();
                 echo "Rol de usuario no válido.";
                 exit;
         }
-        exit; // Siempre después de header() para evitar que se siga ejecutando el código
+        exit;
     } else {
-        echo "Contraseña incorrecta.";
+        // Verificar si el correo existe
+        $stmt = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        if ($stmt->fetch()) {
+            echo "Contraseña incorrecta.";
+        } else {
+            echo "El correo no está registrado.";
+        }
     }
 }
+

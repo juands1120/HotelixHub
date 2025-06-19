@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../controlador/sessionManager.php';
+require_once __DIR__ . '/../services/sessionManager.php';
 
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../login.php');
@@ -35,7 +35,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
       <a href="#"><i class="fa fa-bed"></i>Habitaciones</a>
       <a href="#"><i class="fa fa-box"></i>Productos</a>
       <a href="#"><i class="fa fa-cog"></i>Ajustes</a>
-      <a href="/Codigo/controlador/logout.php"><i class="sesion"></i>Cerrar Sesion</a>
+      <a href="../controller/logout.php"><i class="sesion"></i>Cerrar Sesion</a>
     </nav>
   </aside>
 

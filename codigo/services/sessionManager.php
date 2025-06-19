@@ -11,7 +11,7 @@ if (isset($_SESSION['usuario'])) {
         if ($inactividad > $tiempoInactividad) {
             session_unset();
             session_destroy();
-            header("Location: ../dash/login.php");
+            header("Location: ../views/login.php");
             exit();
         }
     }

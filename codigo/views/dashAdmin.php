@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../controlador/sessionManager.php';
+require_once __DIR__ . '/../services/sessionManager.php';
 
 
 if (!isset($_SESSION['usuario'])) {
@@ -19,7 +19,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 1) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HoteluxHub Dashboard</title>
-    <link rel="stylesheet" href="../css/dashAdmin.css">
+    <link rel="stylesheet" href="../assets/css/dashAdmin.css">
 </head>
 
 <body>
@@ -35,13 +35,13 @@ if ($_SESSION['usuario']['usu_idrol'] != 1) {
         <div class="usu">
             <button id="usuario">Usuarios</button>
             <div class="usu-contenido">
-                <a href="FormEmpleados.php">Empleados</a>
-                <a href="FormClientes.php">Clientes</a>
-                
+                <a href="formEmpleados.php">Empleados</a>
+                <a href="formClientes.php">Clientes</a>
+
         </div>
         </div>
             <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
-            <a href="../../controlador/logout.php"><div class="logout">Cerrar Sesión</div></a>
+            <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
         </div>
 
     </div>    
