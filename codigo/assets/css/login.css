@@ -81,7 +81,7 @@
       position: relative;
       flex: 1;
       height: 100%;
-      background: url('../img/imgLoginRegistro/cuadro.jpg') no-repeat center center/cover;
+      background: url('../img/imgHome/cuadro.jpg') no-repeat center center/cover;
       display: flex;
       justify-content: center;
       align-items: center;

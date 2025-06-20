@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../controlador/sessionManager.php';
+require_once __DIR__ . '/../services/sessionManager.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,18 +7,18 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Nuevo Producto</title>
-    <link rel="stylesheet" href="../css/productosAdmin.css">
+    <link rel="stylesheet" href="../assets/css/productosAdmin.css">
 </head>
 <body>
             <div class="barra-lateral">
 
             <div class="logo">
-                <a href="Home.php"><img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub"  class="logo">
+                <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
             </div>
             <br><br>
             
             <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-            <a href="Habitacion.php"><div class="menu-item">Habitaciones</div></a>
+            <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
 
             <div class="usu">
                 <button id="usuario">Usuarios</button>

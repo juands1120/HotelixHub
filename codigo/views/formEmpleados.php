@@ -27,7 +27,7 @@ require_once __DIR__ . '/../services/sessionManager.php';
                     <a href="formClientes.php">Clientes</a>
                 </div>
             </div>
-            <a href="ProductosAdmin.html"><div class="menu-item">Productos</div></a>
+            <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
         </div>
 
   <main class="main">
