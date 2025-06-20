@@ -7,13 +7,13 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Nuevo Producto</title>
-    <link rel="stylesheet" href="../css/ProductosAdmin.css">
+    <link rel="stylesheet" href="../css/productosAdmin.css">
 </head>
 <body>
             <div class="barra-lateral">
 
             <div class="logo">
-                <a href="Home.php"><img src="/Codigo/vista/img/img_ProductosCliente/Logo Positivo (1).png" alt="HotelixHub"  class="logo">
+                <a href="Home.php"><img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub"  class="logo">
             </div>
             <br><br>
             
@@ -23,8 +23,8 @@ require_once __DIR__ . '/../../controlador/sessionManager.php';
             <div class="usu">
                 <button id="usuario">Usuarios</button>
                 <div class="usu-contenido">
-                    <a href="DashEmpleados.php">Empleados   </a>
-                    <a href="DashClientes.php">Clientes</a>
+                    <a href="formEmpleados.php">Empleados   </a>
+                    <a href="formClientes.php">Clientes</a>
                 </div>
             </div>
             <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>

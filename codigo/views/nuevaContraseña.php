@@ -11,7 +11,7 @@
 
   <!-- Logo con sombra -->
   <div class="logo-container">
-    <img src="/Codigo/vista/img/img_LoginYRegistro/Logo principal (2).png" alt="HotelixHub"  class="logo">
+    <img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub"  class="logo">
   </div>
 
   <!-- Contenedor principal -->
@@ -85,7 +85,7 @@
       showModal("¡Contraseña restablecida con éxito!");
 
       setTimeout(() => {
-        window.location.href = "login.html";
+        window.location.href = "login.php";
       }, 2000);
     });
 
@@ -139,6 +139,19 @@
       }, 300);
     }, 4000);
   </script>
+<?php if (!empty($mostrar_modal) && !empty($message)): ?>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("modal");
+    const modalMessage = document.getElementById("modalMessage");
+    modalMessage.textContent = <?php echo json_encode($message); ?>;
+    modal.style.display = 'block';
+    setTimeout(() => {
+      modal.classList.add('show');
+    }, 10);
+  });
+</script>
+<?php endif; ?>
 
 </body>
 </html>

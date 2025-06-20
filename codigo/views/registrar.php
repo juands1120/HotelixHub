@@ -28,7 +28,7 @@ if (isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - HotelixHub</title>
-    <link rel="stylesheet" href="../asets/css/registro.css">
+    <link rel="stylesheet" href="../assets/registro.css">
 
 </head>
 <body>

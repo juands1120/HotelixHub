@@ -28,7 +28,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
   <!-- BARRA LATERAL -->
   <aside class="barra-lateral">
     <div class="logo">
-      <img src="/Codigo/vista/img/img_ProductosCliente/Logo Positivo (1).png" alt="HotelixHub"  class="logo">
+      <img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub"  class="logo">
     </div>
     <nav>
       <a href="dashCliente.php"><i class="fa fa-home"></i>Inicio</a>

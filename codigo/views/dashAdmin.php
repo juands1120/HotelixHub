@@ -3,13 +3,13 @@ require_once __DIR__ . '/../services/sessionManager.php';
 
 
 if (!isset($_SESSION['usuario'])) {
-    header('Location: ../login.php');
+    header('Location: ../views/login.php');
     exit();
 }
 
 // Verificar que el rol sea administrador 
 if ($_SESSION['usuario']['usu_idrol'] != 1) {
-    header('Location: ../login.php'); // O a una página de error
+    header('Location: ../views/login.php'); // O a una página de error
     exit();
 }
 ?>
@@ -25,7 +25,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 1) {
 <body>
     <div class="barra-lateral">
         <div class="logo">
-            <a href="Home.php"><img src="/Codigo/vista/img/img_ProductosCliente/Logo Positivo (1).png" alt="HotelixHub" class="logo">
+            <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo">
         </div>
         <br><br>
             

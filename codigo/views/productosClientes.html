@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estructura con Barra Lateral</title>
-    <link rel="stylesheet" href="./css/ProductosClientes.css">
+    <link rel="stylesheet" href="../assets/css/productosClientes.css">
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <body>
@@ -13,7 +13,7 @@
         <!--BARRA LATERAL-->    
         <div class="barra-lateral">
             <div class="logo">
-                <a href="Home.html"><img src="img_Home/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+                <a href="Home.html"><img src="../assets/img/imgHome/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
             </div>
             <button class="menu-btn" id="btnServicios">Servicios</button>
             <button class="menu-btn" id="btnProductos">Productos</button>
@@ -28,7 +28,7 @@
                 <button class="toggle-menu" onclick="document.querySelector('.barra-lateral').classList.toggle('abierta')">☰</button>
                 <input type="text" placeholder="Buscar producto..." id="input-busqueda">
                 <button id="btn-buscar">
-                    <img src="img_ProductosCliente/lupa busqueda.png" alt="Buscar" width="25px" height="25px">
+                    <img src="../assets/img/imgProductosCliente/lupa busqueda.png" alt="Buscar" width="25px" height="25px">
                 </button>
             </div>
 
@@ -39,7 +39,7 @@
                     <h3 id="textoCarruselTitulo"></h3>
                     <p id="textoCarruselDescripcion"></p>
                 </div>
-                <img src="img/promocion.png" alt="Anuncio actual">
+                <img src="../assets/img/imgProductosCliente/promocion.png" alt="Anuncio actual">
             </div>
 
 
@@ -48,17 +48,17 @@
 
             <div class="categorias">
                 <button class="btn-categoria" data-categoria="comida">
-                    <img src="img_ProductosCliente/restaurante 1.png" alt="comida">
+                    <img src="../assets/img/imgProductosCliente/restaurante 1.png" alt="comida">
                     <p>Comida</p>
                 </button>
 
                 <button class="btn-categoria" data-categoria="bebidas">
-                    <img src="img_ProductosCliente/martini 1.png" alt="bebidas">
+                    <img src="../assets/img/imgProductosCliente/martini 1.png" alt="bebidas">
                     <p>Bebida</p>
                 </button>
 
                 <button class="btn-categoria" data-categoria="aseo">
-                    <img src="img_ProductosCliente/jabon 1.png" alt="aseo">
+                    <img src="../assets/img/imgProductosCliente/jabon 1.png" alt="aseo">
                     <p>Aseo</p>
                 </button>
             </div>
@@ -71,7 +71,7 @@
                     <!--PRIMER PRODUCTO-->
                     <div class="tarjeta-producto" data-tipo="producto" data-categoria="bebida">
                         <div class="producto-info">
-                            <img class="img-producto" src="img_ProductosCliente/producto1.png" alt="Vino de Marchesi Antinori">
+                            <img class="img-producto" src="../assets/img/imgProductosCliente/producto1.png" alt="Vino de Marchesi Antinori">
                             <div class="contenido-producto">
                                 <h3>Vino de Marchesi Antinori</h3>
                                 <p>
@@ -95,7 +95,7 @@
                     <!--SEGUNDO PRODUCTO-->
                     <div class="tarjeta-producto" data-tipo="producto" data-categoria="comida">
                         <div class="producto-info">
-                            <img class="img-producto" src="img_ProductosCliente/Producto2.png" alt="Godzilla Roll">
+                            <img class="img-producto" src="../assets/img/imgProductosCliente/Producto2.png" alt="Godzilla Roll">
                             <div class="contenido-producto">
                                 <h3>Godzilla Roll</h3>
                                 <p>
@@ -117,7 +117,7 @@
                     <!--TERCER PRODUCTO-->
                     <div class="tarjeta-producto" data-tipo="producto" data-categoria="aseo">
                         <div class="producto-info">
-                            <img class="img-producto" src="img_ProductosCliente/Producto3.png" alt="Jabón de Lavanda Deluxe">
+                            <img class="img-producto" src="../assets/img/imgProductosCliente/Producto3.png" alt="Jabón de Lavanda Deluxe">
                             <div class="contenido-producto">
                                 <h3>Jabón de Lavanda Deluxe</h3>
                                 <p>
@@ -138,7 +138,7 @@
 
                     <div class="tarjeta-producto" data-tipo="servicio" data-categoria="spa">
                         <div class="producto-info">
-                            <img class="img-producto" src="img_ProductosCliente/Servicio1.png" alt="Spa Relax Premium">
+                            <img class="img-producto" src="../assets/img/imgProductosCliente/Servicio1.png" alt="Spa Relax Premium">
                             <div class="contenido-producto">
                                 <h3>Spa Relax Premium</h3>
                                 <p>
@@ -173,7 +173,7 @@
             </div>
             <div class="dropdown-sesion">
                 <button class="btn-sesion" onclick="toggleSesionMenu()">
-                    <img src="img_ProductosCliente/sesion.png" alt="sesion" >
+                    <img src="../assets/img/imgProductosCliente/sesion.png" alt="sesion" >
                 </button>
                 <div class="menu-sesion" id="menuSesion">
                     <button onclick="cerrarSesion()">Cerrar sesión</button>
@@ -189,7 +189,7 @@
                 <h3>Orden</h3>
                 <div class="lista-carrito">
                     <div class="item-carrito">
-                        <img src="./img_ProductosCliente/producto1.png" alt="vino">
+                        <img src="../assets/img/imgProductosCliente/producto1.png" alt="vino">
                         <p>Vino de Marchesi Antinori</p>
                         <p>$95.700 x 1</p>
                     </div>
@@ -252,6 +252,6 @@
 
 
     <!--FUNCIONES Y VALIDACIONES JAVA SCRIPT-->
-    <script src="./JS/ProductosClientes.js"></script>
+    <script src="../assets/js/productosClientes.js"></script>
 </body>
 </html>

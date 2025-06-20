@@ -39,7 +39,7 @@ if (isset($_SESSION['usuario'])) {
 <?php endif; ?>
 
 <body>
-  <img src="../asets/img/imgLoginRegistro/logoPrincipal.png" alt="HotelixHub" width="500" height="400" class="logo">
+  <img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub" width="500" height="400" class="logo">
 
   <div class="container">
     <div class="login-box">
