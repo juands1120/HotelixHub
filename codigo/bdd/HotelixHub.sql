@@ -18,9 +18,11 @@ CREATE TABLE `hotelixhub`.`usuarios` (
   password VARCHAR(255) NOT NULL,
   reset_token VARCHAR(255) DEFAULT NULL,
   token_expires DATETIME DEFAULT NULL,
+  estado ENUM('en turno', 'fuera de turno', 'vacaciones', 'capacitacion') NOT NULL DEFAULT 'en turno',
+  direccion VARCHAR(100) NOT NULL,
   FOREIGN KEY (usu_idrol) REFERENCES rol(id_rol)
 );
 
-INSERT INTO rol(id_rol, rol_nombre) VALUES ('1','administrador') , ('2','cliente');
+INSERT INTO rol(id_rol, rol_nombre) VALUES ('1','administrador') , ('2','cliente'),('3','recepcionista'), ('4','cocinero'),('5','camarero');
 
 

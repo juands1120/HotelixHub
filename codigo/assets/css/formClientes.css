@@ -13,129 +13,150 @@
     }
 
   .barra-lateral {
-      background-color: #402E7A;
-      color: white;
-      padding: 20px;
-  }
+            background-color: #402E7A;
+            color: white;
+            padding: 20px;
+        }
 
-  .barra-lateral h2 {
-      color: #ecf0f1;
-      padding-bottom: 10px;
-  }
+        .barra-lateral h2 {
+            color: #ecf0f1;
+            padding-bottom: 10px;
+        }
 
-  .menu-item {
-      padding: 12px 15px;
-      margin: 20px 0;
-      cursor: pointer;
-      background: transparent;
-      transition: background-color 0.3s;
-      color: #ffffff;
-      border-radius: 8px;
-      font-size: 18px;
-      border: 1px solid transparent;
-      font-weight: 400;
-      cursor: pointer;
-  }
+        .menu-item {
+            padding: 12px 15px;
+            margin: 20px 0;
+            cursor: pointer;
+            background: transparent;
+            transition: background-color 0.3s;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 18px;
+            border: 1px solid transparent;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        .logout{
+            padding: 12px 15px;
+            margin-top: 420px;
+            cursor: pointer;
+            background: transparent;
+            transition: background-color 0.3s;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 18px;
+            border: 1px solid transparent;
+            font-weight: 400;
+        }
+        .logout {animation: slideIn 2s;}
+        @keyframes slideIn{
+            0%{transform: translateX(0);}
+            100%{transform: translateX(20%);}
+        }
 
-  .menu-item {animation: slideIn 2s;}
-  @keyframes slideIn{
-      0%{transform: translateX(0);}
-      100%{transform: translateX(20%);}
-  }
+        .logout:hover {
+        box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 40px #ffffff, 0 0 80px #ffffff, 0 0 0px #ffffff ;
+        }
 
-  .menu-item:hover {
-      box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 40px #ffffff, 0 0 80px #ffffff, 0 0 0px #ffffff ;
-  }
+        .menu-item {animation: slideIn 2s;}
+        @keyframes slideIn{
+            0%{transform: translateX(0);}
+            100%{transform: translateX(20%);}
+        }
 
-  .usu {
-    position: relative;
-    display: inline-block;
-  }
+        .menu-item:hover {
+            box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 40px #ffffff, 0 0 80px #ffffff, 0 0 0px #ffffff ;
+        }
 
-  /* Botón principal */
-  .usu button {
-    padding: 12px 130px 12px 20px;
-    background: transparent;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 400;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: box-shadow 0.3s, transform 0.3s;
-    animation: slideIn 0.6s ease-in-out;
-    text-align: left;
-  }
+        .usu {
+        position: relative;
+        display: inline-block;
+        }
 
-  /* Animación de entrada */
-  @keyframes slideIn {
-    0% {
-      transform: translateX(-20%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
+        /* Botón principal */
+        .usu button {
+        padding: 12px 130px 12px 20px;
+        background: transparent;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 400;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: box-shadow 0.3s, transform 0.3s;
+        animation: slideIn 0.6s ease-in-out;
+        text-align: left;
+        }
 
-  /* Hover botón */
-  .usu button:hover {
-    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
-  }
+        /* Animación de entrada */
+        @keyframes slideIn {
+        0% {
+            transform: translateX(-20%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        }
 
-  /* Contenedor desplegable */
-  .usu-contenido {
-    display: none;
-    position: absolute;
-    top: 100%; /* bajo el botón */
-    left: 0;
-    background: #402E7A;
-    color: #fff;
-    min-width: 180px;
-    border-radius: 6px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-  }
+        /* Hover botón */
+        .usu button:hover {
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
+        }
 
-  /* Enlaces dentro del dropdown */
-  .usu-contenido a {
-    display: block;
-    padding: 12px 115px 12px 20px;
-    text-decoration: wavy;
-    color: #ffffff;
-    font-size: 15px;
-    transition: background-color 0.3s;
-  }
+        /* Contenedor desplegable */
+        .usu-contenido {
+        display: none;
+        position: absolute;
+        top: 100%; /* bajo el botón */
+        left: 0;
+        background: #402E7A;
+        color: #fff;
+        min-width: 180px;
+        border-radius: 6px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        }
 
-  /* Hover enlaces */
-  .usu-contenido a:hover {
-    background-color: #ffffff;
-    color: #402E7A;
-  }
+        /* Enlaces dentro del dropdown */
+        .usu-contenido a {
+        display: block;
+        padding: 12px 115px 12px 20px;
+        text-decoration: wavy;
+        color: #ffffff;
+        font-size: 15px;
+        transition: background-color 0.3s;
+        }
 
-  /* Mostrar dropdown al hacer hover */
-  .usu:hover .usu-contenido {
-    display: block;
-  }
+        /* Hover enlaces */
+        .usu-contenido a:hover {
+        background-color: #ffffff;
+        color: #402E7A;
+        }
 
-  /* Flecha decorativa */
-  .usu::after {
-    content: "▼";
-    font-size: 0.6rem;
-    color: #fff;
-    position: absolute;
-    right: 18px; /* 🠖 Alineación a la derecha */
-    top: 40%;
-    transform: translateY(-50%);
-    transition: transform 0.3s;
-  }
+        /* Mostrar dropdown al hacer hover */
+        .usu:hover .usu-contenido {
+        display: block;
+        }
+
+        /* Flecha decorativa */
+        .usu::after {
+        content: "▼";
+        font-size: 0.6rem;
+        color: #fff;
+        position: absolute;
+        right: 18px; /* 🠖 Alineación a la derecha */
+        top: 40%;
+        transform: translateY(-50%);
+        transition: transform 0.3s;
+        }
 
 
-  /* Rotar flecha al hacer hover */
-  .usu:hover::after {
-    transform: rotate(180deg);
-  }
+        /* Rotar flecha al hacer hover */
+        .usu:hover::after {
+        transform: rotate(180deg);
+        }
 
     .main {
       flex: 1;

@@ -1,0 +1,51 @@
+DELIMITER $$
+
+CREATE PROCEDURE sp_registrar_empleado(
+    IN P_nombre VARCHAR(100),
+    IN P_apellido VARCHAR(100),
+    IN P_tipoDocumento VARCHAR(100),
+    IN P_numeroDocumento VARCHAR(10),
+    IN P_direccion VARCHAR(100),
+    IN P_email VARCHAR(20),
+    IN P_numeroTelefono VARCHAR(100),
+    IN P_usu_rol INT,
+    IN P_estado VARCHAR(100),
+    IN P_password VARCHAR(255),
+    IN P_reset_token VARCHAR(255),
+    IN P_token_expires DATETIME
+)
+BEGIN
+    INSERT INTO usuarios (
+        usu_idrol, nombre, apellido, tipoDocumento, numeroDocumento, numeroTelefono, direccion, email, password, estado, reset_token, token_expires
+    )
+    VALUES (
+        P_usu_idrol, P_nombre, P_apellido, P_tipoDocumento, P_numeroDocumento, P_numeroTelefono, P_direccion, P_email, P_password, P_estado, P_reset_token, P_token_expires
+    );
+END $$
+
+DELIMITER ;
+
+/*selecionar empleados*/
+
+DELIMITER //
+
+CREATE PROCEDURE sp_obtener_empleados()
+BEGIN
+  SELECT 
+    u.id_usuario,
+    r.rol_nombre,
+    u.nombre,
+    u.apellido,
+    u.tipoDocumento,
+    u.numeroDocumento,
+    u.numeroTelefono,
+    u.paisProcedencia,
+    u.email,
+    u.estado,
+    u.direccion
+  FROM usuarios u
+  INNER JOIN rol r ON u.usu_idrol = r.id_rol
+  WHERE u.usu_idrol IN (3, 4, 5); -- solo empleados
+END //
+
+DELIMITER ;

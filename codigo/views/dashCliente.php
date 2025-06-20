@@ -1,8 +1,9 @@
 <?php
 require_once __DIR__ . '/../services/sessionManager.php';
 
+
 if (!isset($_SESSION['usuario'])) {
-    header('Location: ../login.php');
+    header('Location: ../views/login.php');
     exit();
 }
 

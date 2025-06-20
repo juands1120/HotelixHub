@@ -1,4 +1,13 @@
 <?php
+
+require_once __DIR__ . '/../services/sessionManager.php';
+
+
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../views/login.php');
+    exit();
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,7 +22,13 @@ if (isset($_SESSION['usuario'])) {
             header('Location: dashCliente.php');
             break;
         case 3:
-            header('Location: dashOtro.php');
+            header('Location: dashAdmin.php');
+            break;
+        case 4:
+            header('Location: dashAdmin.php');
+            break;
+        case 5:
+            header('Location: dashAdmin.php');
             break;
         default:
             header('Location: ../login.php');
@@ -71,6 +86,8 @@ if (isset($_SESSION['usuario'])) {
         <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
+
+
 
 <script>
 // Redirigir al inicio de sesión

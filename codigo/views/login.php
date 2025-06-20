@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../services/sessionManager.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -72,6 +74,7 @@ if (isset($_SESSION['usuario'])) {
       <p id="modalMessage"></p>
     </div>
   </div>
+
 
 <script>
   function mostrarModal(mensaje) {

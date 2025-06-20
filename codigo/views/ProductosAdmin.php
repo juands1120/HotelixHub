@@ -1,5 +1,11 @@
 <?php
 require_once __DIR__ . '/../services/sessionManager.php';
+
+
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../views/login.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,6 +34,7 @@ require_once __DIR__ . '/../services/sessionManager.php';
                 </div>
             </div>
             <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
+            <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
         </div>
     
     <div class="main-content">

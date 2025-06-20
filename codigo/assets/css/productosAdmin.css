@@ -11,13 +11,10 @@
             background-color: #ffffff;
         }
 
-        .barra-lateral {
-            height: 999px;
-            background-color: #3f317e;
+.barra-lateral {
+            background-color: #402E7A;
             color: white;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 20px;
+            padding: 20px;
         }
 
         .barra-lateral h2 {
@@ -37,6 +34,27 @@
             border: 1px solid transparent;
             font-weight: 400;
             cursor: pointer;
+        }
+        .logout{
+            padding: 12px 15px;
+            margin-top: 420px;
+            cursor: pointer;
+            background: transparent;
+            transition: background-color 0.3s;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 18px;
+            border: 1px solid transparent;
+            font-weight: 400;
+        }
+        .logout {animation: slideIn 2s;}
+        @keyframes slideIn{
+            0%{transform: translateX(0);}
+            100%{transform: translateX(20%);}
+        }
+
+        .logout:hover {
+        box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 40px #ffffff, 0 0 80px #ffffff, 0 0 0px #ffffff ;
         }
 
         .menu-item {animation: slideIn 2s;}
