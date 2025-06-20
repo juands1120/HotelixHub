@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 500px;
+}
+
+.error-img {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-size: 48px;
+  color:#402e7a;
+  margin-bottom: 10px;
+
+}
+
+p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  margin-top: 50px;
+
+}
+
+.btn {
+  text-decoration: none;
+  background-color: #402e7a; /* o el color que uses */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-top: 25px; /* <<--- AQUI SE AGREGA LA SEPARACIÓN */
+}
+
+.btn:hover {
+  background-color: #402e7a; /* color más oscuro al pasar el mouse */
+}
+
+
+.error-img {
+  width: 100%;
+  max-width: 300px;
+  height: 350px; 
+  margin-bottom: 30px;
+}
+
+.logo-fondo {
+  position: fixed;
+  top: 20px;       /* 👈 cambia 'bottom' por 'top' */
+  left: 20px;      /* mantiene la alineación a la izquierda */
+  width: 280px;
+ z-index: 1;
+  pointer-events: none;
+}
