@@ -30,7 +30,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 1) {
         <br><br>
             
         <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-        <a href="Habitacion.php"><div class="menu-item">Habitaciones</div></a>
+        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
 
         <div class="usu">
             <button id="usuario">Usuarios</button>

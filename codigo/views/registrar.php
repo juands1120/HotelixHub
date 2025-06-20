@@ -28,12 +28,12 @@ if (isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - HotelixHub</title>
-    <link rel="stylesheet" href="../assets/registro.css">
+    <link rel="stylesheet" href="../assets/css/registrar.css">
 
 </head>
 <body>
     <div class="header">
-        <img src="../asets/img/imgLoginRegistro/logoPrincipal.png" alt="HotelixHub"  class="logo">
+        <img src="../assets/img/imghome/Logo Principal.png" alt="HotelixHub"  class="logo">
     </div>
     <div class="container">
         <div class="login-section">

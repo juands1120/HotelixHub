@@ -12,7 +12,7 @@
 
   <!-- Logo -->
   <div class="logo-container">
-    <img src="/Codigo/vista/img/img_LoginYRegistro/Logo principal (2).png" alt="HotelixHub" class="logo">
+    <img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub" class="logo">
   </div>
 
   <!-- Contenedor principal -->

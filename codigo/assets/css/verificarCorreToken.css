@@ -82,7 +82,7 @@
     .image-panel {
       flex: 1;
       position: relative;
-      background-image: url('img/cuadro.jpg'); /* Usa tu imagen */
+      background-image: url('../img/imgHome/cuadro.jpg'); /* Usa tu imagen */
       background-size: cover;
       background-position: center;
       display: flex;
