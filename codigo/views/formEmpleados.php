@@ -192,10 +192,20 @@ $empleados = $empleado->obtenerEmpleados();
 </div>
 
    <!--Formulario para generar PDF -->
-    <form id="formPDF" action="generarPdf.php" method="post" target="_blank">
+<form id="formFiltrosPDF" action="generarPdf.php" method="post" target="_blank">
+  <label for="estadoFiltro">Filtrar por estado:</label>
+  <select name="estadoFiltro" id="estadoFiltro">
+    <option value="">--Todos--</option>
+    <option value="en turno">En turno</option>
+    <option value="vacaciones">Vacaciones</option>
+    <option value="fuera de turno">Fuera de turno</option>
+    <option value="capacitacion">Capacitación</option>
+  </select>
+
   <input type="hidden" name="datos" id="datosPDF">
   <button type="submit">Generar informe PDF</button>
 </form>
+
 
 
 <!-- Tabla oculta solo para generar el PDF -->
@@ -204,6 +214,11 @@ $empleados = $empleado->obtenerEmpleados();
     <tr>
       <th>Rol</th>
       <th>Nombre</th>
+      <th>Tipo Doc.</th>
+      <th>Número Doc.</th>
+      <th>Correo</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
       <th>Estado</th>
     </tr>
   </thead>
@@ -212,11 +227,17 @@ $empleados = $empleado->obtenerEmpleados();
       <tr>
         <td><?= htmlspecialchars($emp['rol_nombre']) ?></td>
         <td><?= htmlspecialchars($emp['nombre']) . ' ' . htmlspecialchars($emp['apellido']) ?></td>
+        <td><?= htmlspecialchars($emp['tipo_documento']) ?></td>
+        <td><?= htmlspecialchars($emp['numero_documento']) ?></td>
+        <td><?= htmlspecialchars($emp['email']) ?></td>
+        <td><?= htmlspecialchars($emp['telefono']) ?></td>
+        <td><?= htmlspecialchars($emp['direccion']) ?></td>
         <td><?= htmlspecialchars($emp['estado']) ?></td>
       </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
+
 
 
   </main>
@@ -329,10 +350,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Generar PDF con los datos de la tabla
   // Al enviar el formulario, se captura la tabla y se convierte a HTML
-  document.getElementById("formPDF").addEventListener("submit", function(e) {
-    const tabla = document.getElementById("tablaEmpleadosPDF");
-    const html = tabla.outerHTML;
-    document.getElementById("datosPDF").value = html;
+document.getElementById("formFiltrosPDF").addEventListener("submit", function(e) {
+  const estadoFiltro = document.getElementById("estadoFiltro").value.toLowerCase();
+  const tabla = document.getElementById("tablaEmpleadosPDF");
+  const filas = tabla.querySelectorAll("tbody tr");
+
+  filas.forEach(fila => {
+    const estado = fila.cells[7].textContent.trim().toLowerCase();
+    fila.style.display = (estadoFiltro === "" || estado === estadoFiltro) ? "" : "none";
+  });
+
+  const html = tabla.outerHTML;
+  document.getElementById("datosPDF").value = html;
+
+  // Restaurar visibilidad
+  filas.forEach(fila => fila.style.display = "");
+});
+  // Mostrar el modal de agregar empleado al cargar la página
+  document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.hash === "#agregar") {
+      abrirModal();
+    }
   });
 
 

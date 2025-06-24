@@ -1,22 +1,19 @@
 <?php
-session_start(); // Asegura acceso a la sesión
+session_start();
 
-require_once '../librerias/dompdf/autoload.inc.php'; // Asegura que Dompdf esté cargado
-
+require_once '../librerias/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
+// Validar si llegaron los datos
 if (!isset($_POST['datos'])) {
   die("No se recibió ninguna tabla.");
 }
 
-// Obtener la tabla HTML y el nombre del admin
 $tablaHTML = $_POST['datos'];
-$nombreAdmin = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : 'Administrador';
+$nombreAdmin = isset($_SESSION['usuario']) ? htmlspecialchars($_SESSION['usuario']) : 'Administrador';
+$filtroEstado = isset($_POST['estadoFiltro']) && $_POST['estadoFiltro'] !== '' ? $_POST['estadoFiltro'] : 'Todos';
 
-// Instancia Dompdf
-$dompdf = new Dompdf();
-
-// HTML con diseño personalizado
+// Construir el HTML para Dompdf
 $html = '
   <style>
     body { font-family: Arial, sans-serif; font-size: 12px; }
@@ -60,22 +57,23 @@ $html = '
   </style>
 
   <header>
-    <img src="../assets/img/imgHome/Logo Positivo.png" class="logo">
+    <img src="../assets/img/imgError/logo.png" class="logo">
     <h2>HotelixHub</h2>
     <p class="subtitulo">Informe de empleados registrados</p>
+    <p class="subtitulo">Estado filtrado: <strong>' . htmlspecialchars($filtroEstado) . '</strong></p>
   </header>
 
   ' . $tablaHTML . '
 
   <p class="footer">
-    Generado por: ' . htmlspecialchars($nombreAdmin) . '<br>
+    Generado por: ' . $nombreAdmin . '<br>
     Fecha: ' . date('d/m/Y H:i') . '
   </p>
 ';
 
-// Renderizar PDF
+// Crear PDF
+$dompdf = new Dompdf();
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 $dompdf->stream("informe_empleados.pdf", ["Attachment" => false]);
-?>
