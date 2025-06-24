@@ -3,10 +3,6 @@
 require_once __DIR__ . '/../services/sessionManager.php';
 
 
-if (!isset($_SESSION['usuario'])) {
-    header('Location: ../views/login.php');
-    exit();
-}
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

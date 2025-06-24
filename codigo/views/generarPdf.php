@@ -1,22 +1,39 @@
 <?php
-session_start(); // Asegura acceso a la sesión
+session_start(); // Activa la sesión
 
-require_once '../librerias/dompdf/autoload.inc.php'; // Asegura que Dompdf esté cargado
+require_once '../librerias/dompdf/autoload.inc.php'; // Carga Dompdf
 
 use Dompdf\Dompdf;
 
+// Verificar si se recibió la tabla HTML
 if (!isset($_POST['datos'])) {
-  die("No se recibió ninguna tabla.");
+    die("No se recibió ninguna tabla.");
 }
 
-// Obtener la tabla HTML y el nombre del admin
+// Recuperar la tabla enviada
 $tablaHTML = $_POST['datos'];
-$nombreAdmin = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : 'Administrador';
 
-// Instancia Dompdf
+// Obtener nombre del administrador (puede ser string o array)
+$usuario = $_SESSION['usuario'] ?? 'Administrador';
+$nombreAdmin = is_array($usuario) && isset($usuario['nombre'])
+    ? $usuario['nombre']
+    : (is_string($usuario) ? $usuario : 'Administrador');
+
+// Fecha actual
+$fechaGeneracion = date('d/m/Y H:i');
+
+// Crear instancia Dompdf
 $dompdf = new Dompdf();
 
-// HTML con diseño personalizado
+// Convertir ruta relativa del logo a ruta absoluta (recomendado por Dompdf)
+$logoPath = realpath('../assets/img/imgHome/Logo Positivo.png');
+
+// Si no existe el logo, omitir la imagen
+$logoHTML = file_exists($logoPath)
+    ? '<img src="file:///' . str_replace('\\', '/', $logoPath) . '" class="logo">'
+    : '<div style="color:red;">[Logo no disponible]</div>';
+
+// Plantilla HTML para el PDF
 $html = '
   <style>
     body { font-family: Arial, sans-serif; font-size: 12px; }
@@ -60,7 +77,7 @@ $html = '
   </style>
 
   <header>
-    <img src="../assets/img/imgHome/Logo Positivo.png" class="logo">
+    ' . $logoHTML . '
     <h2>HotelixHub</h2>
     <p class="subtitulo">Informe de empleados registrados</p>
   </header>
@@ -69,13 +86,15 @@ $html = '
 
   <p class="footer">
     Generado por: ' . htmlspecialchars($nombreAdmin) . '<br>
-    Fecha: ' . date('d/m/Y H:i') . '
+    Fecha: ' . htmlspecialchars($fechaGeneracion) . '
   </p>
 ';
 
-// Renderizar PDF
+// Generar el PDF
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
+
+// Mostrar en el navegador sin descargar
 $dompdf->stream("informe_empleados.pdf", ["Attachment" => false]);
 ?>

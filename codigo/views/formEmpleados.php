@@ -24,7 +24,7 @@ $empleados = $empleado->obtenerEmpleados();
 <div class="barra-lateral">
 
     <div class="logo">
-      <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub"  class="logo">
+      <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub"  class="logo"></a>
     </div>
     <br><br>
             
@@ -221,6 +221,11 @@ $empleados = $empleado->obtenerEmpleados();
 
   </main>
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+  // todo tu código JS aquí
+});
+
+
   document.getElementById("formEmpleado").addEventListener("submit", function (e) {
     let errores = [];
 
