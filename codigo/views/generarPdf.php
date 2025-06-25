@@ -1,39 +1,19 @@
 <?php
-session_start(); // Activa la sesión
+session_start();
 
-require_once '../librerias/dompdf/autoload.inc.php'; // Carga Dompdf
-
+require_once '../librerias/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
-// Verificar si se recibió la tabla HTML
+// Validar si llegaron los datos
 if (!isset($_POST['datos'])) {
-    die("No se recibió ninguna tabla.");
+  die("No se recibió ninguna tabla.");
 }
 
-// Recuperar la tabla enviada
 $tablaHTML = $_POST['datos'];
+$nombreAdmin = isset($_SESSION['usuario']['nombre']) ? htmlspecialchars($_SESSION['usuario']['nombre']) : 'Administrador';
+$filtroEstado = isset($_POST['estadoFiltro']) && $_POST['estadoFiltro'] !== '' ? $_POST['estadoFiltro'] : 'Todos';
 
-// Obtener nombre del administrador (puede ser string o array)
-$usuario = $_SESSION['usuario'] ?? 'Administrador';
-$nombreAdmin = is_array($usuario) && isset($usuario['nombre'])
-    ? $usuario['nombre']
-    : (is_string($usuario) ? $usuario : 'Administrador');
-
-// Fecha actual
-$fechaGeneracion = date('d/m/Y H:i');
-
-// Crear instancia Dompdf
-$dompdf = new Dompdf();
-
-// Convertir ruta relativa del logo a ruta absoluta (recomendado por Dompdf)
-$logoPath = realpath('../assets/img/imgHome/Logo Positivo.png');
-
-// Si no existe el logo, omitir la imagen
-$logoHTML = file_exists($logoPath)
-    ? '<img src="file:///' . str_replace('\\', '/', $logoPath) . '" class="logo">'
-    : '<div style="color:red;">[Logo no disponible]</div>';
-
-// Plantilla HTML para el PDF
+// Construir el HTML para Dompdf
 $html = '
   <style>
     body { font-family: Arial, sans-serif; font-size: 12px; }
@@ -77,24 +57,23 @@ $html = '
   </style>
 
   <header>
-    ' . $logoHTML . '
+    <img src="../assets/img/imgError/logo.png" class="logo">
     <h2>HotelixHub</h2>
     <p class="subtitulo">Informe de empleados registrados</p>
+    <p class="subtitulo">Estado filtrado: <strong>' . htmlspecialchars($filtroEstado) . '</strong></p>
   </header>
 
   ' . $tablaHTML . '
 
   <p class="footer">
-    Generado por: ' . htmlspecialchars($nombreAdmin) . '<br>
-    Fecha: ' . htmlspecialchars($fechaGeneracion) . '
+    Generado por: ' . $nombreAdmin . '<br>
+    Fecha: ' . date('d/m/Y H:i') . '
   </p>
 ';
 
-// Generar el PDF
+// Crear PDF
+$dompdf = new Dompdf();
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
-
-// Mostrar en el navegador sin descargar
 $dompdf->stream("informe_empleados.pdf", ["Attachment" => false]);
-?>

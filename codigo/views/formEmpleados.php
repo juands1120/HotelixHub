@@ -192,120 +192,58 @@ $empleados = $empleado->obtenerEmpleados();
 </div>
 
    <!--Formulario para generar PDF -->
-    <form id="formPDF" action="generarPdf.php" method="post" target="_blank">
+<form id="formFiltrosPDF" action="generarPdf.php" method="post" target="_blank">
+  <label for="estadoFiltro">Filtrar por estado:</label>
+  <select name="estadoFiltro" id="estadoFiltro">
+    <option value="">--Todos--</option>
+    <option value="en turno">En turno</option>
+    <option value="vacaciones">Vacaciones</option>
+    <option value="fuera de turno">Fuera de turno</option>
+    <option value="capacitacion">Capacitación</option>
+  </select>
+
   <input type="hidden" name="datos" id="datosPDF">
   <button type="submit">Generar informe PDF</button>
 </form>
 
 
+
 <!-- Tabla oculta solo para generar el PDF -->
-<table id="tablaEmpleadosPDF" style="display: none;">
+<table id="tablaEmpleadosPDF" class="tablainvicible">
   <thead>
     <tr>
       <th>Rol</th>
       <th>Nombre</th>
+      <th>Tipo Doc.</th>
+      <th>Número Doc.</th>
+      <th>Correo</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
       <th>Estado</th>
     </tr>
   </thead>
-  <tbody>
-    <?php foreach ($empleados as $emp): ?>
-      <tr>
-        <td><?= htmlspecialchars($emp['rol_nombre']) ?></td>
-        <td><?= htmlspecialchars($emp['nombre']) . ' ' . htmlspecialchars($emp['apellido']) ?></td>
-        <td><?= htmlspecialchars($emp['estado']) ?></td>
-      </tr>
-    <?php endforeach; ?>
-  </tbody>
+<tbody>
+  <?php foreach ($empleados as $emp): ?> 
+    <tr>
+      <td><?= htmlspecialchars($emp['rol_nombre']) ?></td>
+      <td><?= htmlspecialchars($emp['nombre']) . ' ' . htmlspecialchars($emp['apellido']) ?></td>
+      <td><?= htmlspecialchars($emp['tipoDocumento']) ?></td>
+      <td><?= htmlspecialchars($emp['numeroDocumento']) ?></td>
+      <td><?= htmlspecialchars($emp['email']) ?></td>
+      <td><?= htmlspecialchars($emp['numeroTelefono']) ?></td>
+      <td><?= htmlspecialchars($emp['direccion']) ?></td>
+      <td><?= htmlspecialchars($emp['estado']) ?></td>
+    </tr>
+  <?php endforeach; ?>
+</tbody>
+
 </table>
+
 
 
   </main>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-  // todo tu código JS aquí
-});
-
-
-  document.getElementById("formEmpleado").addEventListener("submit", function (e) {
-    let errores = [];
-
-    const nombre = document.getElementById("nombre").value.trim();
-    const apellido = document.getElementById("apellido").value.trim();
-    const tipoDocumento = document.getElementById("tipoDocumento").value;
-    const numeroDocumento = document.getElementById("numeroDocumento").value.trim();
-    const direccion = document.getElementById("direccion").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const telefono = document.getElementById("numeroTelefono").value.trim();
-    const rol = document.getElementById("rol").value;
-    const estado = document.getElementById("estado").value;
-    const password = document.getElementById("password").value;
-
-    // Validaciones
-    if (nombre === "") errores.push("El nombre es obligatorio.");
-    if (apellido === "") errores.push("El apellido es obligatorio.");
-    if (tipoDocumento === "") errores.push("Debe seleccionar un tipo de documento.");
-    if (!/^\d{7,15}$/.test(numeroDocumento)) errores.push("El número de documento debe contener solo números.");
-    if (direccion === "") errores.push("La dirección es obligatoria.");
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errores.push("El correo no es válido.");
-    if (!/^\d{7,15}$/.test(telefono)) errores.push("El teléfono debe contener entre 7 y 15 dígitos.");
-    if (rol === "") errores.push("Debe seleccionar un rol.");
-    if (estado === "") errores.push("Debe seleccionar un estado.");
-    if (password.length < 6) errores.push("La contraseña debe tener al menos 6 caracteres.");
-
-    if (errores.length > 0) {
-      e.preventDefault(); // Detener envío
-
-      // Mostrar errores en el modal
-      const listaErrores = document.getElementById("listaErrores");
-      listaErrores.innerHTML = ""; // Limpiar errores anteriores
-
-      errores.forEach(function(error) {
-        const li = document.createElement("li");
-        li.textContent = error;
-        listaErrores.appendChild(li);
-      });
-
-      document.getElementById("modalErrores").style.display = "block";
-    }
-  });
-
-  // Validación en tiempo real: solo letras
-function soloLetras(input) {
-  input.addEventListener('input', function () {
-    this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
-  });
-}
-
-// Validación en tiempo real: solo números
-function soloNumeros(input) {
-  input.addEventListener('input', function () {
-    this.value = this.value.replace(/\D/g, '');
-  });
-}
-
-// Validación en tiempo real: teléfono con máximo 15 dígitos
-function validarTelefono(input) {
-  input.addEventListener('input', function () {
-    this.value = this.value.replace(/\D/g, '').substring(0, 15);
-  });
-}
-function validarnumeroDocumento(input) {
-  input.addEventListener('input', function () {
-    this.value = this.value.replace(/\D/g, '').substring(0, 15);
-  });
-}
-
-
-// Aplicar validaciones en tiempo real
-document.addEventListener('DOMContentLoaded', function () {
-  soloLetras(document.getElementById('nombre'));
-  soloLetras(document.getElementById('apellido'));
-  soloNumeros(document.getElementById('numeroDocumento'));
-  validarTelefono(document.getElementById('numeroTelefono'));
-  validarnumeroDocumento(document.getElementById('numeroDocumento'));
-});
-
-
+  // Funciones globales para el modal
   function abrirModal() {
     document.getElementById('modalEmpleado').style.display = 'block';
   }
@@ -318,30 +256,115 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("modalErrores").style.display = "none";
   }
 
-  // Cerrar modales al hacer clic fuera
-  window.onclick = function(event) {
+  // Cierre modal al hacer clic fuera
+  window.onclick = function (event) {
     const modalEmpleado = document.getElementById('modalEmpleado');
     const modalErrores = document.getElementById('modalErrores');
-
-    if (event.target === modalEmpleado) {
-      modalEmpleado.style.display = "none";
-    }
-    if (event.target === modalErrores) {
-      modalErrores.style.display = "none";
-    }
+    if (event.target === modalEmpleado) modalEmpleado.style.display = "none";
+    if (event.target === modalErrores) modalErrores.style.display = "none";
   };
 
+  document.addEventListener("DOMContentLoaded", function () {
+    // Validaciones en tiempo real
+    soloLetras(document.getElementById('nombre'));
+    soloLetras(document.getElementById('apellido'));
+    soloNumeros(document.getElementById('numeroDocumento'));
+    validarTelefono(document.getElementById('numeroTelefono'));
+    validarnumeroDocumento(document.getElementById('numeroDocumento'));
 
-  // Generar PDF con los datos de la tabla
-  // Al enviar el formulario, se captura la tabla y se convierte a HTML
-  document.getElementById("formPDF").addEventListener("submit", function(e) {
-    const tabla = document.getElementById("tablaEmpleadosPDF");
-    const html = tabla.outerHTML;
-    document.getElementById("datosPDF").value = html;
+    // Validación de formulario empleado
+    document.getElementById("formEmpleado").addEventListener("submit", function (e) {
+      let errores = [];
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const apellido = document.getElementById("apellido").value.trim();
+      const tipoDocumento = document.getElementById("tipoDocumento").value;
+      const numeroDocumento = document.getElementById("numeroDocumento").value.trim();
+      const direccion = document.getElementById("direccion").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefono = document.getElementById("numeroTelefono").value.trim();
+      const rol = document.getElementById("rol").value;
+      const estado = document.getElementById("estado").value;
+      const password = document.getElementById("password").value;
+
+      if (nombre === "") errores.push("El nombre es obligatorio.");
+      if (apellido === "") errores.push("El apellido es obligatorio.");
+      if (tipoDocumento === "") errores.push("Debe seleccionar un tipo de documento.");
+      if (!/^\d{7,15}$/.test(numeroDocumento)) errores.push("El número de documento debe contener solo números.");
+      if (direccion === "") errores.push("La dirección es obligatoria.");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errores.push("El correo no es válido.");
+      if (!/^\d{7,15}$/.test(telefono)) errores.push("El teléfono debe contener entre 7 y 15 dígitos.");
+      if (rol === "") errores.push("Debe seleccionar un rol.");
+      if (estado === "") errores.push("Debe seleccionar un estado.");
+      if (password.length < 6) errores.push("La contraseña debe tener al menos 6 caracteres.");
+
+      if (errores.length > 0) {
+        e.preventDefault();
+        const listaErrores = document.getElementById("listaErrores");
+        listaErrores.innerHTML = "";
+        errores.forEach(function (error) {
+          const li = document.createElement("li");
+          li.textContent = error;
+          listaErrores.appendChild(li);
+        });
+        document.getElementById("modalErrores").style.display = "block";
+      }
+    });
+
+    // Generar PDF con los datos de la tabla oculta
+    document.getElementById("formFiltrosPDF").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const estadoFiltro = document.getElementById("estadoFiltro").value.toLowerCase();
+      const tabla = document.getElementById("tablaEmpleadosPDF");
+      const filas = tabla.querySelectorAll("tbody tr");
+
+      filas.forEach(fila => {
+        const estado = fila.cells[7].textContent.trim().toLowerCase();
+        fila.style.display = (estadoFiltro === "" || estado === estadoFiltro) ? "" : "none";
+      });
+
+      const html = tabla.outerHTML;
+      const input = document.getElementById("datosPDF");
+      if (input) {
+        input.value = html;
+      }
+
+      filas.forEach(fila => fila.style.display = "");
+
+      setTimeout(() => this.submit(), 100);
+    });
+
+    // Funciones auxiliares
+    function soloLetras(input) {
+      input.addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+      });
+    }
+
+    function soloNumeros(input) {
+      input.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+      });
+    }
+
+    function validarTelefono(input) {
+      input.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').substring(0, 15);
+      });
+    }
+
+    function validarnumeroDocumento(input) {
+      input.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').substring(0, 15);
+      });
+    }
   });
+</script>
 
 
 
+</main>
 
 </body>
 </html>

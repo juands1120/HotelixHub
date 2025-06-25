@@ -511,5 +511,13 @@
       }
     }
 
+    .tablainvicible{
+
+      display: none;
+      background-color:#28a745 ; /* no muevan esto por nada del mundo */
+
+    }
+
+
 
 
