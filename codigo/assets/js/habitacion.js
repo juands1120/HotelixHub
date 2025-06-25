@@ -9,6 +9,7 @@
  * - Filtrar habitaciones por piso
  */
 
+
 // ==================== VARIABLES GLOBALES ====================
 let habitaciones = []; // Almacena el listado de habitaciones cargadas desde MySQL
 let habitacionEditando = null; // Referencia a la habitación que se está editando (null para creación)
@@ -19,22 +20,30 @@ const form = document.getElementById("formHabitacion"); // Formulario de creaci�
 
 // ==================== FUNCIONES PARA COMUNICACIÓN CON BACKEND (PHP/MYSQL) ====================
 
-/**
- * Envía datos al backend mediante fetch API
- * @param {string} accion - Tipo de operación ('crear', 'editar', 'eliminar')
- * @param {object} datos - Objeto con los datos de la habitación
- * @param {string|null} numero - Número de habitación (opcional, usado para edición/eliminación)
- * @returns {Promise<object>} Respuesta del servidor
- */
-async function enviarDatos(accion, datos, numero = null) {
+async function enviarDatos(accion, datos = {}, numero = null) {
     const formData = new FormData();
-    formData.append('accion', accion);
-    if (numero) formData.append('numero', numero);
-    formData.append('datos', JSON.stringify(datos));
+    formData.append("accion", accion);
 
+    // Datos comunes
+    if (datos.numero) formData.append("numero", datos.numero);
+    if (datos.tipo) formData.append("tipo", datos.tipo);
+    if (datos.piso) formData.append("piso", datos.piso);
+    if (datos.precio) formData.append("precio", datos.precio);
+    if (datos.servicios) formData.append("servicios", datos.servicios.join(","));
+    if (datos.estado) formData.append("estado", datos.estado);
+
+    // Imagen si existe
+    const imagenInput = document.getElementById("imagenHabitacion");
+    if (imagenInput?.files[0]) {
+        formData.append("imagen", imagenInput.files[0]);
+    } else if (datos.imagenRuta) {
+        formData.append("imagenRuta", datos.imagenRuta); // para conservar la imagen anterior
+    }
+
+    // Enviar al servidor
     try {
-        const response = await fetch('api_habitaciones.php', {
-            method: 'POST',
+        const response = await fetch("/codigo/api_habitaciones.php", {
+            method: "POST",
             body: formData
         });
         return await response.json();
@@ -44,13 +53,15 @@ async function enviarDatos(accion, datos, numero = null) {
     }
 }
 
+
+
 /**
  * Carga las habitaciones desde el backend al iniciar la aplicación
  * Actualiza la variable global 'habitaciones' y refresca la UI
  */
 async function cargarHabitaciones() {
     try {
-        const response = await fetch('api_habitaciones.php?accion=listar');
+        const response = await fetch('/codigo/api_habitaciones.php?accion=listar');
         habitaciones = await response.json();
         actualizarUI();
     } catch (error) {
@@ -67,13 +78,16 @@ document.getElementById("habitacion").onclick = () => abrirFormulario();
  * Abre el formulario modal para crear o editar una habitación
  * @param {object|null} data - Datos de la habitación a editar (null para creación)
  */
-function abrirFormulario(data = null) {
+console.log("EDITANDO:", habitacionEditando);
+
+function abrirFormulario(data) {
     form.reset(); // Limpiar formulario
     limpiarErrores(); // Eliminar mensajes de error previos
     document.getElementById("modalHabitacion").style.display = "block";
-    
-    // Configurar título del modal según sea creación o edición
-    document.getElementById("modalTitulo").textContent = data ? "Editar Habitación" : "Agregar Nueva Habitación";
+
+    // Configurar título
+    const titulo = document.getElementById("modalTitulo");
+    titulo.textContent = data ? "Editar Habitación" : "Agregar Nueva Habitación";
     
     // Mostrar botón de eliminar solo en modo edición
     document.getElementById("eliminarBtn").style.display = data ? "inline-block" : "none";
@@ -87,6 +101,19 @@ function abrirFormulario(data = null) {
         document.getElementById("piso").value = data.piso;
         document.getElementById("precio").value = data.precio;
         document.getElementById("servicios").value = data.servicios.join(", ");
+
+    // Mostrar imagen actual (nuevo)
+        const imagenPreview = document.createElement('div');
+        imagenPreview.innerHTML = `
+            <p>Imagen actual:</p>
+            <img src="/codigo/${data.imagen}" style="max-width: 100px; margin: 10px 0;">
+        `;
+        form.insertBefore(imagenPreview, form.querySelector('button[type="submit"]'));
+        // Hacer el campo de número de habitación readonly al editar
+        document.getElementById("numHabitacion").readOnly = true;
+    } else {
+        // Asegurarse de que no es readonly al crear
+        document.getElementById("numHabitacion").readOnly = false;
     }
 }
 
@@ -110,10 +137,9 @@ function cerrarModalExito() {
 
 // Evento submit del formulario para crear/editar habitaciones
 form.addEventListener("submit", async function (e) {
-    e.preventDefault(); // Prevenir envío tradicional del formulario
-    limpiarErrores(); // Limpiar errores previos
+    e.preventDefault();
+    limpiarErrores();
 
-    // Obtener y procesar valores del formulario
     const numero = document.getElementById("numHabitacion").value.trim();
     const numeroVal = parseInt(numero);
     const tipo = document.getElementById("tipoHabitacion").value;
@@ -126,90 +152,91 @@ form.addEventListener("submit", async function (e) {
     const imagenInput = document.getElementById("imagenHabitacion");
     const file = imagenInput.files[0];
 
-    let isValid = true; // Bandera para validación
+    let isValid = true;
 
-    // ========= VALIDACIONES DEL FORMULARIO =========
-
-    // Validación número de habitación (200-511)
     if (!/^\d+$/.test(numero) || numeroVal < 200 || numeroVal > 511) {
         mostrarError("numHabitacion", "Número de habitación entre 200 y 511");
         isValid = false;
     }
 
-    // Validación que el número no esté repetido (excepto en edición)
     if (habitaciones.some(h => h.numero === numero) && !habitacionEditando) {
         mostrarError("numHabitacion", "Este número ya está registrado");
         isValid = false;
     }
 
-    // Validación tipo de habitación (no vacío)
     if (tipo === "") {
         mostrarError("tipoHabitacion", "Seleccione tipo de habitación");
         isValid = false;
     }
 
-    // Validación piso (2-5)
     if (isNaN(pisoVal) || pisoVal < 2 || pisoVal > 5) {
         mostrarError("piso", "Piso válido entre 2 y 5");
         isValid = false;
     }
 
-    // Validación precio (positivo, máximo 1 millón)
     if (isNaN(precioVal) || precioVal <= 0 || precioVal > 1000000) {
         mostrarError("precio", "Precio inválido (máx 1 millón)");
         isValid = false;
     }
 
-    // Validación servicios (al menos uno)
     if (servicios.length === 0) {
         mostrarError("servicios", "Seleccione al menos un servicio");
         isValid = false;
     }
 
-    // Validación imagen (obligatoria solo para creación, máximo 1MB)
     if (!habitacionEditando && (!file || file.size > 1024 * 1024)) {
         mostrarError("imagenHabitacion", "Imagen obligatoria (máx 1MB)");
         isValid = false;
     }
 
-    if (!isValid) return; // Detener proceso si hay errores
+    if (!isValid) return;
 
-    // Procesar imagen si existe (convertir a Base64)
-    const reader = new FileReader();
-    reader.onload = async () => {
-        // Crear objeto con los datos de la habitación
-        const nuevaHabitacion = {
-            numero,
-            tipo,
-            piso,
-            precio: precioVal,
-            servicios,
-            imagen: file ? reader.result : habitacionEditando?.imagen, // Usar imagen nueva o mantener la existente
-            estado: habitacionEditando ? habitacionEditando.estado : "Disponible" // Mantener estado o establecer como disponible
-        };
-
-        try {
-            // Determinar si es creación o edición
-            const accion = habitacionEditando ? "editar" : "crear";
-            const respuesta = await enviarDatos(accion, nuevaHabitacion, numero);
-
-            if (respuesta.exito) {
-                cerrarModal();
-                document.getElementById("modalExito").style.display = "block";
-                await cargarHabitaciones(); // Refrescar lista desde MySQL
-            } else {
-                alert("Error al guardar: " + (respuesta.error || ""));
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Error al guardar");
-        }
+    const nuevaHabitacion = {
+        numero: document.getElementById("numHabitacion").value.trim(),
+        tipo: document.getElementById("tipoHabitacion").value,
+        piso: parseInt(document.getElementById("piso").value.trim()),
+        precio: parseFloat(document.getElementById("precio").value.trim()),
+        servicios: document.getElementById("servicios").value.split(",").map(s => s.trim()),
+        estado: habitacionEditando ? habitacionEditando.estado : "Disponible",
+        imagenRuta: form.getAttribute("data-imagen-actual") || null 
     };
 
-    // Si hay archivo, leerlo, sino continuar directamente
-    if (file) reader.readAsDataURL(file);
-    else reader.onload();
+    try {
+        const accion = habitacionEditando ? "editar" : "crear";
+        const respuesta = await enviarDatos(accion, nuevaHabitacion);
+
+        if (respuesta.exito) {
+            cerrarModal();
+            document.getElementById("modalExito").style.display = "block";
+
+            // Actualización clave: Modificar el array `habitaciones` en memoria
+            if (habitacionEditando) {
+                // 1. Buscar la habitación editada en el array
+                const index = habitaciones.findIndex(h => h.numero === nuevaHabitacion.numero);
+                
+                if (index !== -1) {
+                    // 2. Sobrescribir los datos antiguos con los nuevos
+                    if (respuesta.datos) {
+                        habitaciones[index] = respuesta.datos; // Reemplazar por lo que devuelve el backend
+                    }
+
+                }
+            } else {
+                // Si es una nueva habitación, agregarla al array
+                if (respuesta.datos) habitaciones.push(respuesta.datos);
+            }
+
+            actualizarUI(); // Refrescar la interfaz con los datos actualizados
+            habitacionEditando = null;
+        } else {
+            alert("Error al guardar: " + (respuesta.error || "Error desconocido"));
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error al guardar");
+    }
 });
+
 
 // ==================== RENDERIZADO DE HABITACIONES ====================
 
@@ -217,6 +244,20 @@ form.addEventListener("submit", async function (e) {
  * Crea y renderiza una tarjeta HTML para una habitación
  * @param {object} data - Datos de la habitación a renderizar
  */
+// =============== FUNCIÓN AUXILIAR PARA VALIDAR LA IMAGEN ===============
+function validarImagen(imagen) {
+    if (!imagen || typeof imagen !== "string") return 'imgHabitacion/no-imagen.png';
+
+    if (!imagen.startsWith('data:image')) return 'imgHabitacion/no-imagen.png';
+
+    const partes = imagen.split(',');
+    if (partes.length < 2) return 'imgHabitacion/no-imagen.png';
+
+    const header = partes[0];
+    const base64 = partes[1].split(':')[0]; // Elimina errores como ":1"
+    return `${header},${base64}`;
+}
+
 function renderHabitacion(data) {
     const div = document.createElement("div");
     div.className = "habitacion-card";
@@ -228,9 +269,9 @@ function renderHabitacion(data) {
         <ul class="habitacion-features">
             <li>Piso: ${data.piso}</li>
             <li>Tipo de habitación: ${data.tipo}</li>
-            <li>Servicios Incluidos: ${data.servicios.join(", ")}</li>
+            <li>Servicios Incluidos: ${(Array.isArray(data.servicios) ? data.servicios.join(", ") : "Sin servicios")}</li>
         </ul>
-        <div class="img"><img src="${data.imagen}" /></div>
+        <img src="/codigo/${data.imagen}" alt="Imagen habitación" />    
         <div class="habitacion-precio">$${parseInt(data.precio).toLocaleString()} COP</div>
         <select class="estado-select">
             <option ${data.estado === "Disponible" ? "selected" : ""}>Disponible</option>
@@ -250,10 +291,24 @@ function renderHabitacion(data) {
 
     // Evento para cambios de estado
     estadoSelect.addEventListener("change", async function () {
-        data.estado = this.value;
+        const datosActualizados = {
+            numero: data.numero,
+            tipo: data.tipo,
+            piso: data.piso,
+            precio: data.precio,
+            servicios: data.servicios,
+            estado: this.value,
+            imagenRuta: data.imagen // mantener la imagen actual
+        };
+
         aplicarEstiloEstado(this);
-        await enviarDatos("editar", data, data.numero); // Actualizar estado en backend
+
+        const respuesta = await enviarDatos("editar", datosActualizados);
+        if (!respuesta.exito) {
+            alert("Error al cambiar el estado");
+        }
     });
+
 }
 
 // ==================== FUNCIONES AUXILIARES ====================
@@ -283,7 +338,7 @@ function actualizarUI() {
 document.getElementById("eliminarBtn").onclick = async () => {
     if (confirm("¿Eliminar esta habitación?")) {
         try {
-            const respuesta = await enviarDatos("eliminar", null, habitacionEditando.numero);
+            const respuesta = await enviarDatos("eliminar", { numero: habitacionEditando.numero });
             if (respuesta.exito) {
                 await cargarHabitaciones();
                 cerrarModal();

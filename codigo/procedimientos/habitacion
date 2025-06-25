@@ -1,0 +1,88 @@
+DELIMITER //
+
+-- Procedimiento para crear habitación
+CREATE PROCEDURE SP_CrearHabitacion(
+    IN p_nombre VARCHAR(50),
+    IN p_tipo VARCHAR(50),
+    IN p_piso INT,
+    IN p_precio DECIMAL(10,2),
+    IN p_servicios VARCHAR(255),
+    IN p_estado VARCHAR(20),
+    IN p_imagen VARCHAR(255)
+)
+BEGIN
+    INSERT INTO habitacion 
+    (nombre, tipoHabitacion, piso, precio, serviciosIncluidos, estado, imagen)
+    VALUES (p_nombre, p_tipo, p_piso, p_precio, p_servicios, p_estado, p_imagen);
+END //
+
+DELIMITER ;
+
+======================================================================================
+
+DELIMITER //
+
+-- Procedimiento para editar habitación
+CREATE PROCEDURE SP_EditarHabitacion(
+    IN p_numero VARCHAR(50),
+    IN p_tipo VARCHAR(50),
+    IN p_piso INT,
+    IN p_precio DECIMAL(10,2),
+    IN p_servicios TEXT,
+    IN p_estado VARCHAR(20),
+    IN p_imagen VARCHAR(255))
+BEGIN
+    UPDATE habitacion 
+    SET tipoHabitacion = p_tipo, piso = p_piso, precio = p_precio,
+        serviciosIncluidos = p_servicios, estado = p_estado, imagen = p_imagen
+    WHERE nombre = p_numero;
+END //
+
+DELIMITER ;
+
+====================================================================================================
+
+DELIMITER //
+
+-- Procedimiento para eliminar habitación
+CREATE PROCEDURE SP_EliminarHabitacion(IN p_numero VARCHAR(50))
+BEGIN
+    DELETE FROM habitacion WHERE nombre = p_numero;
+END //
+
+DELIMITER ;
+
+=====================================================================================================
+
+DELIMITER //
+
+-- Procedimiento para listar habitaciones
+CREATE PROCEDURE SP_ObtenerHabitaciones()
+BEGIN
+    SELECT * FROM habitacion;
+END //
+
+DELIMITER ;
+
+====================================================================================================
+
+DELIMITER //
+
+-- Procedimiento para obtener una habitación específica
+CREATE PROCEDURE SP_ObtenerHabitacionPorNumero(IN p_numero VARCHAR(50))
+BEGIN
+    SELECT * FROM habitacion WHERE nombre = p_numero;
+END //
+
+DELIMITER ;
+
+=====================================================================================================
+
+DELIMITER //
+
+CREATE PROCEDURE SP_ListarHabitacionesDisponibles()
+BEGIN
+    SELECT * FROM habitacion WHERE estado != 'Mantenimiento';
+END //
+
+DELIMITER ;

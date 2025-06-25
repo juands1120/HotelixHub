@@ -1,0 +1,21 @@
+Array
+(
+    [accion] => crear
+    [nombre] => Laura
+    [apellido] => Portillo
+    [tipoDocumento] => CC
+    [numeroDocumento] => 123456789
+    [telefono] => 1234567890
+    [email] => lauportillo@gmail.com
+    [huesped] => 1
+    [tipoHabitacion] => sencilla
+    [checkIn] => 2025-06-25
+    [checkOut] => 2025-07-03
+    [servicios] => Array
+        (
+            [0] => Desayuno Buffet
+            [1] => Parqueadero
+        )
+
+    [id_habitacion] => 9
+)

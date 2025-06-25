@@ -1,13 +1,3 @@
-<?php
-require_once __DIR__ . '/../services/sessionManager.php';
-
-
-if (!isset($_SESSION['usuario'])) {
-    header('Location: ../views/login.php');
-    exit();
-}
-
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,7 +13,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="barra-lateral">
             <!-- LOGO DEL HOTEL CON ENLACE AL HOME -->
             <div class="logo">
-                <a href="Home.html"><img src="../assets/img/imgHome/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+                <a href="Home.html"><img src="../assets/img/imgHabitacion/Copia de Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
             </div>
             <br><br>
             
@@ -35,13 +25,13 @@ if (!isset($_SESSION['usuario'])) {
             <div class="usu">
                 <button id="usuario">Usuarios</button>
                 <div class="usu-contenido">
-                    <a href="formEmpleados.php">Empleados</a>
-                    <a href="formClientes.php">Clientes</a>
+                    <a href="DashEmpleados.html">Empleados</a>
+                    <a href="DashClientes.html">Clientes</a>
                 </div>
             </div>
             
             <!-- ENLACE A MÓDULO DE PRODUCTOS -->
-            <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
+            <a href="ProductosAdmin.html"><div class="menu-item">Productos</div></a>
         </div>
 
         <!-- CONTENIDO PRINCIPAL DE LA PÁGINA -->
@@ -80,12 +70,12 @@ if (!isset($_SESSION['usuario'])) {
             <h2 id="modalTitulo">Agregar Nueva Habitación</h2>
 
             <!-- FORMULARIO PARA DATOS DE LA HABITACIÓN -->
-            <form id="formHabitacion" method="post">
+            <form id="formHabitacion" method="post" enctype="multipart/form-data">
                 <!-- NÚMERO DE HABITACIÓN -->
-                <input type="text" id="numHabitacion" name="numHabitacion" placeholder="Número de habitación" required />
+                <input type="text" id="numHabitacion" name="numero" placeholder="Número de habitación" required />
                 
                 <!-- SELECTOR DE TIPO DE HABITACIÓN -->
-                <select id="tipoHabitacion" name="tipoHabitacion" required>
+                <select id="tipoHabitacion" name="tipo" required>
                     <option value="">Tipo de habitación</option>
                     <option value="Sencilla">Sencilla</option>
                     <option value="Doble">Doble</option>
@@ -113,7 +103,7 @@ if (!isset($_SESSION['usuario'])) {
                 
                 <!-- SUBIDA DE IMAGEN DE LA HABITACIÓN -->
                 <label><strong>Imagen de la habitacion:</strong></label>
-                <input type="file" id="imagenHabitacion" name="imagenHabitacion" accept="image/*" required />
+                <input type="file" id="imagenHabitacion" name="imagen" accept="image/*" required />
                 
                 <!-- BOTÓN PARA GUARDAR -->
                 <button type="submit" id="guardarBtn" name="guardarBtn">Guardar Habitación</button>
@@ -135,6 +125,6 @@ if (!isset($_SESSION['usuario'])) {
     </div>
 
     <!-- INCLUSIÓN DEL ARCHIVO JAVASCRIPT -->
-    <script src="../assets/js/habitacion.js"></script>
+    <script src="../assets/JS/habitacion.js"></script>
 </body>
 </html>

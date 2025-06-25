@@ -1,0 +1,82 @@
+DELIMITER //
+
+CREATE PROCEDURE SP_CrearReserva(
+    IN p_id_usuario INT,
+    IN p_id_habitacion INT,
+    IN p_fecha_entrada DATE,
+    IN p_fecha_salida DATE,
+    IN p_num_huespedes INT,
+    IN p_servicios_adicionales TEXT,
+    IN p_precio_total DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO reserva (
+        id_usuario, id_habitacion, fecha_entrada, fecha_salida, num_huespedes,
+        servicios_adicionales, precio_total, estado, fecha_reserva
+    )
+    VALUES (
+        p_id_usuario, p_id_habitacion, p_fecha_entrada, p_fecha_salida, p_num_huespedes,
+        p_servicios_adicionales, p_precio_total, 'Pendiente', NOW()
+    );
+END //
+
+DELIMITER ;
+
+==============================================================================================
+
+DELIMITER //
+
+CREATE PROCEDURE SP_ListarReservasPorEmail(IN p_email VARCHAR(100))
+BEGIN
+    SELECT 
+        r.id_reserva,
+        r.fecha_reserva,
+        r.fecha_entrada,
+        r.fecha_salida,
+        r.num_huespedes,
+        r.precio_total,
+        r.estado,
+        r.servicios_adicionales,
+        h.nombre AS nombre_habitacion,
+        h.tipoHabitacion
+    FROM reserva r
+    JOIN usuarios u ON r.id_usuario = u.id_usuario
+    JOIN habitacion h ON r.id_habitacion = h.id_habitacion
+    WHERE u.email = p_email
+    ORDER BY r.fecha_reserva DESC;
+END //
+
+DELIMITER ;
+
+==============================================================================================
+
+DELIMITER //
+
+CREATE PROCEDURE SP_CancelarReserva(IN p_id_reserva INT)
+BEGIN
+    UPDATE reserva SET estado = 'Cancelada' WHERE id_reserva = p_id_reserva;
+END //
+
+DELIMITER ;
+
+==============================================================================================
+
+DELIMITER //
+
+CREATE PROCEDURE SP_VerificarDisponibilidad(
+    IN p_id_habitacion INT,
+    IN p_fecha_entrada DATE,
+    IN p_fecha_salida DATE
+)
+BEGIN
+    SELECT 
+        COUNT(*) = 0 AS disponible
+    FROM reserva
+    WHERE id_habitacion = p_id_habitacion
+      AND estado != 'Cancelada'
+      AND (
+          (fecha_entrada <= p_fecha_salida AND fecha_salida >= p_fecha_entrada)
+      );
+END //
+
+DELIMITER ;
