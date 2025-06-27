@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   FOREIGN KEY (usu_idrol) REFERENCES rol(id_rol)
 );
 
-INSERT INTO rol(id_rol, rol_nombre) VALUES ('1','administrador') , ('2','cliente');
+INSERT INTO rol(id_rol, rol_nombre) VALUES ('1','administrador') , ('2','cliente') , ('3','recepcionista') , ('4', 'cocinero') , ('5', 'camarero');
 
 CREATE TABLE `habitacion` (
   `id_habitacion` INT AUTO_INCREMENT PRIMARY KEY,
