@@ -753,8 +753,6 @@ right: 40.2%;
   font-size: 13px;
 }
 
-
-
 /* ============ MEDIA QUERIES PARA DISPOSITIVOS MÁS GRANDES ============ */
 @media (min-width: 768px) {
     /* Navegación en fila para pantallas grandes */
@@ -854,4 +852,39 @@ right: 40.2%;
         margin-left: auto;
         margin-right: auto;
     }
+}
+
+@media (max-width: 767px) {
+  .modal-confirmacion-reserva .modal-contenido {
+    flex-direction: column;
+    width: 90%;
+    height: auto;
+  }
+
+  .modal-confirmacion-reserva .modal-izquierda,
+  .modal-confirmacion-reserva .modal-derecha {
+    width: 100%;
+    padding: 20px;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .modal-confirmacion-reserva .modal-derecha {
+    background-size: cover;
+    border-bottom: none;
+  }
+
+  .modal-confirmacion-reserva .modal-footer {
+    flex-direction: column;
+    gap: 10px;
+    bottom: 20px;
+    position: relative;
+    width: auto;
+  }
+
+  .modal-confirmacion-reserva .btn-cancelar,
+  .modal-confirmacion-reserva .btn-confirmar {
+    width: 80%;
+    margin: 0 auto;
+  }
 }

@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const response = await fetch(`/codigo/controller/ReservaController.php?accion=listar&email=${encodeURIComponent(email)}`);
+            const response = await fetch(`/HotelixHub/codigo/controller/ReservaController.php?accion=listar&email=${encodeURIComponent(email)}`);
             
             // Validar que la respuesta sea válida
             if (!response.ok) {
@@ -234,14 +234,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <div class="botones-reserva">
                     <button class="btn-eliminar" data-id="${reserva.id_reserva}">Eliminar</button>
-                    <a href="/codigo/pdf/generarRecibo.php?id=${reserva.id_reserva}" target="_blank" class="btn-descargar"> Ver Recibo</a>
+                    <a href="/HotelixHub/codigo/pdf/generarRecibo.php?id=${reserva.id_reserva}" target="_blank" class="btn-descargar"> Ver Recibo</a>
                 </div>
             `;
             reservaItem.querySelector('.btn-eliminar').addEventListener('click', async function () {
                 const id = this.getAttribute('data-id');
                 if (confirm('¿Seguro que deseas eliminar esta reserva del historial?')) {
                     try {
-                        const res = await fetch(`/codigo/controller/ReservaController.php`, {
+                        const res = await fetch(`/HotelixHub/codigo/controller/ReservaController.php`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ accion: 'eliminar', id_reserva: id })
@@ -522,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function autocompletarFormularioConSesion() {
         try {
-            const res = await fetch('/codigo/apiUsuario.php');
+            const res = await fetch('/HotelixHub/codigo/api/apiUsuario.php');
             const datos = await res.json();
 
             if (datos.error) {
@@ -615,6 +615,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!validarReservaCompleta()) return;
 
+        mostrarResumenReserva();
+
         // Obtener ID de la habitación seleccionada
         const idHab = document.getElementById('id_habitacion_asignada').value;
         const habitacion = habitacionesDisponibles.find(h => String(h.id_habitacion) === String(idHab));
@@ -627,8 +629,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('res-hab-precio').textContent = `$${Number(habitacion.precio).toLocaleString('es-CO')} COP`;
 
             const imagenPath = habitacion.imagen && habitacion.imagen !== ''
-                ? '/codigo/' + habitacion.imagen
-                : '/codigo/uploads/habitaciones/no-imagen.png';
+                ? '/HotelixHub/codigo/' + habitacion.imagen
+                : '/HotelixHub/codigo/uploads/habitaciones/no-imagen.png';
 
             document.getElementById('res-imagen').src = imagenPath;
             document.getElementById('res-imagen').alt = 'Imagen habitación ' + habitacion.nombre;
@@ -664,7 +666,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function cargarHabitaciones() {
         try {
-            const response = await fetch('/codigo/controller/HabitacionController.php?accion=listarDisponibles');
+            const response = await fetch('/HotelixHub/codigo/api/apiHabitaciones.php?accion=listarDisponibles');
+
             habitacionesDisponibles = await response.json(); // Guardar globalmente
             const habitaciones = habitacionesDisponibles;
 
@@ -675,7 +678,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const card = document.createElement('div');
                 card.classList.add('card-hab');
                 card.innerHTML = `
-                    <img src="/codigo/${hab.imagen}" alt="${hab.nombre}">
+                    <img src="/HotelixHub/codigo/${hab.imagen}" alt="${hab.nombre}">
                     <h3>Habitación ${hab.nombre}</h3>
                     <p><strong>Piso:</strong> ${hab.piso}</p>
                     <p><strong>Tipo:</strong> ${hab.tipoHabitacion}</p>
@@ -731,6 +734,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        mostrarResumenReserva();
+
         // Mostrar resumen en el modal
         document.getElementById('res-hab-nombre').textContent = habitacion.nombre;
         document.getElementById('res-hab-tipo').textContent = habitacion.tipoHabitacion;
@@ -739,8 +744,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('res-hab-precio').textContent = `$${Number(habitacion.precio).toLocaleString('es-CO')} COP`;
 
         const imagenPath = habitacion.imagen && habitacion.imagen !== ''
-            ? '/codigo/' + habitacion.imagen
-            : '/codigo/uploads/habitaciones/no-imagen.png';
+            ? '/HotelixHub/codigo/' + habitacion.imagen
+            : '/HotelixHub/codigo/uploads/habitaciones/no-imagen.png';
 
         document.getElementById('res-imagen').src = imagenPath;
         document.getElementById('res-imagen').alt = 'Imagen habitación ' + habitacion.nombre;
@@ -763,7 +768,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
-            const response = await fetch("/codigo/reservas.php", {
+            const response = await fetch("/HotelixHub/codigo/api/reservas.php", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -797,7 +802,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Descargar PDF automáticamente si el backend devuelve el ID
                 if (resultado.id_reserva) {
                     const link = document.createElement('a');
-                    link.href = `/codigo/pdf/generarRecibo.php?id=${resultado.id_reserva}`;
+                    link.href = `/HotelixHub/codigo/pdf/generarRecibo.php?id=${resultado.id_reserva}`;
                     link.download = `recibo-reserva-${resultado.id_reserva}.pdf`;
                     document.body.appendChild(link);
                     link.click();

@@ -65,10 +65,10 @@ class HabitacionModel {
         if (isset($datos['imagen']) && $datos['imagen']['error'] === UPLOAD_ERR_OK) {
             $nombreTemporal = $datos['imagen']['tmp_name'];
             $nombreFinal = uniqid() . "_" . basename($datos['imagen']['name']);
-            $rutaDestino = "uploads/habitaciones/" . $nombreFinal;
+            $rutaDestino = "../uploads/habitaciones/" . $nombreFinal;
 
             move_uploaded_file($nombreTemporal, $rutaDestino);
-            return $rutaDestino;
+            return "uploads/habitaciones/" . $nombreFinal;
         }
 
         return $datos['imagenRuta'] ?? 'uploads/habitaciones/no-imagen.png';

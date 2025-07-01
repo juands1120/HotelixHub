@@ -69,14 +69,14 @@ $html = '
 <body>
   <div class="contenedor">
 
-    <div class="encabezado">
-      <img src="' . $logoURL . '" class="logo">
+    <div class="encabezado" style="justify-content: flex-end;">
       <div class="titulo">
         <h1>Recibo de Reserva</h1>
         <p>Número: <strong>' . $reciboNumero . '</strong></p>
         <p>Emitido el: ' . $fechaActual . '</p>
       </div>
     </div>
+
 
     <div class="seccion">
       <h3>Datos del Cliente</h3>

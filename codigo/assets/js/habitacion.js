@@ -42,7 +42,7 @@ async function enviarDatos(accion, datos = {}, numero = null) {
 
     // Enviar al servidor
     try {
-        const response = await fetch("/codigo/api_habitaciones.php", {
+        const response = await fetch("/HotelixHub/codigo/api/apiHabitaciones.php", {
             method: "POST",
             body: formData
         });
@@ -61,7 +61,7 @@ async function enviarDatos(accion, datos = {}, numero = null) {
  */
 async function cargarHabitaciones() {
     try {
-        const response = await fetch('/codigo/api_habitaciones.php?accion=listar');
+        const response = await fetch('/HotelixHub/codigo/api/apiHabitaciones.php?accion=listar');
         habitaciones = await response.json();
         actualizarUI();
     } catch (error) {
@@ -94,6 +94,10 @@ function abrirFormulario(data) {
     
     habitacionEditando = data; // Guardar referencia a la habitación en edición
 
+    // Eliminar previews anteriores
+    const previewsAntiguos = form.querySelectorAll('.imagen-preview-actual');
+    previewsAntiguos.forEach(preview => preview.remove());
+
     // Si estamos editando, llenar el formulario con los datos existentes
     if (data) {
         document.getElementById("numHabitacion").value = data.numero;
@@ -104,9 +108,10 @@ function abrirFormulario(data) {
 
     // Mostrar imagen actual (nuevo)
         const imagenPreview = document.createElement('div');
+        imagenPreview.classList.add('imagen-preview-actual');
         imagenPreview.innerHTML = `
             <p>Imagen actual:</p>
-            <img src="/codigo/${data.imagen}" style="max-width: 100px; margin: 10px 0;">
+            <img src="/HotelixHub/codigo/${data.imagen}" style="max-width: 100px; margin: 10px 0;">
         `;
         form.insertBefore(imagenPreview, form.querySelector('button[type="submit"]'));
         // Hacer el campo de número de habitación readonly al editar
@@ -271,7 +276,7 @@ function renderHabitacion(data) {
             <li>Tipo de habitación: ${data.tipo}</li>
             <li>Servicios Incluidos: ${(Array.isArray(data.servicios) ? data.servicios.join(", ") : "Sin servicios")}</li>
         </ul>
-        <img src="/codigo/${data.imagen}" alt="Imagen habitación" />    
+        <img src="/HotelixHub/codigo/${data.imagen}" alt="Imagen habitación" />   
         <div class="habitacion-precio">$${parseInt(data.precio).toLocaleString()} COP</div>
         <select class="estado-select">
             <option ${data.estado === "Disponible" ? "selected" : ""}>Disponible</option>

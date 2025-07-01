@@ -1,7 +1,6 @@
 <?php
 // controllers/HabitacionController.php
 
-// Habilitar errores para depuración
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -30,7 +29,6 @@ class HabitacionController {
                     echo json_encode(['exito' => false]);
                 }
                 break;
-
 
             case 'editar':
                 $datos = $this->recogerDatosFormulario();
@@ -84,11 +82,4 @@ class HabitacionController {
             'imagenRuta' => $_POST['imagenRuta'] ?? null
         ];
     }
-}
-
-// ========== EJECUTAR CONTROLADOR ==========
-if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once __DIR__ . '/../config/conexionbd.php';
-    $controller = new HabitacionController($pdo);
-    $controller->manejarSolicitud();
 }
