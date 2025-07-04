@@ -1,6 +1,7 @@
 DELIMITER $$
 
 CREATE PROCEDURE sp_registrar_empleado(
+    IN P_usu_idrol INT,
     IN P_nombre VARCHAR(100),
     IN P_apellido VARCHAR(100),
     IN P_tipoDocumento VARCHAR(100),
@@ -8,7 +9,6 @@ CREATE PROCEDURE sp_registrar_empleado(
     IN P_direccion VARCHAR(100),
     IN P_email VARCHAR(20),
     IN P_numeroTelefono VARCHAR(100),
-    IN P_usu_rol INT,
     IN P_estado VARCHAR(100),
     IN P_password VARCHAR(255),
     IN P_reset_token VARCHAR(255),
