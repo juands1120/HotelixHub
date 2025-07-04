@@ -4,7 +4,7 @@ $db   = 'hotelixhub';
 $user = 'root'; 
 $pass = '';
 $charset = 'utf8mb4';
-$port = '3307';
+$port = '';
 
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
 

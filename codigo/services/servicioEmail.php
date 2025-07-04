@@ -15,12 +15,12 @@ class ServicioEmail {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'juandis.pt55@gmail.com';
-            $mail->Password = 'ksuy quav hjwt fmfg';
+            $mail->Username = 'hotelixhub@gmail.com';
+            $mail->Password = 'wpsq fael ebls zqyy';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
-            $mail->setFrom('juandis.pt55@gmail.com', 'HotelixHub');
+            $mail->setFrom('hotelixhub@gmail.com', 'HotelixHub');
             $mail->addAddress($correoDestino, $nombreUsuario);
 
             $mail->isHTML(true);
@@ -48,12 +48,12 @@ class ServicioEmail {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'juandis.pt55@gmail.com';
-            $mail->Password = 'ksuy quav hjwt fmfg';
+            $mail->Username = 'hotelixhub@gmail.com';
+            $mail->Password = 'wpsq fael ebls zqyy';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
-            $mail->setFrom('juandis.pt55@gmail.com', 'HotelixHub');
+            $mail->setFrom('hotelixhub@gmail.com', 'HotelixHub');
             $mail->addAddress($correoDestino, $nombreUsuario);
 
             $mail->isHTML(true);
