@@ -14,6 +14,8 @@ if (isset($_POST['login'])) {
     if ($user) {
         $_SESSION['usuario'] = $user;
 
+
+
         // Redireccionar según rol
         switch ($user['usu_idrol']) {
             case 1:
