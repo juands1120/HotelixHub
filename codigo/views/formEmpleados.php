@@ -245,7 +245,7 @@ $empleados = $empleado->obtenerEmpleados();
 <script>
   // Funciones globales para el modal
   function abrirModal() {
-    document.getElementById('modalEmpleado').style.display = 'block';
+    document.getElementById('modalEmpleado').style.display = 'flex';
   }
 
   function cerrarModal() {
