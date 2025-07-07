@@ -1,0 +1,26 @@
+DELIMITER $$
+
+CREATE PROCEDURE sp_obtener_empleados_por_rol(
+    IN p_rol_nombre VARCHAR(100)
+)
+BEGIN
+  SELECT 
+    u.id_usuario,
+    u.usu_idrol,
+    r.rol_nombre,
+    u.nombre,
+    u.apellido,
+    u.tipoDocumento,
+    u.numeroDocumento,
+    u.numeroTelefono,
+    u.paisProcedencia,
+    u.email,
+    u.estado,
+    u.direccion
+  FROM usuarios u
+  INNER JOIN rol r ON u.usu_idrol = r.id_rol
+  WHERE u.usu_idrol IN (3, 4, 5)
+    AND (p_rol_nombre = '' OR r.rol_nombre = p_rol_nombre);
+END $$
+
+DELIMITER ;

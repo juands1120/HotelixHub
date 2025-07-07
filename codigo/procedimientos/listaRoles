@@ -1,0 +1,8 @@
+DELIMITER //
+CREATE PROCEDURE `sp_listar_roles_empleados`()
+BEGIN
+    SELECT id_rol, rol_nombre 
+    FROM rol 
+    WHERE id_rol IN (3, 4, 5); -- Solo roles de empleados
+END //
+DELIMITER ;

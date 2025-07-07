@@ -15,7 +15,7 @@ if (isset($_SESSION['usuario'])) {
             header('Location: dashCliente.php');
             break;
         case 3:
-            header('Location: dashOtro.php');
+            header('Location: dashAdmin.php');
             break;
         default:
             header('Location: ../login.php');
@@ -54,7 +54,7 @@ if (isset($_SESSION['usuario'])) {
         <div class="form-group">
           <label>Contraseña</label>
           <input type="password" name="password" id="password" placeholder="Ingrese su contraseña">
-          <div class="text-end"><a href="verificarCorreoToken.php">¿Olvidó su contraseña?</a></div>
+          <div class="text-end"><a href="verificarCorreoToken.php" target="_blank">¿Olvidó su contraseña?</a></div>
         </div>
         <button type="submit" class="btn" name="login">Iniciar Sesión</button>
       </form>

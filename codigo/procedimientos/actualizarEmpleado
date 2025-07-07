@@ -1,0 +1,65 @@
+DELIMITER //
+CREATE PROCEDURE `sp_actualizar_empleado`(
+    IN p_id_usuario INT,
+    IN p_nombre VARCHAR(100),
+    IN p_apellido VARCHAR(100),
+    IN p_tipoDocumento ENUM('CC','PA','TI','CE'),
+    IN p_numeroDocumento VARCHAR(100),
+    IN p_numeroTelefono VARCHAR(20),
+    IN p_email VARCHAR(100),
+    IN p_direccion VARCHAR(100),
+    IN p_usu_idrol INT,
+    IN p_estado ENUM('en turno','fuera de turno','vacaciones')
+)
+BEGIN
+    DECLARE document_exists INT;
+    DECLARE phone_exists INT;
+    DECLARE email_exists INT;
+    DECLARE error_msg VARCHAR(255);
+    
+    -- Verificar si el documento ya existe en otro usuario
+    SELECT COUNT(*) INTO document_exists 
+    FROM usuarios 
+    WHERE numeroDocumento = p_numeroDocumento AND id_usuario != p_id_usuario;
+    
+    -- Verificar si el teléfono ya existe en otro usuario
+    SELECT COUNT(*) INTO phone_exists 
+    FROM usuarios 
+    WHERE numeroTelefono = p_numeroTelefono AND id_usuario != p_id_usuario;
+    
+    -- Verificar si el email ya existe en otro usuario
+    SELECT COUNT(*) INTO email_exists 
+    FROM usuarios 
+    WHERE email = p_email AND id_usuario != p_id_usuario;
+    
+    -- Validaciones
+    IF document_exists > 0 THEN
+        SET error_msg = 'El número de documento ya está registrado por otro usuario';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+    ELSEIF phone_exists > 0 THEN
+        SET error_msg = 'El número de teléfono ya está registrado por otro usuario';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+    ELSEIF email_exists > 0 THEN
+        SET error_msg = 'El correo electrónico ya está registrado por otro usuario';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
+    ELSE
+        -- Actualizar el usuario
+        UPDATE usuarios SET
+            nombre = p_nombre,
+            apellido = p_apellido,
+            tipoDocumento = p_tipoDocumento,
+            numeroDocumento = p_numeroDocumento,
+            numeroTelefono = p_numeroTelefono,
+            email = p_email,
+            direccion = p_direccion,
+            usu_idrol = p_usu_idrol,
+            estado = p_estado
+        WHERE id_usuario = p_id_usuario;
+        
+        -- Verificar si se actualizó correctamente
+        IF ROW_COUNT() = 0 THEN
+            SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'No se realizaron cambios en el empleado';
+        END IF;
+    END IF;
+END //
+DELIMITER ;

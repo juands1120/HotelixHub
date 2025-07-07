@@ -39,15 +39,12 @@ if (!isset($_SESSION['usuario'])) {
 
   <main class="main">
     <header class="header">
-      <div class="search-bar">
-        <input type="text" placeholder="Buscar" />
-        <button>🔍</button>
-        <button>🔽</button>
-      </div>
-      <div class="profile">
-        <span class="profile-name">Jose Cuervo</span>
-        <div class="profile-img">👤</div>
-      </div>
+        <div class="profile" id="profile">
+          <span class="profile-name">
+            <?php echo htmlspecialchars($_SESSION['usuario']['nombre']. ' ' . $_SESSION['usuario']['apellido']); ?>
+          </span>
+          <div class="profile-img">👤</div>
+        </div>
     </header>
 
     <h1 class="page-title">Clientes</h1>

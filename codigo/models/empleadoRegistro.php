@@ -8,23 +8,78 @@ class empleadoRegistro {
         $this->pdo = $pdo;
     }
 
-    public function registrar($usu_idrol, $nombre, $apellido, $tipoDocumento, $numeroDocumento, $numeroTelefono, $direccion, $email, $estado, $password, $reset_token = null, $token_expires = null) {
-        $sql = "CALL sp_registrar_empleado(:usu_idrol, :nombre, :apellido, :tipoDocumento, :numeroDocumento, :numeroTelefono, :direccion, :email, :estado, :password, :reset_token, :token_expires)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':usu_idrol', $usu_idrol);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellido', $apellido);
-        $stmt->bindParam(':tipoDocumento', $tipoDocumento);
-        $stmt->bindParam(':numeroDocumento', $numeroDocumento);
-        $stmt->bindParam(':numeroTelefono', $numeroTelefono);
-        $stmt->bindParam(':direccion', $direccion);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':estado', $estado);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':reset_token', $reset_token);
-        $stmt->bindParam(':token_expires', $token_expires);
-        return $stmt->execute();
+    public function registrar($rol, $nombre, $apellido, $tipoDocumento, $numeroDocumento,
+                            $numeroTelefono, $paisProcedencia, $email, $password,
+                            $reset_token, $token_expires, $estado, $direccion)
+    {
+        $stmt = $this->pdo->prepare("CALL sp_registrar_empleado(
+            :rol, :nombre, :apellido, :tipoDocumento, :numeroDocumento,
+            :numeroTelefono, :paisProcedencia, :email, :password,
+            :reset_token, :token_expires, :estado, :direccion
+        )");
+
+        return $stmt->execute([
+            ':rol' => $rol,
+            ':nombre' => $nombre,
+            ':apellido' => $apellido,
+            ':tipoDocumento' => $tipoDocumento,
+            ':numeroDocumento' => $numeroDocumento,
+            ':numeroTelefono' => $numeroTelefono,
+            ':paisProcedencia' => $paisProcedencia, 
+            ':email' => $email,
+            ':password' => $password,
+            ':reset_token' => $reset_token,
+            ':token_expires' => $token_expires,
+            ':estado' => $estado,
+            ':direccion' => $direccion
+        ]);
     }
+
+    public function obtenerEmpleadosPorRol($rol) {
+    $stmt = $this->pdo->prepare("CALL sp_obtener_empleados_por_rol(:rol)");
+    $stmt->bindParam(':rol', $rol);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+// Agrega estos métodos a tu clase empleadoRegistro
+public function actualizarEmpleado($data) {
+    $stmt = $this->pdo->prepare("CALL sp_actualizar_empleado(
+        :id, :nombre, :apellido, :tipoDocumento, :numeroDocumento, 
+        :numeroTelefono, :email, :direccion, :usu_idrol, :estado
+    )");
+    
+    return $stmt->execute($data);
+}
+
+public function eliminarEmpleado($idEmpleado, $idUsuarioEliminador) {
+    $stmt = $this->pdo->prepare("CALL sp_eliminar_empleado(:idEmpleado, :idEliminador)");
+    return $stmt->execute([
+        'idEmpleado' => $idEmpleado,
+        'idEliminador' => $idUsuarioEliminador
+    ]);
+}
+
+
+
+public function findByDocumento($numeroDocumento) {
+    $stmt = $this->pdo->prepare("SELECT * FROM usuarios WHERE numeroDocumento = :doc");
+    $stmt->execute(['doc' => $numeroDocumento]);
+    return $stmt->fetch();
+}
+
+public function findByTelefono($numeroTelefono) {
+    $stmt = $this->pdo->prepare("SELECT * FROM usuarios WHERE numeroTelefono = :tel");
+    $stmt->execute(['tel' => $numeroTelefono]);
+    return $stmt->fetch();
+}
+
+public function findByDireccion($direccion) {
+    $stmt = $this->pdo->prepare("SELECT * FROM usuarios WHERE direccion = :dir");
+    $stmt->execute(['dir' => $direccion]);
+    return $stmt->fetch();
+}
+
+
     //metodo para buscar solo empleados
     public function obtenerEmpleados() {
     $stmt = $this->pdo->query("CALL sp_obtener_empleados()");

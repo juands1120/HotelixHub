@@ -25,7 +25,13 @@ if (isset($_POST['login'])) {
                 header('Location: ../views/dashCliente.php');
                 break;
             case 3:
-                header('Location: ../views/dashOtro.php');
+                header('Location: ../views/dashAdmin.php');
+                break;
+            case 4:
+                header('Location: ../views/dashAdmin.php');
+                break;
+            case 5:
+                header('Location: ../views/dashAdmin.php');
                 break;
             default:
                 session_destroy();

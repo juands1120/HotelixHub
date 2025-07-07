@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 // Tiempo máximo de inactividad (en segundos)
-$tiempoInactividad = 900; // 1 minutos
+$tiempoInactividad = 900; // 15 minutos
 
 if (isset($_SESSION['usuario'])) {
     if (isset($_SESSION['ultimo_acceso'])) {

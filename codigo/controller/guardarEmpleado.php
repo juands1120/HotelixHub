@@ -8,33 +8,52 @@ $empleado = new empleadoRegistro($pdo);
 
 if (isset($_POST['guardarEmpleado'])) {
     $data = [
-        'usu_rol' => $_POST['usu_rol'],
+        'usu_idrol' => $_POST['usu_idrol'],
         'nombre' => $_POST['nombre'],
         'apellido' => $_POST['apellido'],
         'tipoDocumento' => $_POST['tipoDocumento'],
         'numeroDocumento' => $_POST['numeroDocumento'],
         'numeroTelefono' => $_POST['numeroTelefono'],
-        'direccion' => $_POST['direccion'],
-        'email' => $_POST['email'],
+        'email' => strtolower(trim($_POST['email'])),
+        'password' => $_POST['password'],
         'estado' => $_POST['estado'],
-        'password' => $_POST['password']
+        'direccion' => $_POST['direccion']
     ];
 
+    // Validaciones: documento, teléfono y correo deben ser únicos
+    if ($empleado->findByEmail($data['email'])) {
+        header("Location: ../views/formEmpleados.php?error=correo");
+        exit;
+    }
+
+    if ($empleado->findByDocumento($data['numeroDocumento'])) {
+        header("Location: ../views/formEmpleados.php?error=documento");
+        exit;
+    }
+
+    if ($empleado->findByTelefono($data['numeroTelefono'])) {
+        header("Location: ../views/formEmpleados.php?error=telefono");
+        exit;
+    }
+
+    // Hashear la contraseña
     $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
+    // Registrar empleado
     $registroExitoso = $empleado->registrar(
-        $data['usu_rol'],
+        $data['usu_idrol'],
         $data['nombre'],
         $data['apellido'],
         $data['tipoDocumento'],
         $data['numeroDocumento'],
         $data['numeroTelefono'],
-        $data['direccion'],
+        null, // paisProcedencia como NULL
         $data['email'],
-        $data['estado'],
         $hashedPassword,
         null,
-        null
+        null,
+        $data['estado'],
+        $data['direccion']
     );
 
     if ($registroExitoso) {
@@ -42,6 +61,7 @@ if (isset($_POST['guardarEmpleado'])) {
         $servicioEmail->enviarCorreoBienvenida($data['email'], $data['nombre']);
     }
 
-    header('Location: ../views/login.php');
+    header('Location: ../views/formEmpleados.php?registro=exitoso');
     exit;
 }
+

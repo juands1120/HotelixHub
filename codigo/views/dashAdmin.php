@@ -8,8 +8,8 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 // Verificar que el rol sea administrador 
-if ($_SESSION['usuario']['usu_idrol'] != 1) {
-    header('Location: ../views/login.php'); // O a una página de error
+if (!in_array($_SESSION['usuario']['usu_idrol'], [1, 3, 4, 5])) {
+    header('Location: ../views/login.php'); // O página de acceso denegado
     exit();
 }
 ?>
@@ -47,15 +47,15 @@ if ($_SESSION['usuario']['usu_idrol'] != 1) {
     </div>    
 
     <div class="main-content">
-        <div class="header">
-            <div class="profile">
-                <span>jose cuervo</span>
-                <div class="profile-img">JC</div>
-            </div>
+        <div class="profile" id="profile">
+          <span class="profile-name">
+            <?php echo htmlspecialchars($_SESSION['usuario']['nombre']. ' ' . $_SESSION['usuario']['apellido']); ?>
+          </span>
+          <div class="profile-img">👤</div>
         </div>
 
         <div class="welcome">
-            <h2>Bienvenido, jose cuervo</h2>
+            <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']. ' ' . $_SESSION['usuario']['apellido']); ?></h2>
         </div>
 
         <div class="dashboard-content">
