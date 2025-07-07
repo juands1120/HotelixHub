@@ -1,0 +1,19 @@
+DELIMITER //
+
+CREATE PROCEDURE sp_guardar_mensaje_contacto(
+    IN p_id_usuario INT,
+    IN p_nombre VARCHAR(100),
+    IN p_telefono VARCHAR(20),
+    IN p_email VARCHAR(100),
+    IN p_ciudad VARCHAR(50),
+    IN p_motivo VARCHAR(50),
+    IN p_mensaje TEXT
+)
+BEGIN
+    INSERT INTO contacto 
+        (id_usuario, nombre, telefono, email, ciudad, motivo, mensaje)
+    VALUES 
+        (p_id_usuario, p_nombre, p_telefono, p_email, p_ciudad, p_motivo, p_mensaje);
+END //
+
+DELIMITER ;

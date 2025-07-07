@@ -46,21 +46,10 @@
             <form action="procesar_reserva.php" method="POST">
                 <!-- RESERVAR-->
                 <div class="reservar">
-                    <!---->
-                    <div class="inputGrupo">
-                        <label><strong>Tu experiencia ideal</strong></label>
-                        <select name="experiencia" id="experiencia">
-                            <option value="" disabled selected>Personaliza tu estancia</option>
-                            <option value="negocios-ejecutiva">Viaje de negocios (Habitación Ejecutiva)</option>
-                            <option value="romantica-suite">Escapada romántica (Suite)</option>
-                            <option value="familiar-conectadas">Vacaciones familiares (Habitaciones conectadas)</option>
-                            <option value="relax-spa">Relax y bienestar (Con acceso a Spa)</option>
-                        </select>
-                    </div>
-                    
                     <!-- FECHA ENTRADA-->
                     <div class="inputGrupo">
-                        <label><strong>Check in</strong></label>        
+                        <label><strong>Check in</strong></label>  
+                        <br>      
                         <input type="date" name="checkin" id="checkin">
                     </div>
                     
@@ -246,7 +235,7 @@
 
         <!-- ====================================== SECCION DE CONTACTANOS ====================================== -->
         <section id="contacto">
-            <form class="formulario-C" action="procesar_contacto.php" method="POST">
+            <form class="formulario-C">
                 <!-- INTRODUCCION DE CONTACTANOS-->
                 <h2><strong>Contactanos</strong></h2>
                 <p>¿Tienes preguntas, necesitas ayuda o simplemente 
@@ -321,7 +310,16 @@
         </div>
     </footer>
 
+    <div id="modal-exito" class="modal-exito-overlay">
+        <div class="modal-exito-contenido">
+            <h2>¡Mensaje enviado!</h2>
+            <p>Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos lo antes posible.</p>
+            <button id="cerrar-modal-exito">Cerrar</button>
+        </div>
+    </div>
+
+
     <!-- ================================================ VALIDACIONES DE JAVASCRIPT ========================================== -->
-    <script src="./JS/Home.js"></script>
+    <script src="/HotelixHub/codigo/assets/js/home.js"></script>
 </body>
 </html>

@@ -1,118 +1,108 @@
-// Espera a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     // ==================================================================
     // FUNCIONES UTILITARIAS
     // ==================================================================
-    
-    //Muestra un mensaje de error bajo un campo de formulario
-
     function mostrarError(input, mensaje) {
-        // Eliminar errores previos del mismo campo
         const erroresAnteriores = input.parentNode.querySelectorAll('.error-js');
         erroresAnteriores.forEach(error => error.remove());
-        
-        // Crear y mostrar nuevo elemento de error
         const error = document.createElement('span');
-        error.className = 'error error-js'; // Clases para estilizado CSS
+        error.className = 'error error-js';
         error.textContent = mensaje;
         input.parentNode.appendChild(error);
-        input.classList.add('input-error'); // Resaltar campo inválido
+        input.classList.add('input-error');
     }
-
-    //Limpia errores cuando el usuario comienza a escribir en un campo
 
     function limpiarError(input) {
         input.addEventListener('input', function() {
-            // Remover estilos de error
             input.classList.remove('input-error');
-            // Eliminar mensaje de error si existe
             const error = input.parentNode.querySelector('.error-js');
             if (error) error.remove();
         });
     }
 
     // ==================================================================
-    // SECCIÓN 1: VALIDACIÓN FORMULARIO RÁPIDO DE RESERVAS (HOME)
+    // FORMULARIO RÁPIDO DE RESERVAS (home.html)
     // ==================================================================
-    const reservaForm = document.querySelector('#formulario form');
-    
-    if (reservaForm) {
-        // Preparación: Agregar listeners para limpiar errores al escribir
-        const inputsReserva = reservaForm.querySelectorAll('input, select');
-        inputsReserva.forEach(input => limpiarError(input));
-        
-        // Validación al enviar el formulario
-        reservaForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevenir envío por defecto
-            let isValid = true; // Bandera de validación
+    const formRapido = document.querySelector('#formulario form');
+    if (formRapido) {
+        const inputsRapido = formRapido.querySelectorAll('input');
+        inputsRapido.forEach(input => limpiarError(input));
 
-            // --- Validación del campo EXPERIENCIA (reemplazo de ubicación) ---
-            const experiencia = document.getElementById('experiencia');
-            if (experiencia.value === '') {
-                mostrarError(experiencia, 'Selecciona una experiencia para personalizar tu estancia');
-                isValid = false;
-            }
+        formRapido.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
 
-            // --- Validación de FECHAS ---
             const checkin = document.getElementById('checkin');
             const checkout = document.getElementById('checkout');
-            const hoy = new Date().toISOString().split('T')[0]; // Fecha actual
+            const invitados = document.getElementById('invitados');
 
-            // Validar fecha de entrada
+            // VALIDACIÓN CHECK-IN
             if (checkin.value === '') {
                 mostrarError(checkin, 'Ingresa fecha de check-in');
                 isValid = false;
-            } else if (checkin.value < hoy) {
-                mostrarError(checkin, 'No puedes seleccionar fechas pasadas');
-                isValid = false;
+            } else {
+                const fechaCheckin = new Date(checkin.value + "T00:00:00");
+                const hoy = new Date();
+                hoy.setHours(0,0,0,0);
+                if (fechaCheckin < hoy) {
+                    mostrarError(checkin, 'No puedes seleccionar fechas pasadas');
+                    isValid = false;
+                }
             }
 
-            // Validar fecha de salida
+            // VALIDACIÓN CHECK-OUT
             if (checkout.value === '') {
                 mostrarError(checkout, 'Ingresa fecha de check-out');
                 isValid = false;
             } else if (checkin.value && checkout.value && new Date(checkin.value) >= new Date(checkout.value)) {
-                mostrarError(checkout, 'Check-out debe ser posterior al check-in');
+                mostrarError(checkout, 'Check-out debe ser posterior');
                 isValid = false;
             }
 
-            // --- Validación de NÚMERO DE INVITADOS ---
-            const invitados = document.getElementById('invitados');
+            // VALIDACIÓN INVITADOS
             if (!invitados.value || parseInt(invitados.value) < 1) {
                 mostrarError(invitados, 'Debe haber al menos 1 invitado');
                 isValid = false;
             }
 
-            // Enviar formulario solo si pasa todas las validaciones
             if (isValid) {
-                this.submit();
+                const url = `/HotelixHub/codigo/views/reservas.html?checkin=${checkin.value}&checkout=${checkout.value}&huespedes=${invitados.value}`;
+                window.location.href = url;
             }
         });
     }
 
     // ==================================================================
-    // SECCIÓN 2: VALIDACIÓN FORMULARIO DE CONTACTO
+    // AUTO-RELLENO EN reservas.html
+    // ==================================================================
+    const formularioReserva = document.querySelector('#formulario-reserva');
+    if (formularioReserva) {
+        const params = new URLSearchParams(window.location.search);
+        const checkin = params.get('checkin');
+        const checkout = params.get('checkout');
+        const huespedes = params.get('huespedes');
+
+        if (checkin) document.getElementById('check-in').value = checkin;
+        if (checkout) document.getElementById('check-out').value = checkout;
+        if (huespedes) document.getElementById('huesped').value = huespedes;
+    }
+
+    // ==================================================================
+    // VALIDACIÓN FORMULARIO DE CONTACTO
     // ==================================================================
     const contactoForm = document.querySelector('#contacto form');
-    
     if (contactoForm) {
-        // Preparación: Agregar listeners para limpiar errores al escribir
         const inputsContacto = contactoForm.querySelectorAll('input, select');
         inputsContacto.forEach(input => limpiarError(input));
-        
-        // --- VALIDACIÓN ESPECIAL PARA CAMPO NOMBRE (solo letras) ---
+
         const nombreInput = contactoForm.querySelector('input[name="nombre"]');
         if (nombreInput) {
-            // 1. Bloquear teclas no permitidas mientras escribe
             nombreInput.addEventListener('keypress', function(e) {
                 const key = String.fromCharCode(e.which);
-                const permitidos = /[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/; // Regex: solo letras y espacios
-                
-                if (!permitidos.test(key)) {
-                    e.preventDefault(); // Evitar que se muestre el carácter
-                    // Mostrar error temporal (desaparece después de 1s)
-                    mostrarError(this, 'Solo se permiten letras');
+                if (!/[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/.test(key)) {
+                    e.preventDefault();
+                    mostrarError(this, 'Solo letras');
                     setTimeout(() => {
                         const error = this.parentNode.querySelector('.error-js');
                         if (error) error.remove();
@@ -120,113 +110,108 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // 2. Limpieza de texto pegado con contenido inválido
             nombreInput.addEventListener('input', function() {
-                const valorOriginal = this.value;
-                // Eliminar cualquier carácter que no sea letra o espacio
+                const original = this.value;
                 this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
-                
-                // Si se modificó el valor, mostrar advertencia
-                if (valorOriginal !== this.value) {
-                    mostrarError(this, 'Se eliminaron caracteres no permitidos');
+                if (original !== this.value) {
+                    mostrarError(this, 'Se eliminaron caracteres inválidos');
                     setTimeout(() => {
                         const error = this.parentNode.querySelector('.error-js');
                         if (error) error.remove();
                     }, 1500);
                 }
-                
                 this.classList.remove('input-error');
             });
         }
 
-        // Validación al enviar formulario de contacto
         contactoForm.addEventListener('submit', function(e) {
             e.preventDefault();
             let isValid = true;
 
-            // --- VALIDACIÓN CAMPO NOMBRE ---
             const nombre = contactoForm.querySelector('input[name="nombre"]');
-            const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,}$/; // Mínimo 3 letras
-            
-            if (nombre.value.trim() === '') {
-                mostrarError(nombre, 'El nombre es requerido');
-                isValid = false;
-            } else if (!nombreRegex.test(nombre.value.trim())) {
-                mostrarError(nombre, 'Mínimo 3 letras (solo se permiten letras y espacios)');
+            if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,}$/.test(nombre.value.trim())) {
+                mostrarError(nombre, 'Mínimo 3 letras');
                 isValid = false;
             }
 
-            // --- VALIDACIÓN CAMPO TELÉFONO ---
             const telefono = contactoForm.querySelector('input[name="telefono"]');
-            const telefonoRegex = /^\+?[0-9]{7,15}$/; // Formato internacional opcional
-            
-            if (telefono.value.trim() === '') {
-                mostrarError(telefono, 'El teléfono es requerido');
-                isValid = false;
-            } else if (!telefonoRegex.test(telefono.value.trim())) {
-                mostrarError(telefono, 'Teléfono inválido (solo números, 7-15 dígitos, puede incluir + al inicio)');
+            if (!/^\+?[0-9]{7,15}$/.test(telefono.value.trim())) {
+                mostrarError(telefono, 'Teléfono inválido');
                 isValid = false;
             }
 
-            // --- VALIDACIÓN CAMPO EMAIL ---
             const email = contactoForm.querySelector('input[type="email"]');
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Formato email estándar
-            
-            if (email.value.trim() === '') {
-                mostrarError(email, 'El email es requerido');
-                isValid = false;
-            } else if (!emailRegex.test(email.value.trim())) {
-                mostrarError(email, 'Ingresa un email válido (ejemplo: usuario@dominio.com)');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+                mostrarError(email, 'Email inválido');
                 isValid = false;
             }
 
-            // --- VALIDACIÓN CAMPO CIUDAD ---
             const ciudad = contactoForm.querySelector('#ciudad');
             if (ciudad.value === '#') {
-                mostrarError(ciudad, 'Selecciona una ciudad válida');
+                mostrarError(ciudad, 'Selecciona una ciudad');
                 isValid = false;
             }
 
-            // --- VALIDACIÓN CAMPO MOTIVO ---
             const motivo = contactoForm.querySelector('#motivo');
             if (motivo.value === '#') {
-                mostrarError(motivo, 'Selecciona un motivo válido');
+                mostrarError(motivo, 'Selecciona un motivo');
                 isValid = false;
             }
 
-            // --- VALIDACIÓN CAMPO MENSAJE ---
             const mensaje = contactoForm.querySelector('input[name="mensaje"]');
             if (mensaje.value.trim().length < 10) {
-                mostrarError(mensaje, 'El mensaje debe tener al menos 10 caracteres');
+                mostrarError(mensaje, 'Mínimo 10 caracteres');
                 isValid = false;
             }
 
-            // Enviar formulario solo si pasa todas las validaciones
             if (isValid) {
-                this.submit();
+                const datos = {
+                    nombre: nombre.value.trim(),
+                    telefono: telefono.value.trim(),
+                    email: email.value.trim(),
+                    ciudad: ciudad.value,
+                    motivo: motivo.value,
+                    mensaje: mensaje.value.trim()
+                };
+
+                fetch('/HotelixHub/codigo/api/apiContacto.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(datos)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        contactoForm.reset();
+                        mostrarModalExito();
+                    } else {
+                        alert('Error: ' + (data.error || 'No se pudo enviar'));
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Error al enviar el formulario');
+                });
             }
         });
     }
-});
 
-// Menú móvil
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            menuToggle.classList.toggle('active');
+    // ==================================================================
+    // MODAL DE ÉXITO PARA CONTACTO
+    // ==================================================================
+    const cerrarModal = document.getElementById('cerrar-modal-exito');
+    if (cerrarModal) {
+        cerrarModal.addEventListener('click', function() {
+            document.getElementById('modal-exito').style.display = 'none';
         });
     }
-    
-    // Cierra el menú al hacer clic en un enlace
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
-        });
-    });
+
+    window.mostrarModalExito = function() {
+        const modal = document.getElementById('modal-exito');
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 15000);
+    };
+
 });

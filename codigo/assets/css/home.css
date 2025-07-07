@@ -593,6 +593,51 @@ footer {
     text-align: left;
 }
 
+/*MODAL EXITO */
+
+.modal-exito-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-exito-contenido {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.modal-exito-contenido h2 {
+    margin-bottom: 15px;
+    color: #402E7A; /* Verde éxito */
+}
+
+.modal-exito-contenido p {
+    margin-bottom: 20px;
+}
+
+.modal-exito-contenido button {
+    background: #402E7A;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.modal-exito-contenido button:hover {
+    background: #00d4ff;
+}
+
 /* ==================== MEDIA QUERIES ==================== */
 
 /* Para tablets (768px - 1024px) */

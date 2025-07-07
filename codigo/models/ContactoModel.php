@@ -13,10 +13,7 @@ class ContactoModel {
     }
 
     public function guardarMensaje($datos) {
-        $stmt = $this->pdo->prepare("INSERT INTO contacto 
-            (id_usuario, nombre, telefono, email, ciudad, motivo, mensaje) 
-            VALUES (:id_usuario, :nombre, :telefono, :email, :ciudad, :motivo, :mensaje)");
-
+        $stmt = $this->pdo->prepare("CALL sp_guardar_mensaje_contacto(:id_usuario, :nombre, :telefono, :email, :ciudad, :motivo, :mensaje)");
         return $stmt->execute([
             ':id_usuario' => $datos['id_usuario'],
             ':nombre' => $datos['nombre'],
