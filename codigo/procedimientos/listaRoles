@@ -6,3 +6,16 @@ BEGIN
     WHERE id_rol IN (3, 4, 5); -- Solo roles de empleados
 END //
 DELIMITER ;
+
+
+
+
+/* llamada al procedimiento almacenado para listar rol de cliente */
+DELIMITER //
+CREATE PROCEDURE `sp_listar_rol_cliente`()
+BEGIN
+    SELECT id_rol, rol_nombre 
+    FROM rol 
+    WHERE id_rol IN (2); -- Solo roles de clientes
+END //
+DELIMITER ;

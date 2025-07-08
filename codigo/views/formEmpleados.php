@@ -382,7 +382,6 @@ function mostrarDetallesEmpleado(empleado) {
             <div class="employee-data">
                 <div class="name">${empleado.nombre} ${empleado.apellido}</div>
                 <div class="details">${tiposDoc[empleado.tipoDocumento] || empleado.tipoDocumento} ${empleado.numeroDocumento}</div>
-                <div class="details">Nacionalidad: Colombia</div>
             </div>
         </div>
         <div class="contact-details">

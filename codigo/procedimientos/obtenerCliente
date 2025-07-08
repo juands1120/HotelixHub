@@ -1,0 +1,31 @@
+DELIMITER $$
+
+CREATE PROCEDURE sp_obtener_clientes()
+BEGIN
+    SELECT 
+        u.id_usuario,
+        u.nombre,
+        u.apellido,
+        u.tipoDocumento,
+        u.numeroDocumento,
+        u.numeroTelefono,
+        u.paisProcedencia,
+
+        r.id_habitacion,
+        r.fecha_entrada,
+        r.fecha_salida,
+        r.estado,
+
+        h.nombre AS nombre_habitacion,        
+        h.tipoHabitacion,
+        h.serviciosIncluidos
+
+    FROM usuarios u
+    LEFT JOIN reserva r ON r.id_usuario = u.id_usuario
+    LEFT JOIN habitacion h ON r.id_habitacion = h.id_habitacion
+    WHERE u.usu_idrol = 2;
+END $$
+
+DELIMITER ;
+
+
