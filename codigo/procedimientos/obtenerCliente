@@ -10,11 +10,14 @@ BEGIN
         u.numeroDocumento,
         u.numeroTelefono,
         u.paisProcedencia,
+        u.email,
 
         r.id_habitacion,
         r.fecha_entrada,
         r.fecha_salida,
         r.estado,
+        r.fecha_reserva,
+        
 
         h.nombre AS nombre_habitacion,        
         h.tipoHabitacion,

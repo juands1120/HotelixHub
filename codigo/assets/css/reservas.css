@@ -53,6 +53,7 @@ body {
 .nav-derecha {
     display: flex;
     align-items: center;
+    gap: 30px; /* Espacio entre botones */
 }
 
 /* Estilos del botón "Mis Reservas" */
@@ -61,7 +62,7 @@ body {
     color: #ffffff;
     background: #4B70F5;
     padding: 10px 20px;
-    margin: 10px 0;
+    margin: 10px 5px;
     border-radius: 10px;
     transition: .4s;
     cursor: pointer;
@@ -69,6 +70,28 @@ body {
     box-shadow: 0 1px 10px 1px #ffffff;
     border: transparent;
 }
+/* Estilos del botón "Inicio" */
+.btn-inicio {
+    text-decoration: none;
+    color: white;
+    background: #4B70F5;
+    padding: 15px 50px;
+    margin: 10px 5px;
+    border-radius: 10px;
+    font-size: 20px;
+    box-shadow: 0 1px 10px 1px #ffffff;
+    border: none;
+    transition: .4s;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn-inicio:hover {
+    background: #3DC2EC;
+    color: #402E7A;
+}
+
+
 
 #btn-nav:hover {
     background: #3DC2EC;
@@ -888,3 +911,4 @@ right: 40.2%;
     margin: 0 auto;
   }
 }
+

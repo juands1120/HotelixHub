@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-07-2025 a las 07:49:36
+-- Tiempo de generación: 08-07-2025 a las 23:37:08
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -195,11 +195,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_clientes` ()   BEGIN
         u.numeroDocumento,
         u.numeroTelefono,
         u.paisProcedencia,
+        u.email,
 
         r.id_habitacion,
         r.fecha_entrada,
         r.fecha_salida,
         r.estado,
+        r.fecha_reserva,
+        
 
         h.nombre AS nombre_habitacion,        
         h.tipoHabitacion,
@@ -383,7 +386,7 @@ CREATE TABLE `habitacion` (
 --
 
 INSERT INTO `habitacion` (`id_habitacion`, `nombre`, `tipoHabitacion`, `piso`, `precio`, `serviciosIncluidos`, `estado`, `imagen`) VALUES
-(1, '201', 'Sencilla', 2, 120000, 'wifi', 'Ocupada', 'uploads/habitaciones/686c8e6914986_Copia de habitacion_doble.webp');
+(1, '201', 'Sencilla', 2, 120000, 'wifi', 'Disponible', 'uploads/habitaciones/686c8e6914986_Copia de habitacion_doble.webp');
 
 -- --------------------------------------------------------
 
@@ -425,7 +428,9 @@ CREATE TABLE `reserva` (
 --
 
 INSERT INTO `reserva` (`id_reserva`, `id_usuario`, `id_habitacion`, `fecha_entrada`, `fecha_salida`, `num_huespedes`, `servicios_adicionales`, `precio_total`, `estado`, `fecha_reserva`) VALUES
-(1, 22, 1, '2025-07-07', '2025-07-08', 1, '[]', 150000.00, 'Pendiente', '2025-07-08 03:21:00');
+(1, 22, 1, '2025-07-07', '2025-07-08', 1, '[]', 150000.00, 'Pendiente', '2025-07-08 03:21:00'),
+(2, 22, 1, '2025-07-09', '2025-07-25', 1, '[\"Spa\"]', 2480000.00, 'Pendiente', '2025-07-08 19:47:05'),
+(3, 22, 1, '2025-07-30', '2025-07-31', 1, '[]', 150000.00, 'Pendiente', '2025-07-08 20:34:16');
 
 -- --------------------------------------------------------
 
@@ -479,7 +484,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id_usuario`, `usu_idrol`, `nombre`, `apellido`, `tipoDocumento`, `numeroDocumento`, `numeroTelefono`, `paisProcedencia`, `email`, `password`, `reset_token`, `token_expires`, `estado`, `direccion`) VALUES
 (1, 1, 'juan', 'diego', 'CC', '1026553308', '3138916559', 'colombia', 'js@gmail.com', '$2y$10$twI7PjcEblpqhTqt9z8yM.HiIORYHtTFvGuEjJsjPYpJCePnuotI6', '9f26c2fd21a638ca7c9a518702e6e164', '2025-07-07 09:50:19', NULL, ''),
 (21, 2, 'natali', 'veloza', 'CC', '52199883', '3143845237', NULL, 'natali@gmail.com', '$2y$10$oN7V6kOOMJ.yYMLlx6sWYeYpcB7pukNlEVNbjFoBBuq8K3r6ZbwTq', NULL, NULL, 'en turno', 'cll 2hasgdhjas'),
-(22, 2, 'fabio', 'sanchez', 'CC', '79632311', '301664875', 'mexico', 'fabio@gmail.com', '$2y$10$wpfb6OK21EP1H4XcfBilqu37SFzJkbjYYgxLnFgzQzYmbt7izgBp.', NULL, NULL, NULL, ''),
+(22, 2, 'fabio', 'sanchez', 'CC', '79632311', '6565655656', 'mexico', 'fabio@gmail.com', '$2y$10$wpfb6OK21EP1H4XcfBilqu37SFzJkbjYYgxLnFgzQzYmbt7izgBp.', NULL, NULL, NULL, ''),
 (23, 4, 'sebastian', 'rodriguez', 'CC', '21211212', '22323233232', NULL, 'sebas@gmail.com', '$2y$10$v/p1E9X5Tsv6CAPyeQQd7uDL37CkW.N1GbzWFXO0B.CHDMYvoehrS', NULL, NULL, 'en turno', 'cll 2hasgdhjas');
 
 -- --------------------------------------------------------
@@ -617,7 +622,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`

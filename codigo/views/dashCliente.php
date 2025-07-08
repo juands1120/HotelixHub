@@ -103,23 +103,10 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
             <th>Estado</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Hotel El Campín</td>
-            <td>01/01/2024</td>
-            <td>10/01/2024</td>
-            <td>15/01/2024</td>
-            <td>Confirmada</td>
-          </tr>
-          <tr>
-            <td>Hotel Central</td>
-            <td>15/02/2024</td>
-            <td>20/02/2024</td>
-            <td>25/02/2024</td>
-            <td>Cancelada</td>
-          </tr>
-          <!-- Más filas -->
-        </tbody>
+          <tbody id="tablaReservasBody">
+            <!-- Se llenará dinámicamente -->
+          </tbody>
+
       </table>
     </section>
   </main>
@@ -133,143 +120,169 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
     </div>
   </div>
 
-  <script>
-    const editBtn = document.getElementById('editBtn');
-    const saveBtn = document.getElementById('saveBtn');
+<script>
+/* ========== 1. AL CARGAR LA PÁGINA: CARGAR DATOS DEL CLIENTE Y SUS RESERVAS ========== */
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('../controller/clienteInfoController.php')
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        const historial = data.data;
+        const tbody = document.getElementById('tablaReservasBody');
+        tbody.innerHTML = '';
 
-    // Campos
-    const inpNombre = document.getElementById('inpNombre');
-    const inpTipo = document.getElementById('inpTipo');
-    const inpNum = document.getElementById('inpNum');
-    const inpPais = document.getElementById('inpPais');
-    const inpEmail = document.getElementById('inpEmail');
-    const inpTel = document.getElementById('inpTel');
+        // Si no hay reservas
+        if (historial.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">No hay reservas registradas.</td></tr>';
+        } else {
+          // Mostrar reservas en tabla
+          historial.forEach(reserva => {
+            const tr = document.createElement('tr');
+            const fechaReserva = reserva.fecha_reserva ? reserva.fecha_reserva.substring(0, 10) : '';
+            const fechaEntrada = reserva.fecha_entrada ? reserva.fecha_entrada.substring(0, 10) : '';
+            const fechaSalida = reserva.fecha_salida ? reserva.fecha_salida.substring(0, 10) : '';
 
-    // Display
-    const dispNombre = document.getElementById('dispNombre');
-    const dispTipo = document.getElementById('dispTipo');
-    const dispNum = document.getElementById('dispNum');
-    const dispPais = document.getElementById('dispPais');
-    const dispEmail = document.getElementById('dispEmail');
-    const dispTel = document.getElementById('dispTel');
+            tr.innerHTML = `
+              <td>${reserva.nombre_hotel || 'Hotel El Campin'}</td>
+              <td>${fechaReserva}</td>
+              <td>${fechaEntrada}</td>
+              <td>${fechaSalida}</td>
+              <td>${reserva.estado || 'Desconocido'}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
 
-    // Modal
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalMessage = document.getElementById('modalMessage');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
+        // Mostrar datos del cliente (de la primera reserva)
+        if (historial.length > 0) {
+          const cliente = historial[0];
+          document.getElementById('dispNombre').textContent = cliente.nombre + " " + cliente.apellido;
+          document.getElementById('dispTipo').textContent = cliente.tipoDocumento;
+          document.getElementById('dispNum').textContent = cliente.numeroDocumento;
+          document.getElementById('dispPais').textContent = cliente.paisProcedencia;
+          document.getElementById('dispEmail').textContent = cliente.email;
+          document.getElementById('dispTel').textContent = cliente.numeroTelefono;
 
-    // Abrir modal con mensaje
-    function openModal(title, message) {
-      modalTitle.textContent = title;
-      modalMessage.textContent = message;
-      modal.classList.add('active');
-    }
+          // Campos editables
+          document.getElementById('inpNombre').value = cliente.nombre + " " + cliente.apellido;
+          document.getElementById('inpTipo').value = cliente.tipoDocumento;
+          document.getElementById('inpNum').value = cliente.numeroDocumento;
+          document.getElementById('inpPais').value = cliente.paisProcedencia;
+          document.getElementById('inpEmail').value = cliente.email;
+          document.getElementById('inpTel').value = cliente.numeroTelefono;
+        }
 
-    modalCloseBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
+      } else {
+        openModal("Error", "No se pudo obtener la información del cliente.");
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      openModal("Error", "Error al cargar datos.");
     });
+});
 
-    // Validar solo letras y espacios
-    function validarSoloLetras(text) {
-      return /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(text.trim());
+
+/* ========== 2. FUNCIONALIDAD DEL MODAL DE MENSAJE ========== */
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const modalMessage = document.getElementById('modalMessage');
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+function openModal(title, message) {
+  modalTitle.textContent = title;
+  modalMessage.textContent = message;
+  modal.classList.add('active');
+}
+
+modalCloseBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+
+/* ========== 3. FUNCIONES DE VALIDACIÓN ========== */
+function validarEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+function validarTelefono(tel) {
+  return /^[\d+\s]+$/.test(tel.trim());
+}
+
+
+/* ========== 4. BOTÓN EDITAR: SOLO HABILITA EMAIL Y TELÉFONO ========== */
+editBtn.addEventListener('click', () => {
+  document.getElementById('inpEmail').disabled = false;
+  document.getElementById('inpTel').disabled = false;
+
+  // Asegura que los demás sigan deshabilitados
+  document.getElementById('inpNombre').disabled = true;
+  document.getElementById('inpTipo').disabled = true;
+  document.getElementById('inpNum').disabled = true;
+  document.getElementById('inpPais').disabled = true;
+
+  editBtn.disabled = true;
+  saveBtn.disabled = false;
+});
+
+
+/* ========== 5. BOTÓN GUARDAR: VALIDAR Y ACTUALIZAR EN SERVIDOR ========== */
+saveBtn.addEventListener('click', () => {
+  const email = inpEmail.value.trim();
+  const telefono = inpTel.value.trim();
+  let errores = [];
+
+  // Validaciones
+  if (!validarEmail(email)) {
+    errores.push("El email no tiene un formato válido.");
+    inpEmail.classList.add('invalid');
+  } else {
+    inpEmail.classList.remove('invalid');
+  }
+
+  if (!validarTelefono(telefono)) {
+    errores.push("El teléfono solo debe contener números, espacios o el símbolo '+'.");
+    inpTel.classList.add('invalid');
+  } else {
+    inpTel.classList.remove('invalid');
+  }
+
+  if (errores.length > 0) {
+    openModal("Errores de Validación", errores.join('\n'));
+    return;
+  }
+
+  // Si pasa validación, actualizar interfaz
+  dispEmail.textContent = email;
+  dispTel.textContent = telefono;
+
+  document.getElementById('inpEmail').disabled = true;
+  document.getElementById('inpTel').disabled = true;
+  editBtn.disabled = false;
+  saveBtn.disabled = true;
+
+  // Enviar al servidor
+  const datosActualizados = { email, telefono };
+
+  fetch('../controller/actualizarClienteController.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datosActualizados)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.status === 'success') {
+      openModal("Éxito", "Los datos han sido actualizados correctamente.");
+    } else {
+      openModal("Error", "No se pudieron actualizar los datos.");
     }
+  })
+  .catch(error => {
+    console.error(error);
+    openModal("Error", "Error en la comunicación con el servidor.");
+  });
+});
+</script>
 
-    // Validar números (solo dígitos)
-    function validarSoloNumeros(text) {
-      return /^[0-9]+$/.test(text.trim());
-    }
-
-    // Validar email
-    function validarEmail(email) {
-      // Regexp simple para validar email
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-    }
-
-    // Validar teléfono (números, +, espacios)
-    function validarTelefono(tel) {
-      return /^[\d+\s]+$/.test(tel.trim());
-    }
-
-    editBtn.addEventListener('click', () => {
-      document.querySelectorAll('.col.edit input').forEach(input => input.disabled = false);
-      editBtn.disabled = true;
-      saveBtn.disabled = false;
-      // Limpiar estilos de error
-      document.querySelectorAll('.col.edit input').forEach(input => input.classList.remove('invalid'));
-    });
-
-    saveBtn.addEventListener('click', () => {
-      let errores = [];
-
-      // Validar nombre
-      if (!validarSoloLetras(inpNombre.value)) {
-        errores.push("El nombre solo debe contener letras y espacios.");
-        inpNombre.classList.add('invalid');
-      } else {
-        inpNombre.classList.remove('invalid');
-      }
-
-      // Validar tipo doc (solo letras y espacios)
-      if (!validarSoloLetras(inpTipo.value)) {
-        errores.push("El tipo de documento solo debe contener letras y espacios.");
-        inpTipo.classList.add('invalid');
-      } else {
-        inpTipo.classList.remove('invalid');
-      }
-
-      // Número doc puede tener letras y números, permitimos alfanumérico básico
-      // pero no vacío
-      if (inpNum.value.trim() === "") {
-        errores.push("El número de documento no puede estar vacío.");
-        inpNum.classList.add('invalid');
-      } else {
-        inpNum.classList.remove('invalid');
-      }
-
-      // País solo letras y espacios
-      if (!validarSoloLetras(inpPais.value)) {
-        errores.push("El país solo debe contener letras y espacios.");
-        inpPais.classList.add('invalid');
-      } else {
-        inpPais.classList.remove('invalid');
-      }
-
-      // Email
-      if (!validarEmail(inpEmail.value)) {
-        errores.push("El email no tiene un formato válido.");
-        inpEmail.classList.add('invalid');
-      } else {
-        inpEmail.classList.remove('invalid');
-      }
-
-      // Teléfono
-      if (!validarTelefono(inpTel.value)) {
-        errores.push("El teléfono solo debe contener números, espacios o el símbolo '+'.");
-        inpTel.classList.add('invalid');
-      } else {
-        inpTel.classList.remove('invalid');
-      }
-
-      if (errores.length > 0) {
-        openModal("Errores de Validación", errores.join('\n'));
-        return; // No continuar
-      }
-
-      // Si pasa validación, actualizar display
-      dispNombre.textContent = inpNombre.value.trim();
-      dispTipo.textContent = inpTipo.value.trim();
-      dispNum.textContent = inpNum.value.trim();
-      dispPais.textContent = inpPais.value.trim();
-      dispEmail.textContent = inpEmail.value.trim();
-      dispTel.textContent = inpTel.value.trim();
-
-      document.querySelectorAll('.col.edit input').forEach(input => input.disabled = true);
-      editBtn.disabled = false;
-      saveBtn.disabled = true;
-
-      openModal("Éxito", "Datos guardados con éxito.");
-    });
-  </script>
 </body>
 </html>

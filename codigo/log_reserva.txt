@@ -9,8 +9,8 @@ Array
     [email] => fabio@gmail.com
     [huesped] => 1
     [tipoHabitacion] => sencilla
-    [checkIn] => 2025-07-07
-    [checkOut] => 2025-07-08
+    [checkIn] => 2025-07-30
+    [checkOut] => 2025-07-31
     [servicios] => Array
         (
         )
