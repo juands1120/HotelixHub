@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-07-2025 a las 23:37:08
+-- Tiempo de generación: 04-07-2025 a las 23:49:22
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -25,58 +25,6 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_empleado` (IN `p_id_usuario` INT, IN `p_nombre` VARCHAR(100), IN `p_apellido` VARCHAR(100), IN `p_tipoDocumento` ENUM('CC','PA','TI','CE'), IN `p_numeroDocumento` VARCHAR(100), IN `p_numeroTelefono` VARCHAR(20), IN `p_email` VARCHAR(100), IN `p_direccion` VARCHAR(100), IN `p_usu_idrol` INT, IN `p_estado` ENUM('en turno','fuera de turno','vacaciones'))   BEGIN
-    DECLARE document_exists INT;
-    DECLARE phone_exists INT;
-    DECLARE email_exists INT;
-    DECLARE error_msg VARCHAR(255);
-    
-    -- Verificar si el documento ya existe en otro usuario
-    SELECT COUNT(*) INTO document_exists 
-    FROM usuarios 
-    WHERE numeroDocumento = p_numeroDocumento AND id_usuario != p_id_usuario;
-    
-    -- Verificar si el teléfono ya existe en otro usuario
-    SELECT COUNT(*) INTO phone_exists 
-    FROM usuarios 
-    WHERE numeroTelefono = p_numeroTelefono AND id_usuario != p_id_usuario;
-    
-    -- Verificar si el email ya existe en otro usuario
-    SELECT COUNT(*) INTO email_exists 
-    FROM usuarios 
-    WHERE email = p_email AND id_usuario != p_id_usuario;
-    
-    -- Validaciones
-    IF document_exists > 0 THEN
-        SET error_msg = 'El número de documento ya está registrado por otro usuario';
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
-    ELSEIF phone_exists > 0 THEN
-        SET error_msg = 'El número de teléfono ya está registrado por otro usuario';
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
-    ELSEIF email_exists > 0 THEN
-        SET error_msg = 'El correo electrónico ya está registrado por otro usuario';
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_msg;
-    ELSE
-        -- Actualizar el usuario
-        UPDATE usuarios SET
-            nombre = p_nombre,
-            apellido = p_apellido,
-            tipoDocumento = p_tipoDocumento,
-            numeroDocumento = p_numeroDocumento,
-            numeroTelefono = p_numeroTelefono,
-            email = p_email,
-            direccion = p_direccion,
-            usu_idrol = p_usu_idrol,
-            estado = p_estado
-        WHERE id_usuario = p_id_usuario;
-        
-        -- Verificar si se actualizó correctamente
-        IF ROW_COUNT() = 0 THEN
-            SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'No se realizaron cambios en el empleado';
-        END IF;
-    END IF;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_CancelarReserva` (IN `p_id_reserva` INT)   BEGIN
     UPDATE reserva SET estado = 'Cancelada' WHERE id_reserva = p_id_reserva;
 END$$
@@ -109,42 +57,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EliminarHabitacion` (IN `p_numer
     DELETE FROM habitacion WHERE nombre = p_numero;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_empleado` (IN `p_id_usuario` INT, IN `p_id_usuario_eliminador` INT)   BEGIN
-    DECLARE es_administrador INT;
-    DECLARE tiene_reservas INT;
-    
-    -- Verificar si el usuario que elimina es administrador
-    SELECT COUNT(*) INTO es_administrador 
-    FROM usuarios 
-    WHERE id_usuario = p_id_usuario_eliminador AND usu_idrol = 1;
-    
-    -- Verificar si el empleado tiene reservas asociadas
-    SELECT COUNT(*) INTO tiene_reservas 
-    FROM reserva 
-    WHERE id_usuario = p_id_usuario;
-    
-    IF es_administrador = 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Solo los administradores pueden eliminar empleados';
-    ELSEIF tiene_reservas > 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se puede eliminar el empleado porque tiene reservas asociadas';
-    ELSE
-        -- Eliminar el usuario
-        DELETE FROM usuarios WHERE id_usuario = p_id_usuario;
-        
-        -- Verificar si se eliminó correctamente
-        IF ROW_COUNT() = 0 THEN
-            SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'No se encontró el empleado para eliminar';
-        END IF;
-    END IF;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_guardar_mensaje_contacto` (IN `p_id_usuario` INT, IN `p_nombre` VARCHAR(100), IN `p_telefono` VARCHAR(20), IN `p_email` VARCHAR(100), IN `p_ciudad` VARCHAR(50), IN `p_motivo` VARCHAR(50), IN `p_mensaje` TEXT)   BEGIN
-    INSERT INTO contacto 
-        (id_usuario, nombre, telefono, email, ciudad, motivo, mensaje)
-    VALUES 
-        (p_id_usuario, p_nombre, p_telefono, p_email, p_ciudad, p_motivo, p_mensaje);
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ListarHabitacionesDisponibles` ()   BEGIN
     SELECT * FROM habitacion WHERE estado != 'Mantenimiento';
 END$$
@@ -168,12 +80,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ListarReservasPorEmail` (IN `p_e
     ORDER BY r.fecha_reserva DESC;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listar_roles_empleados` ()   BEGIN
-    SELECT id_rol, rol_nombre 
-    FROM rol 
-    WHERE id_rol IN (3, 4, 5); -- Solo roles de empleados
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_login_usuario` (IN `p_email` VARCHAR(100))   BEGIN
     SELECT * FROM usuarios WHERE email = p_email;
 END$$
@@ -186,38 +92,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ObtenerHabitacionPorNumero` (IN 
     SELECT * FROM habitacion WHERE nombre = p_numero;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_clientes` ()   BEGIN
-    SELECT 
-        u.id_usuario,
-        u.nombre,
-        u.apellido,
-        u.tipoDocumento,
-        u.numeroDocumento,
-        u.numeroTelefono,
-        u.paisProcedencia,
-        u.email,
-
-        r.id_habitacion,
-        r.fecha_entrada,
-        r.fecha_salida,
-        r.estado,
-        r.fecha_reserva,
-        
-
-        h.nombre AS nombre_habitacion,        
-        h.tipoHabitacion,
-        h.serviciosIncluidos
-
-    FROM usuarios u
-    LEFT JOIN reserva r ON r.id_usuario = u.id_usuario
-    LEFT JOIN habitacion h ON r.id_habitacion = h.id_habitacion
-    WHERE u.usu_idrol = 2;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_empleados` ()   BEGIN
   SELECT 
     u.id_usuario,
-    u.usu_idrol, 
     r.rol_nombre,
     u.nombre,
     u.apellido,
@@ -230,57 +107,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_empleados` ()   BEGIN
     u.direccion
   FROM usuarios u
   INNER JOIN rol r ON u.usu_idrol = r.id_rol
-  WHERE u.usu_idrol IN (3, 4, 5);
+  WHERE u.usu_idrol IN (3, 4, 5); -- solo empleados
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_empleados_por_rol` (IN `p_rol_nombre` VARCHAR(100))   BEGIN
-  SELECT 
-    u.id_usuario,
-    u.usu_idrol,
-    r.rol_nombre,
-    u.nombre,
-    u.apellido,
-    u.tipoDocumento,
-    u.numeroDocumento,
-    u.numeroTelefono,
-    u.paisProcedencia,
-    u.email,
-    u.estado,
-    u.direccion
-  FROM usuarios u
-  INNER JOIN rol r ON u.usu_idrol = r.id_rol
-  WHERE u.usu_idrol IN (3, 4, 5)
-    AND (p_rol_nombre = '' OR r.rol_nombre = p_rol_nombre);
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_empleado_por_id` (IN `p_id_usuario` INT)   BEGIN
-    SELECT 
-        u.id_usuario,
-        u.usu_idrol,
-        r.rol_nombre,
-        u.nombre,
-        u.apellido,
-        u.tipoDocumento,
-        u.numeroDocumento,
-        u.numeroTelefono,
-        u.paisProcedencia,
-        u.email,
-        u.estado,
-        u.direccion
-    FROM usuarios u
-    INNER JOIN rol r ON u.usu_idrol = r.id_rol
-    WHERE u.id_usuario = p_id_usuario;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_registrar_empleado` (IN `P_usu_idrol` INT, IN `P_nombre` VARCHAR(100), IN `P_apellido` VARCHAR(100), IN `P_tipoDocumento` VARCHAR(100), IN `P_numeroDocumento` VARCHAR(100), IN `P_numeroTelefono` VARCHAR(20), IN `P_paisProcedencia` VARCHAR(100), IN `P_email` VARCHAR(100), IN `P_password` VARCHAR(255), IN `P_reset_token` VARCHAR(255), IN `P_token_expires` DATETIME, IN `P_estado` VARCHAR(100), IN `P_direccion` VARCHAR(100))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_registrar_empleado` (IN `P_usu_idrol` INT, IN `P_nombre` VARCHAR(100), IN `P_apellido` VARCHAR(100), IN `P_tipoDocumento` VARCHAR(100), IN `P_numeroDocumento` VARCHAR(10), IN `P_direccion` VARCHAR(100), IN `P_email` VARCHAR(20), IN `P_numeroTelefono` VARCHAR(100), IN `P_estado` VARCHAR(100), IN `P_password` VARCHAR(255), IN `P_reset_token` VARCHAR(255), IN `P_token_expires` DATETIME)   BEGIN
     INSERT INTO usuarios (
-        usu_idrol, nombre, apellido, tipoDocumento, numeroDocumento,
-        numeroTelefono, paisProcedencia, email, password,
-        reset_token, token_expires, estado, direccion
-    ) VALUES (
-        P_usu_idrol, P_nombre, P_apellido, P_tipoDocumento, P_numeroDocumento,
-        P_numeroTelefono, P_paisProcedencia, P_email, P_password,
-        P_reset_token, P_token_expires, P_estado, P_direccion
+        usu_idrol, nombre, apellido, tipoDocumento, numeroDocumento, numeroTelefono, direccion, email, password, estado, reset_token, token_expires
+    )
+    VALUES (
+        P_usu_idrol, P_nombre, P_apellido, P_tipoDocumento, P_numeroDocumento, P_numeroTelefono, P_direccion, P_email, P_password, P_estado, P_reset_token, P_token_expires
     );
 END$$
 
@@ -316,24 +151,6 @@ CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `descripcion` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `contacto`
---
-
-CREATE TABLE `contacto` (
-  `id_contacto` int(11) NOT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  `nombre` varchar(100) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `ciudad` varchar(50) DEFAULT NULL,
-  `motivo` varchar(50) DEFAULT NULL,
-  `mensaje` text DEFAULT NULL,
-  `fecha_contacto` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -381,13 +198,6 @@ CREATE TABLE `habitacion` (
   `imagen` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `habitacion`
---
-
-INSERT INTO `habitacion` (`id_habitacion`, `nombre`, `tipoHabitacion`, `piso`, `precio`, `serviciosIncluidos`, `estado`, `imagen`) VALUES
-(1, '201', 'Sencilla', 2, 120000, 'wifi', 'Disponible', 'uploads/habitaciones/686c8e6914986_Copia de habitacion_doble.webp');
-
 -- --------------------------------------------------------
 
 --
@@ -422,15 +232,6 @@ CREATE TABLE `reserva` (
   `estado` enum('Pendiente','Confirmada','Cancelada') DEFAULT 'Pendiente',
   `fecha_reserva` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `reserva`
---
-
-INSERT INTO `reserva` (`id_reserva`, `id_usuario`, `id_habitacion`, `fecha_entrada`, `fecha_salida`, `num_huespedes`, `servicios_adicionales`, `precio_total`, `estado`, `fecha_reserva`) VALUES
-(1, 22, 1, '2025-07-07', '2025-07-08', 1, '[]', 150000.00, 'Pendiente', '2025-07-08 03:21:00'),
-(2, 22, 1, '2025-07-09', '2025-07-25', 1, '[\"Spa\"]', 2480000.00, 'Pendiente', '2025-07-08 19:47:05'),
-(3, 22, 1, '2025-07-30', '2025-07-31', 1, '[]', 150000.00, 'Pendiente', '2025-07-08 20:34:16');
 
 -- --------------------------------------------------------
 
@@ -468,7 +269,7 @@ CREATE TABLE `usuarios` (
   `tipoDocumento` enum('CC','PA','TI','CE') NOT NULL,
   `numeroDocumento` varchar(100) NOT NULL,
   `numeroTelefono` varchar(20) NOT NULL,
-  `paisProcedencia` varchar(100) DEFAULT NULL,
+  `paisProcedencia` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `reset_token` varchar(255) DEFAULT NULL,
@@ -482,10 +283,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `usu_idrol`, `nombre`, `apellido`, `tipoDocumento`, `numeroDocumento`, `numeroTelefono`, `paisProcedencia`, `email`, `password`, `reset_token`, `token_expires`, `estado`, `direccion`) VALUES
-(1, 1, 'juan', 'diego', 'CC', '1026553308', '3138916559', 'colombia', 'js@gmail.com', '$2y$10$twI7PjcEblpqhTqt9z8yM.HiIORYHtTFvGuEjJsjPYpJCePnuotI6', '9f26c2fd21a638ca7c9a518702e6e164', '2025-07-07 09:50:19', NULL, ''),
-(21, 2, 'natali', 'veloza', 'CC', '52199883', '3143845237', NULL, 'natali@gmail.com', '$2y$10$oN7V6kOOMJ.yYMLlx6sWYeYpcB7pukNlEVNbjFoBBuq8K3r6ZbwTq', NULL, NULL, 'en turno', 'cll 2hasgdhjas'),
-(22, 2, 'fabio', 'sanchez', 'CC', '79632311', '6565655656', 'mexico', 'fabio@gmail.com', '$2y$10$wpfb6OK21EP1H4XcfBilqu37SFzJkbjYYgxLnFgzQzYmbt7izgBp.', NULL, NULL, NULL, ''),
-(23, 4, 'sebastian', 'rodriguez', 'CC', '21211212', '22323233232', NULL, 'sebas@gmail.com', '$2y$10$v/p1E9X5Tsv6CAPyeQQd7uDL37CkW.N1GbzWFXO0B.CHDMYvoehrS', NULL, NULL, 'en turno', 'cll 2hasgdhjas');
+(1, 1, 'juan', 'diego', 'CC', '1026553308', '3138916559', 'colombia', 'js@gmail.com', '$2y$10$twI7PjcEblpqhTqt9z8yM.HiIORYHtTFvGuEjJsjPYpJCePnuotI6', NULL, NULL, NULL, ''),
+(5, 3, 'Juan Diego', 'Sanchez Velosa', 'CC', '1026555330', 'juandis.pt55@gmail.c', '', 'calle 3#10 a 25', '$2y$10$Z3WtTxjpkhUHo9Y330CPv.SM54h1UmWAhwM/AzVmPcFz12aeJKFnu', NULL, NULL, 'en turno', '3138916559');
 
 -- --------------------------------------------------------
 
@@ -512,13 +311,6 @@ CREATE TABLE `venta` (
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id_categoria`),
   ADD UNIQUE KEY `nombre` (`nombre`);
-
---
--- Indices de la tabla `contacto`
---
-ALTER TABLE `contacto`
-  ADD PRIMARY KEY (`id_contacto`),
-  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `detalle_venta`
@@ -589,12 +381,6 @@ ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `contacto`
---
-ALTER TABLE `contacto`
-  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
@@ -610,7 +396,7 @@ ALTER TABLE `fecha_evento`
 -- AUTO_INCREMENT de la tabla `habitacion`
 --
 ALTER TABLE `habitacion`
-  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
@@ -622,7 +408,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -634,7 +420,7 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `venta`
@@ -645,12 +431,6 @@ ALTER TABLE `venta`
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `contacto`
---
-ALTER TABLE `contacto`
-  ADD CONSTRAINT `contacto_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
 -- Filtros para la tabla `detalle_venta`
