@@ -608,6 +608,19 @@ body {
   background: #274dc4;
 }
 
+.btn-eliminar-item {
+  width: 40px;
+  height: 15px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #3E63DD;
+  background: transparent;
+  box-shadow: 0 1px 5px #3e63dd5b;
+  justify-self: center;
+  align-items: center;
+}
 /* ESTILOS PARA MODAL DE COMPRA */
 .modal-compra {
   position: fixed;
@@ -702,6 +715,37 @@ body {
 
 .form-group.botones button[type="button"]:hover {
   background-color: #ddd;
+}
+
+/* ========================== ESTILOS TOAST MENSAJES ========================== */
+.mensaje-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-family: "Outfit", sans-serif;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 9999;
+}
+
+/* Colores según tipo */
+.mensaje-toast.success {
+    background: #28a745;
+}
+
+.mensaje-toast.error {
+    background: #dc3545;
+}
+
+.mensaje-toast.info {
+    background: #007bff;
 }
 
 

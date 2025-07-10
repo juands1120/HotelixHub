@@ -7,19 +7,12 @@ class ProductoModel {
     }
 
     public function getAll() {
-        $stmt = $this->pdo->query("
-            SELECT p.*, c.nombre_categoria 
-            FROM productos p 
-            LEFT JOIN categorias c ON p.id_categoria = c.id_categoria
-        ");
+        $stmt = $this->pdo->query("CALL sp_listar_productos()");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function insert($data) {
-        $stmt = $this->pdo->prepare("
-            INSERT INTO productos (nombre, precio, descripcion, imagen, stock, id_categoria)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
+        $stmt = $this->pdo->prepare("CALL sp_insertar_producto(?, ?, ?, ?, ?, ?)");
         return $stmt->execute([
             $data['nombre'],
             $data['precio'],
@@ -31,23 +24,20 @@ class ProductoModel {
     }
 
     public function update($data) {
-        $stmt = $this->pdo->prepare("
-            UPDATE productos SET nombre=?, precio=?, descripcion=?, imagen=?, stock=?, id_categoria=?
-            WHERE id=?
-        ");
+        $stmt = $this->pdo->prepare("CALL sp_editar_producto(?, ?, ?, ?, ?, ?, ?)");
         return $stmt->execute([
+            $data['id'],
             $data['nombre'],
             $data['precio'],
             $data['descripcion'],
             $data['imagen'],
             $data['stock'],
-            $data['id_categoria'],
-            $data['id']
+            $data['id_categoria']
         ]);
     }
 
     public function delete($id) {
-        $stmt = $this->pdo->prepare("DELETE FROM productos WHERE id=?");
+        $stmt = $this->pdo->prepare("CALL sp_eliminar_producto(?)");
         return $stmt->execute([$id]);
     }
 }

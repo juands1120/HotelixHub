@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/ContactoModel.php';
+require_once __DIR__ . '/../models/contactoModel.php';
 require_once __DIR__ . '/../librerias/PHPMailer/PHPMailer.php';
 require_once __DIR__ . '/../librerias/PHPMailer/SMTP.php';
 require_once __DIR__ . '/../librerias/PHPMailer/Exception.php';
