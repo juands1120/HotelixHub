@@ -18,3 +18,61 @@ Array
         )
 
 )
+Array
+(
+    [nombre] => Laura
+    [email] => lauportillo@cliente.com
+    [metodo] => credito
+    [tarjeta] => 8484587455548
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 1
+                    [nombre] => cepillo dientes
+                    [precio] => 6000
+                    [cantidad] => 1
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/686f7116d6b16-Copia de habitacion_triple.webp
+                )
+
+            [1] => Array
+                (
+                    [id] => 2
+                    [nombre] => galletas festival
+                    [precio] => 3500
+                    [cantidad] => 1
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/68702b2d9dddd-Copia de Favicon.png
+                )
+
+        )
+
+)
+Array
+(
+    [nombre] => Mario
+    [email] => marito12crak@gmail.com
+    [metodo] => debito
+    [tarjeta] => 848458745554823
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 1
+                    [nombre] => cepillo dientes
+                    [precio] => 6000
+                    [cantidad] => 4
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/686f7116d6b16-Copia de habitacion_triple.webp
+                )
+
+            [1] => Array
+                (
+                    [id] => 2
+                    [nombre] => galletas festival
+                    [precio] => 3500
+                    [cantidad] => 3
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/68702b2d9dddd-Copia de Favicon.png
+                )
+
+        )
+
+)

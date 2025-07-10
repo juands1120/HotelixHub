@@ -37,6 +37,15 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HotelixHub - Dashboard Empleado</title>
     <link rel="stylesheet" href="../assets/css/dashEmpleado.css">
+    <style>
+        /* Estilo inicial para los detalles */
+        .detalle-notificacion {
+            display: none;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
     <!-- ==================== BARRA LATERAL ==================== -->
@@ -130,11 +139,29 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
 
     <!-- ==================== SCRIPTS ==================== -->
     <script>
-    /**
-     * Script para manejar las notificaciones del empleado
-     */
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. OBTENER NOTIFICACIONES DEL SERVIDOR
+        // 1. MANEJAR CLICKS EN LOS HEADERS DE NOTIFICACIONES
+        document.getElementById('contenedor-notificaciones').addEventListener('click', (e) => {
+            // Si el click fue en el header o en sus hijos
+            const header = e.target.closest('.notificacion-header');
+            if (header) {
+                const detalle = header.nextElementSibling;
+                detalle.style.display = detalle.style.display === 'none' ? 'block' : 'none';
+                
+                // Opcional: Rotar ícono si tienes uno
+                const icono = header.querySelector('.toggle-icon');
+                if (icono) {
+                    icono.classList.toggle('rotated');
+                }
+            }
+            
+            // Prevenir que el evento se propague si es un botón
+            if (e.target.classList.contains('btn-leido')) {
+                e.stopPropagation();
+            }
+        });
+
+        // 2. OBTENER NOTIFICACIONES DEL SERVIDOR
         function obtenerNotificaciones() {
             fetch('../controller/compraController.php?accion=notificaciones')
                 .then(res => {
@@ -155,13 +182,13 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                 });
         }
 
-        // 2. MOSTRAR MENSAJE DE ERROR
+        // 3. MOSTRAR MENSAJE DE ERROR
         function mostrarMensajeError() {
             const contenedor = document.getElementById('contenedor-notificaciones');
             contenedor.innerHTML = '<div class="no-notifications">Error al cargar notificaciones</div>';
         }
 
-        // 3. AGRUPAR Y MOSTRAR NOTIFICACIONES
+        // 4. AGRUPAR Y MOSTRAR NOTIFICACIONES
         function mostrarNotificacionesAgrupadas(notificaciones) {
             const contenedor = document.getElementById('contenedor-notificaciones');
             contenedor.innerHTML = '';
@@ -204,12 +231,13 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                 const tarjeta = document.createElement('div');
                 tarjeta.className = 'notificacion-card';
                 tarjeta.innerHTML = `
-                    <div class="notificacion-header" onclick="toggleDetalle(this)">
+                    <div class="notificacion-header">
                         <div class="avatar-circle">${datos.cliente.charAt(0)}</div>
                         <div>
                             <div class="nombre-cliente">${datos.cliente}</div>
                             <div class="mensaje">Habitación: ${datos.habitacion}</div>
                         </div>
+                        <span class="toggle-icon"></span>
                     </div>
                     <div class="detalle-notificacion">
                         <div class="detalle-info">
@@ -230,7 +258,6 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
 
                 // Evento para el botón "Marcar como leída"
                 tarjeta.querySelector('.btn-leido').addEventListener('click', (e) => {
-                    e.stopPropagation();
                     marcarComoLeida(idCompra, tarjeta);
                 });
 
@@ -238,7 +265,7 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
             });
         }
 
-        // 4. FUNCIÓN PARA MARCAR NOTIFICACIÓN COMO LEÍDA
+        // 5. FUNCIÓN PARA MARCAR NOTIFICACIÓN COMO LEÍDA
         function marcarComoLeida(idCompra, tarjetaElemento) {
             fetch('../controller/compraController.php?accion=marcarLeida', {
                 method: 'POST',
@@ -258,12 +285,6 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                 console.error("Error:", error);
                 alert("Error al marcar como leída");
             });
-        }
-
-        // 5. FUNCIÓN PARA MOSTRAR/OCULTAR DETALLES
-        function toggleDetalle(elemento) {
-            const detalle = elemento.nextElementSibling;
-            detalle.style.display = detalle.style.display === 'none' ? 'block' : 'none';
         }
 
         // Inicializar

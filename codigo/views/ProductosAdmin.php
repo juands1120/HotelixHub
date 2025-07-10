@@ -40,7 +40,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
         <div class="usu">
             <button id="usuario">Usuarios</button>
             <div class="usu-contenido">
-                <a href="dashEmpleados.php">Empleados</a>
+                <a href="dashEmpleado.php">Empleados</a>
                 <a href="dashClientes.php">Clientes</a>
             </div>
         </div>
