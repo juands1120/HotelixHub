@@ -8,7 +8,7 @@ Array
             [fecha_salida] => 2025-07-31
             [num_huespedes] => 1
             [precio_total] => 150000.00
-            [estado] => Pendiente
+            [estado] => Confirmada
             [servicios_adicionales] => []
             [nombre_habitacion] => 201
             [tipoHabitacion] => Sencilla
@@ -22,7 +22,7 @@ Array
             [fecha_salida] => 2025-07-25
             [num_huespedes] => 1
             [precio_total] => 2480000.00
-            [estado] => Pendiente
+            [estado] => Confirmada
             [servicios_adicionales] => ["Spa"]
             [nombre_habitacion] => 201
             [tipoHabitacion] => Sencilla
@@ -36,7 +36,7 @@ Array
             [fecha_salida] => 2025-07-08
             [num_huespedes] => 1
             [precio_total] => 150000.00
-            [estado] => Pendiente
+            [estado] => Cancelada
             [servicios_adicionales] => []
             [nombre_habitacion] => 201
             [tipoHabitacion] => Sencilla

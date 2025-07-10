@@ -362,3 +362,34 @@ body {
 .btn-reporte:hover {
   background-color: #291d5c;
 }
+
+/* ==============================================
+   ESTILOS PARA SELECT DE ESTADO
+   ============================================== */
+/* Estilo base */
+.select-estado {
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+}
+
+/* Colores dinámicos según valor */
+.select-estado.estado-pendiente {
+  background-color: #ffeaa7;
+  color: #2d3436;
+}
+.select-estado.estado-confirmada {
+  background-color: #55efc4;
+  color: #2d3436;
+}
+.select-estado.estado-cancelada {
+  background-color: #fab1a0;
+  color: #2d3436;
+}
+.select-estado.estado-sinreserva {
+  background-color: #dfe6e9;
+  color: #636e72;
+}
+

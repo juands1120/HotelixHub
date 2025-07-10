@@ -55,20 +55,20 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
       <h2>Datos Personales</h2>
       <div class="group">
         <div class="col display">
-          <p><strong>Nombre:</strong> <span id="dispNombre">Luis Suarez</span></p>
-          <p><strong>Tipo Doc.:</strong> <span id="dispTipo">Pasaporte</span></p>
-          <p><strong>Número Doc.:</strong> <span id="dispNum">A6258792</span></p>
-          <p><strong>País:</strong> <span id="dispPais">México</span></p>
+          <p><strong>Nombre:</strong> <span id="dispNombre"></span></p>
+          <p><strong>Tipo Doc.:</strong> <span id="dispTipo"></span></p>
+          <p><strong>Número Doc.:</strong> <span id="dispNum"></span></p>
+          <p><strong>País:</strong> <span id="dispPais"></span></p>
         </div>
         <div class="col edit">
           <label for="inpNombre">Nombre completo</label>
-          <input id="inpNombre" type="text" value="Luis Suarez" disabled/>
+          <input id="inpNombre" type="text" value="" disabled/>
           <label for="inpTipo">Tipo de documento</label>
-          <input id="inpTipo" type="text" value="Pasaporte" disabled/>
+          <input id="inpTipo" type="text" value="" disabled/>
           <label for="inpNum">Número de documento</label>
-          <input id="inpNum" type="text" value="A6258792" disabled/>
+          <input id="inpNum" type="text" value="" disabled/>
           <label for="inpPais">País de procedencia</label>
-          <input id="inpPais" type="text" value="México" disabled/>
+          <input id="inpPais" type="text" value="" disabled/>
         </div>
       </div>
     </section>
@@ -78,14 +78,14 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
       <h2>Datos de Contacto</h2>
       <div class="group">
         <div class="col display">
-          <p><strong>Email:</strong> <span id="dispEmail">luiscorreo@gmail.com</span></p>
-          <p><strong>Teléfono:</strong> <span id="dispTel">+52 6263050460</span></p>
+          <p><strong>Email:</strong> <span id="dispEmail"></span></p>
+          <p><strong>Teléfono:</strong> <span id="dispTel"></span></p>
         </div>
         <div class="col edit">
           <label for="inpEmail">Email</label>
-          <input id="inpEmail" type="email" value="luiscorreo@gmail.com" disabled/>
+          <input id="inpEmail" type="email" value="" disabled/>
           <label for="inpTel">Teléfono</label>
-          <input id="inpTel" type="tel" value="+526263050460" disabled/>
+          <input id="inpTel" type="tel" value="" disabled/>
         </div>
       </div>
     </section>

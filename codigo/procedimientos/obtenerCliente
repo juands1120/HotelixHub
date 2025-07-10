@@ -17,6 +17,8 @@ BEGIN
         r.fecha_salida,
         r.estado,
         r.fecha_reserva,
+        r.id_reserva,
+
         
 
         h.nombre AS nombre_habitacion,        

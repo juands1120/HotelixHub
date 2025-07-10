@@ -15,7 +15,13 @@ if (isset($_SESSION['usuario'])) {
             header('Location: dashCliente.php');
             break;
         case 3:
-            header('Location: dashAdmin.php');
+            header('Location: dashEmpleado.php');
+            break;
+        case 4:
+            header('Location: dashEmpleado.php');
+            break;
+        case 5:
+            header('Location: dashEmpleado.php');
             break;
         default:
             header('Location: ../login.php');

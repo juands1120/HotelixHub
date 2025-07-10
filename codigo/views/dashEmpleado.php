@@ -7,8 +7,8 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Verificar que el rol sea administrador 
-if (!in_array($_SESSION['usuario']['usu_idrol'], [1, 3, 4, 5])) {
+// Verificar que el rol sea empleado
+if (!in_array($_SESSION['usuario']['usu_idrol'], [3, 4, 5])) {
     header('Location: ../views/login.php'); // O página de acceso denegado
     exit();
 }
@@ -19,7 +19,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1, 3, 4, 5])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HoteluxHub Dashboard</title>
-    <link rel="stylesheet" href="../asets/css/dashEmpleado.css">
+    <link rel="stylesheet" href="../assets/css/dashEmpleado.css">
 </head>
 
 <body>
@@ -38,7 +38,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1, 3, 4, 5])) {
             
         </div>
 
-        <a href="ProductosAdmin.php"><div class="menu-item">Perfil</div></a>
+        <a href="perfilEmpleado.php"><div class="menu-item">Perfil</div></a>
         <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
     </div>    
 

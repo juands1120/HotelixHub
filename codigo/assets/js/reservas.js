@@ -233,30 +233,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p><strong>Estado:</strong> <span class="estado-${reserva.estado.toLowerCase()}">${reserva.estado}</span></p>
 
                 <div class="botones-reserva">
-                    <button class="btn-eliminar" data-id="${reserva.id_reserva}">Eliminar</button>
+                    <button class="btn-eliminar" data-id="${reserva.id_reserva}">Cancelar</button>
                     <a href="/HotelixHub/codigo/pdf/generarRecibo.php?id=${reserva.id_reserva}" target="_blank" class="btn-descargar"> Ver Recibo</a>
                 </div>
             `;
             reservaItem.querySelector('.btn-eliminar').addEventListener('click', async function () {
                 const id = this.getAttribute('data-id');
-                if (confirm('¿Seguro que deseas eliminar esta reserva del historial?')) {
+                if (confirm('¿Seguro que deseas cancelar esta reserva del historial?')) {
                     try {
                         const res = await fetch(`/HotelixHub/codigo/controller/ReservaController.php`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ accion: 'eliminar', id_reserva: id })
+                            body: JSON.stringify({ accion: 'cancelar', id_reserva: id })
                         });
 
                         const data = await res.json();
                         if (data.success) {
-                            mostrarNotificacion('Reserva eliminada con éxito');
+                            mostrarNotificacion('Reserva cancelada con éxito');
                             cargarReservas(); // recarga historial
                         } else {
-                            mostrarNotificacion('No se pudo eliminar la reserva', 'error');
+                            mostrarNotificacion('No se pudo cancelar la reserva', 'error');
                         }
                     } catch (err) {
                         console.error(err);
-                        mostrarNotificacion('Error al eliminar reserva', 'error');
+                        mostrarNotificacion('Error al cancelar reserva', 'error');
                     }
                 }
             });

@@ -1,19 +1,5 @@
 Array
 (
-    [accion] => crear
-    [nombre] => fabio
-    [apellido] => sanchez
-    [tipoDocumento] => CC
-    [numeroDocumento] => 79632311
-    [telefono] => 301664875
-    [email] => fabio@gmail.com
-    [huesped] => 1
-    [tipoHabitacion] => sencilla
-    [checkIn] => 2025-07-30
-    [checkOut] => 2025-07-31
-    [servicios] => Array
-        (
-        )
-
-    [id_habitacion] => 1
+    [accion] => eliminar
+    [id_reserva] => 2
 )

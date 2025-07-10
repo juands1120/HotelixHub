@@ -28,6 +28,13 @@ class ClienteModelo {
         return $reservas;
     }
 
+    public function actualizarEstadoReserva($idReserva, $nuevoEstado) {
+    $stmt = $this->pdo->prepare("CALL sp_actualizar_estado_reserva(:idReserva, :nuevoEstado)");
+    $stmt->bindParam(':idReserva', $idReserva, PDO::PARAM_INT);
+    $stmt->bindParam(':nuevoEstado', $nuevoEstado, PDO::PARAM_STR);
+    return $stmt->execute();
+}
+
 
 }
 ?>

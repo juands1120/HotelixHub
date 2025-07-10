@@ -1,0 +1,13 @@
+DELIMITER //
+
+CREATE PROCEDURE sp_actualizar_estado_reserva (
+  IN p_id_reserva INT,
+  IN p_estado ENUM('Pendiente', 'Confirmada', 'Cancelada', 'Sin reserva')
+)
+BEGIN
+  UPDATE reserva
+  SET estado = p_estado
+  WHERE id_reserva = p_id_reserva;
+END //
+
+DELIMITER ;

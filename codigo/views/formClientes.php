@@ -9,6 +9,8 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: ../views/login.php');
     exit();
 }
+
+$rolId = $_SESSION['usuario']['usu_idrol'];
 ?>
 
 <!DOCTYPE html>
@@ -23,34 +25,57 @@ if (!isset($_SESSION['usuario'])) {
     <link rel="stylesheet" href="../assets/css/FormClientes.css">
 </head>
 <body>
-    <!-- ==============================================
-         BARRA LATERAL (MENÚ DE NAVEGACIÓN)
-         ============================================== -->
-    <div class="barra-lateral">
-        <!-- LOGO DEL HOTEL -->
-        <div class="logo">
-            <a href="Home.php">
-                <img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo">
-            </a>
-        </div>
-        <br><br>
-        
-        <!-- ELEMENTOS DEL MENÚ -->
-        <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
-        
-        <!-- SUBMENÚ DE USUARIOS -->
-        <div class="usu">
-            <button id="usuario">Usuarios</button>
-            <div class="usu-contenido">
-                <a href="formEmpleados.php">Empleados</a>
-                <a href="formClientes.php">Clientes</a>
-            </div>
-        </div>
-        
-        <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
-        <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
-    </div> 
+
+      <!-- ==============================================
+          BARRA LATERAL (MENÚ DE NAVEGACIÓN)
+          ============================================== -->
+      <div class="barra-lateral">
+          <!-- LOGO DEL HOTEL -->
+          <div class="logo">
+              <a href="<?php echo $rolId === 1 ? 'dashAdmin.php' : 'dashEmpleado.php'; ?>">
+                  <img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo">
+              </a>
+          </div>
+          <br><br>
+
+          <!-- BOTÓN INICIO -->
+          <?php if ($rolId === 1): ?>
+              <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
+          <?php elseif (in_array($rolId, [3, 4, 5])): ?>
+              <a href="dashEmpleado.php"><div class="menu-item">Inicio</div></a>
+          <?php endif; ?>
+
+          <!-- HABITACIONES (solo admin) -->
+          <?php if ($rolId === 1): ?>
+              <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
+          <?php endif; ?>
+
+          <!-- SUBMENÚ USUARIOS -->
+          <div class="usu">
+              <button id="usuario">Usuarios</button>
+              <div class="usu-contenido">
+                  <?php if ($rolId === 1): ?>
+                      <a href="formEmpleados.php">Empleados</a>
+                      <a href="formClientes.php">Clientes</a>
+                  <?php elseif (in_array($rolId, [3, 4, 5])): ?>
+                      <a href="formClientes.php">Clientes</a>
+                  <?php endif; ?>
+              </div>
+          </div>
+
+          <!-- PRODUCTOS (solo admin) -->
+          <?php if ($rolId === 1): ?>
+              <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
+          <?php endif; ?>
+
+          <!-- PERFIL (solo empleado) -->
+          <?php if (in_array($rolId, [3, 4, 5])): ?>
+              <a href="perfilEmpleado.php"><div class="menu-item">Perfil</div></a>
+          <?php endif; ?>
+
+          <!-- CERRAR SESIÓN -->
+          <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
+      </div>
 
     <!-- ==============================================
          CONTENIDO PRINCIPAL
@@ -77,8 +102,8 @@ if (!isset($_SESSION['usuario'])) {
                     <label for="estadoFiltro">Filtrar por estado:</label>
                     <select name="estadoFiltro" id="estadoFiltro">
                         <option value="">Todos</option>
-                        <option value="Confirmado">Confirmado</option>
-                        <option value="Cancelado">Cancelado</option>
+                        <option value="Confirmada">Confirmada</option>
+                        <option value="Cancelada">Cancelada</option>
                         <option value="Sin reserva">Sin reserva</option>
                         <option value="Pendiente">Pendiente</option>
                     </select>
@@ -161,21 +186,29 @@ if (!isset($_SESSION['usuario'])) {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   let clientesGlobal = [];
-
   const contenedor = document.getElementById('clientes-contenedor');
-  const selectEstado = document.getElementById('estadoFiltro');
+  const selectFiltroEstado = document.getElementById('estadoFiltro');
   const panelDetalle = document.querySelector('.client-details');
 
-  // ✅ Ocultar el detalle por defecto al cargar
+  // Ocultar detalle al cargar
   panelDetalle.classList.remove('active');
 
-  // Función para renderizar según filtro
+  // Aplicar estilos según estado
+  function aplicarColorSelect(select, estado) {
+    select.classList.remove('estado-pendiente', 'estado-confirmada', 'estado-cancelada', 'estado-sinreserva');
+    
+    if (!estado) return;
+    
+    const estadoClase = estado.toLowerCase().replace(' ', '');
+    select.classList.add(`estado-${estadoClase}`);
+  }
+
+  // Renderizar lista de clientes
   function renderClientes(filtrados) {
     contenedor.innerHTML = '';
 
     if (filtrados.length === 0) {
       contenedor.innerHTML = '<div style="padding: 10px; color: #555;">No se encontraron clientes.</div>';
-      // Oculta el panel también
       panelDetalle.classList.remove('active');
       return;
     }
@@ -184,6 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const fila = document.createElement('div');
       fila.className = 'clients-table-row';
 
+      // Determinar el estado actual o usar "Sin reserva" por defecto
+      const estadoActual = cliente.estado || 'Sin reserva';
+      
       fila.innerHTML = `
         <div class="room-cell">
           <div class="room-number">${cliente.nombre_habitacion || '-'}</div>
@@ -196,51 +232,117 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="date-cell">${cliente.fecha_entrada || '-'}</div>
         <div class="date-cell">${cliente.fecha_salida || '-'}</div>
         <div class="status-cell">
-          <div class="status-indicator status-pending"></div>
-          <span>${cliente.estado || 'Sin reserva'}</span>
+          <select class="select-estado" data-id-reserva="${cliente.id_reserva || ''}">
+            <option value="Confirmada" ${estadoActual === 'Confirmada' ? 'selected' : ''}>Confirmada</option>
+            <option value="Cancelada" ${estadoActual === 'Cancelada' ? 'selected' : ''}>Cancelada</option>
+            <option value="Pendiente" ${estadoActual === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+            <option value="Sin reserva" ${estadoActual === 'Sin reserva' ? 'selected' : ''}>Sin reserva</option>
+          </select>
         </div>
         <div class="action-cell">
           <button class="action-button">🔍</button>
         </div>
       `;
 
-      // 🔍 Evento click para mostrar los detalles
+      // Mostrar detalles al hacer clic
       fila.querySelector('.action-button').addEventListener('click', () => {
-        panelDetalle.classList.add('active');
-
-        // Mostrar datos del cliente
-        document.getElementById('detalle-nombre').textContent = `${cliente.nombre} ${cliente.apellido}`;
-        document.getElementById('detalle-documento').textContent = `${cliente.tipoDocumento || '-'} ${cliente.numeroDocumento || '-'}`;
-        document.getElementById('detalle-nacionalidad').textContent = `Nacionalidad: ${cliente.paisProcedencia || '-'}`;
-        document.getElementById('detalle-telefono').textContent = `Cel: ${cliente.numeroTelefono || '-'}`;
-
-        if (cliente.fecha_entrada && cliente.fecha_salida && cliente.nombre_habitacion) {
-          document.getElementById('detalle-numero').textContent = `Indicativo: ${cliente.nombre_habitacion}`;
-          document.getElementById('detalle-tipo').textContent = `Tipo: ${cliente.tipoHabitacion}`;
-          document.getElementById('detalle-servicio').textContent = `Adicional: ${cliente.servicioIncluido || '-'}`;
-          document.getElementById('detalle-checkin').textContent = `Check-In: ${cliente.fecha_entrada}`;
-          document.getElementById('detalle-checkout').textContent = `Check-Out: ${cliente.fecha_salida}`;
-          document.getElementById('detalle-estado').textContent = `Estado: ${cliente.estado}`;
-          document.getElementById('detalle-mensaje').style.display = 'none';
-        } else {
-          document.getElementById('detalle-numero').textContent = `Indicativo: -`;
-          document.getElementById('detalle-tipo').textContent = `Tipo: -`;
-          document.getElementById('detalle-servicio').textContent = `Adicional: -`;
-          document.getElementById('detalle-checkin').textContent = `Check-In: -`;
-          document.getElementById('detalle-checkout').textContent = `Check-Out: -`;
-          document.getElementById('detalle-estado').textContent = `Estado: -`;
-          document.getElementById('detalle-mensaje').style.display = 'block';
-        }
+        mostrarDetallesCliente(cliente);
       });
 
+      // Manejar cambio de estado
+      const selectEstado = fila.querySelector('.select-estado');
+      aplicarColorSelect(selectEstado, estadoActual);
+      
+      selectEstado.addEventListener('change', manejarCambioEstado);
+      
       contenedor.appendChild(fila);
     });
   }
 
-  // Filtro de estado
-  selectEstado.addEventListener('change', () => {
-    const valorFiltro = selectEstado.value;
+  // Mostrar detalles del cliente
+  function mostrarDetallesCliente(cliente) {
+    panelDetalle.classList.add('active');
 
+    document.getElementById('detalle-nombre').textContent = `${cliente.nombre} ${cliente.apellido}`;
+    document.getElementById('detalle-documento').textContent = `${cliente.tipoDocumento || '-'} ${cliente.numeroDocumento || '-'}`;
+    document.getElementById('detalle-nacionalidad').textContent = `Nacionalidad: ${cliente.paisProcedencia || '-'}`;
+    document.getElementById('detalle-telefono').textContent = `Cel: ${cliente.numeroTelefono || '-'}`;
+
+    const tieneReserva = cliente.fecha_entrada && cliente.fecha_salida && cliente.nombre_habitacion;
+    
+    if (tieneReserva) {
+      document.getElementById('detalle-numero').textContent = `Indicativo: ${cliente.nombre_habitacion}`;
+      document.getElementById('detalle-tipo').textContent = `Tipo: ${cliente.tipoHabitacion}`;
+      document.getElementById('detalle-servicio').textContent = `Adicional: ${cliente.serviciosIncluidos || '-'}`;
+      document.getElementById('detalle-checkin').textContent = `Check-In: ${cliente.fecha_entrada}`;
+      document.getElementById('detalle-checkout').textContent = `Check-Out: ${cliente.fecha_salida}`;
+      document.getElementById('detalle-estado').textContent = `Estado: ${cliente.estado || 'Sin reserva'}`;
+      document.getElementById('detalle-mensaje').style.display = 'none';
+    } else {
+      document.getElementById('detalle-numero').textContent = 'Indicativo: -';
+      document.getElementById('detalle-tipo').textContent = 'Tipo: -';
+      document.getElementById('detalle-servicio').textContent = 'Adicional: -';
+      document.getElementById('detalle-checkin').textContent = 'Check-In: -';
+      document.getElementById('detalle-checkout').textContent = 'Check-Out: -';
+      document.getElementById('detalle-estado').textContent = 'Estado: -';
+      document.getElementById('detalle-mensaje').style.display = 'block';
+    }
+  }
+
+  // Manejar cambio de estado
+  function manejarCambioEstado(event) {
+    const select = event.target;
+    const nuevoEstado = select.value;
+    const idReserva = select.getAttribute('data-id-reserva');
+    
+    if (!idReserva) {
+      alert('No se puede actualizar: ID de reserva no válido');
+      return;
+    }
+
+    // Mostrar feedback visual durante la carga
+    const originalEstado = select.dataset.originalEstado;
+    select.disabled = true;
+    
+    fetch('../controller/actualizarEstadoReserva.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `id_reserva=${encodeURIComponent(idReserva)}&estado=${encodeURIComponent(nuevoEstado)}`
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Error en la respuesta del servidor');
+      return response.json();
+    })
+    .then(data => {
+      if (data.status === 'success') {
+        aplicarColorSelect(select, nuevoEstado);
+        
+        // Actualizar el estado en el array global
+        const cliente = clientesGlobal.find(c => c.id_reserva == idReserva);
+        if (cliente) cliente.estado = nuevoEstado;
+        
+        // Actualizar panel de detalles si está visible
+        const detalleEstado = document.getElementById('detalle-estado');
+        if (detalleEstado.textContent.includes('Estado:')) {
+          detalleEstado.textContent = `Estado: ${nuevoEstado}`;
+        }
+      } else {
+        throw new Error(data.message || 'Error al actualizar el estado');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert(error.message);
+      select.value = originalEstado; // Revertir el cambio
+    })
+    .finally(() => {
+      select.disabled = false;
+    });
+  }
+
+  // Filtrado por estado
+  selectFiltroEstado.addEventListener('change', () => {
+    const valorFiltro = selectFiltroEstado.value;
     let filtrados = clientesGlobal;
 
     if (valorFiltro) {
@@ -250,53 +352,57 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Oculta el panel de detalle al cambiar el filtro
     panelDetalle.classList.remove('active');
     renderClientes(filtrados);
   });
 
-  // Obtener datos
-  fetch('../controller/clienteController.php')
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 'success') {
-        clientesGlobal = data.data;
-        renderClientes(clientesGlobal);
-      } else {
-        console.error('Error al traer clientes:', data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error en la solicitud:', error);
-    });
+  // Cargar datos iniciales
+  function cargarClientes() {
+    fetch('../controller/clienteController.php')
+      .then(response => {
+        if (!response.ok) throw new Error('Error al obtener clientes');
+        return response.json();
+      })
+      .then(data => {
+        if (data.status === 'success') {
+          clientesGlobal = data.data;
+          renderClientes(clientesGlobal);
+        } else {
+          throw new Error(data.message || 'Error en los datos recibidos');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        contenedor.innerHTML = `<div style="padding: 10px; color: #ff0000;">Error al cargar los datos: ${error.message}</div>`;
+      });
+  }
+
+  // Iniciar
+  cargarClientes();
 });
 
-document.getElementById('btnGenerarPDF').addEventListener('click', function () {
+// Generar PDF
+document.getElementById('btnGenerarPDF').addEventListener('click', function() {
   const estadoSeleccionado = document.getElementById('estadoFiltro').value;
-
-  // Crear un formulario dinámico
   const form = document.createElement('form');
+  
   form.method = 'POST';
-  form.action = '../pdf/generarReportesClientes.php'; // Ruta al script que genera el PDF
-  form.target = '_blank'; // Para abrir el PDF en una nueva pestaña
+  form.action = '../pdf/generarReportesClientes.php';
+  form.target = '_blank';
 
-  // Crear input hidden con el estado seleccionado
   const inputEstado = document.createElement('input');
   inputEstado.type = 'hidden';
   inputEstado.name = 'estadoFiltro';
   inputEstado.value = estadoSeleccionado;
 
-  // Agregar el input al formulario
   form.appendChild(inputEstado);
-
-  // Agregar el formulario al body y enviarlo
   document.body.appendChild(form);
   form.submit();
-
-  // Eliminar el formulario del DOM
   document.body.removeChild(form);
 });
-
 </script>
+
+
+
 </body>
 </html>

@@ -120,4 +120,63 @@ public function findByDireccion($direccion) {
         return $stmt->execute(['id' => $userId]);
     }
 
+
+public function obtenerEmpleadoPorId($idUsuario) {
+    try {
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                u.id_usuario,
+                u.nombre,
+                u.apellido,
+                u.tipoDocumento,
+                u.numeroDocumento,
+                u.numeroTelefono,
+                u.paisProcedencia,
+                u.email,
+                u.estado,
+                u.direccion,
+                r.rol_nombre
+            FROM usuarios u
+            INNER JOIN rol r ON u.usu_idrol = r.id_rol
+            WHERE u.id_usuario = :id
+            LIMIT 1
+        ");
+        
+        if (!$stmt->execute(['id' => $idUsuario])) {
+            throw new PDOException("Error al ejecutar la consulta");
+        }
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$result) {
+            error_log("No se encontró empleado con ID: $idUsuario");
+            return false;
+        }
+        
+        return $result;
+        
+    } catch (PDOException $e) {
+        error_log("PDOException en obtenerEmpleadoPorId: " . $e->getMessage());
+        throw $e;
+    }
+}
+
+public function emailPerteneceAOtroUsuario($email, $idUsuarioActual) {
+    $stmt = $this->pdo->prepare("
+        SELECT id_usuario FROM usuarios 
+        WHERE email = :email AND id_usuario != :id
+    ");
+    $stmt->execute(['email' => $email, 'id' => $idUsuarioActual]);
+    return $stmt->fetch() !== false;
+}
+
+public function telefonoPerteneceAOtroUsuario($telefono, $idUsuarioActual) {
+    $stmt = $this->pdo->prepare("
+        SELECT id_usuario FROM usuarios 
+        WHERE numeroTelefono = :telefono AND id_usuario != :id
+    ");
+    $stmt->execute(['telefono' => $telefono, 'id' => $idUsuarioActual]);
+    return $stmt->fetch() !== false;
+}
+
 }

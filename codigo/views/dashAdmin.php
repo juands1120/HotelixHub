@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 // Verificar que el rol sea administrador 
-if (!in_array($_SESSION['usuario']['usu_idrol'], [1, 3, 4, 5])) {
+if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
     header('Location: ../views/login.php'); // O página de acceso denegado
     exit();
 }
