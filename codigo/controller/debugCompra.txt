@@ -1,0 +1,20 @@
+Array
+(
+    [nombre] => Laura
+    [email] => lauportillo@cliente.com
+    [metodo] => efectivo
+    [tarjeta] => 
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 2
+                    [nombre] => galletas festival
+                    [precio] => 3500
+                    [cantidad] => 1
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/686f715ac8c0a-Copia de habitacion_doble.webp
+                )
+
+        )
+
+)

@@ -1,19 +1,22 @@
 Array
 (
     [accion] => crear
-    [nombre] => laura
-    [apellido] => bastidas
+    [nombre] => Laura
+    [apellido] => Portillo
     [tipoDocumento] => CC
-    [numeroDocumento] => 585858585855
-    [telefono] => 585585858858585
-    [email] => lb@gmail.com
-    [huesped] => 3
-    [tipoHabitacion] => triple
-    [checkIn] => 2025-07-20
-    [checkOut] => 2025-07-21
+    [numeroDocumento] => 124567890
+    [telefono] => 123456789
+    [email] => lauportillo@cliente.com
+    [huesped] => 2
+    [tipoHabitacion] => doble
+    [checkIn] => 2025-07-11
+    [checkOut] => 2025-07-12
     [servicios] => Array
         (
+            [0] => Spa
+            [1] => Desayuno Buffet
+            [2] => Parqueadero
         )
 
-    [id_habitacion] => 3
+    [id_habitacion] => 2
 )

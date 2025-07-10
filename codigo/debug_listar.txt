@@ -2,16 +2,16 @@ Array
 (
     [0] => Array
         (
-            [id_reserva] => 6
-            [fecha_reserva] => 2025-07-10 05:53:32
-            [fecha_entrada] => 2025-07-20
-            [fecha_salida] => 2025-07-21
-            [num_huespedes] => 3
-            [precio_total] => 300000.00
+            [id_reserva] => 7
+            [fecha_reserva] => 2025-07-10 12:44:28
+            [fecha_entrada] => 2025-07-11
+            [fecha_salida] => 2025-07-12
+            [num_huespedes] => 2
+            [precio_total] => 390000.00
             [estado] => Pendiente
-            [servicios_adicionales] => []
-            [nombre_habitacion] => 402
-            [tipoHabitacion] => Triple
+            [servicios_adicionales] => ["Spa","Desayuno Buffet","Parqueadero"]
+            [nombre_habitacion] => 301
+            [tipoHabitacion] => Doble
         )
 
 )

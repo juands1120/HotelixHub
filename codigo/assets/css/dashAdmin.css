@@ -1,626 +1,287 @@
+/* Variables globales */
+:root {
+    --primary: #4a47a3;
+    --secondary: #6c63ff;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --success: #28a745;
+    --sidebar-bg: #402E7A;
+}
 
-        :root {
-            --primary: #4a47a3;
-            --secondary: #6c63ff;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --success: #28a745;
-        }
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-        .barra-lateral {
-            background-color: #402E7A;
-            color: white;
-            padding: 20px;
-        }
-
-        .barra-lateral h2 {
-            color: #ecf0f1;
-            padding-bottom: 10px;
-        }
-
-        .menu-item {
-            padding: 12px 15px;
-            margin: 20px 0;
-            cursor: pointer;
-            background: transparent;
-            transition: background-color 0.3s;
-            color: #ffffff;
-            border-radius: 8px;
-            font-size: 18px;
-            border: 1px solid transparent;
-            font-weight: 400;
-            cursor: pointer;
-        }
-        .logout{
-            padding: 12px 15px;
-            margin-top: 420px;
-            cursor: pointer;
-            background: transparent;
-            transition: background-color 0.3s;
-            color: #ffffff;
-            border-radius: 8px;
-            font-size: 18px;
-            border: 1px solid transparent;
-            font-weight: 400;
-        }
-        .logout {animation: slideIn 2s;}
-        @keyframes slideIn{
-            0%{transform: translateX(0);}
-            100%{transform: translateX(20%);}
-        }
-
-        .logout:hover {
-        box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 40px #ffffff, 0 0 80px #ffffff, 0 0 0px #ffffff ;
-        }
-
-        .menu-item {animation: slideIn 2s;}
-        @keyframes slideIn{
-            0%{transform: translateX(0);}
-            100%{transform: translateX(20%);}
-        }
-
-        .menu-item:hover {
-            box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 40px #ffffff, 0 0 80px #ffffff, 0 0 0px #ffffff ;
-        }
-
-        .usu {
-        position: relative;
-        display: inline-block;
-        }
-
-        /* Botón principal */
-        .usu button {
-        padding: 12px 130px 12px 20px;
-        background: transparent;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 400;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: box-shadow 0.3s, transform 0.3s;
-        animation: slideIn 0.6s ease-in-out;
-        text-align: left;
-        }
-
-        /* Animación de entrada */
-        @keyframes slideIn {
-        0% {
-            transform: translateX(-20%);
-            opacity: 0;
-        }
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        }
-
-        /* Hover botón */
-        .usu button:hover {
-        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
-        }
-
-        /* Contenedor desplegable */
-        .usu-contenido {
-        display: none;
-        position: absolute;
-        top: 100%; /* bajo el botón */
-        left: 0;
-        background: #402E7A;
-        color: #fff;
-        min-width: 180px;
-        border-radius: 6px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        }
-
-        /* Enlaces dentro del dropdown */
-        .usu-contenido a {
-        display: block;
-        padding: 12px 115px 12px 20px;
-        text-decoration: wavy;
-        color: #ffffff;
-        font-size: 15px;
-        transition: background-color 0.3s;
-        }
-
-        /* Hover enlaces */
-        .usu-contenido a:hover {
-        background-color: #ffffff;
-        color: #402E7A;
-        }
-
-        /* Mostrar dropdown al hacer hover */
-        .usu:hover .usu-contenido {
-        display: block;
-        }
-
-        /* Flecha decorativa */
-        .usu::after {
-        content: "▼";
-        font-size: 0.6rem;
-        color: #fff;
-        position: absolute;
-        right: 18px; /* 🠖 Alineación a la derecha */
-        top: 40%;
-        transform: translateY(-50%);
-        transition: transform 0.3s;
-        }
-
-
-        /* Rotar flecha al hacer hover */
-        .usu:hover::after {
-        transform: rotate(180deg);
-        }
-
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            display: flex;
-        }
-
-        .search-bar input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
-            width: 200px;
-        }
-
-        .search-bar button {
-            padding: 8px 12px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-left: none;
-            cursor: pointer;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .filter-btn {
-            padding: 8px;
-            background-color: white;
-            border: 1px solid #ddd;
-            margin-left: 5px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 13px;
-            cursor: pointer;
-            padding-left: 1440px;
-        }
-
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            background-color: #6c63ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        /* Welcome section */
-        .welcome {
-            margin-bottom: 20px;
-        }
-
-        .welcome h2 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .welcome p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Dashboard content */
-        .dashboard-content {
-            display: flex;
-            gap: 20px;
-            flex: 1;
-        }
-
-        .dashboard-left {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .dashboard-right {
-            flex: 1;
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        /* Room stats */
-        .room-stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .room-category {
-            flex: 1;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .room-category h3 {
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .stat-box {
-            background-color: #f0f2ff;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        .add-new {
-            flex: 0.5;
-            background-color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .add-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #e8eaf6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            color: var(--primary);
-            font-size: 24px;
-        }
-
-        .add-text {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        /* Reservas chart */
-        .reservas {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .reservas-header {
+body {
     display: flex;
-    justify-content: space-between; /* Esto empuja el filtro a la derecha */
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 20px; /* Espacio entre el título y el filtro */
-}
-.reservas-header {
-    justify-content: flex-start;
-}
-/* Cambia `space-between` por `flex-start` para alinear a la izquierda */
-.reservas-header {
-    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: #f5f5f5;
 }
 
-
-       .date-filter {
-    display: flex;
-    justify-content: center; /* centrado horizontal */
-    align-items: center;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.date-filter input[type="date"],
-.date-filter button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.95rem;
-}
-
-.date-filter button {
-    background-color: #4a47a3;
+/* ==================== BARRA LATERAL ==================== */
+.barra-lateral {
+    background-color: var(--sidebar-bg);
     color: white;
+    padding: 20px;
+    min-width: 250px;
+    transition: all 0.3s;
+}
+
+.barra-lateral h2 {
+    color: #ecf0f1;
+    padding-bottom: 10px;
+}
+
+/* Elementos del menú */
+.menu-item, .logout {
+    padding: 12px 15px;
+    margin: 20px 0;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.3s;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 18px;
+    border: 1px solid transparent;
+    font-weight: 400;
+    display: block;
+    text-decoration: none;
+}
+
+.logout {
+    margin-top: auto; /* Posiciona el logout al final */
+}
+
+.menu-item:hover, .logout:hover {
+    box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff;
+}
+
+/* Menú desplegable de usuarios */
+.usu {
+    position: relative;
+    display: block;
+}
+
+.usu button {
+    padding: 12px 20px;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
     border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.usu-contenido {
+    display: none;
+    position: relative;
+    background: var(--sidebar-bg);
+    border-radius: 6px;
+    margin-top: 5px;
+}
+
+.usu-contenido a {
+    display: block;
+    padding: 10px 20px;
+    color: #ffffff;
+    text-decoration: none;
     transition: background-color 0.3s;
 }
 
-.date-filter button:hover {
-    background-color: #6c63ff;
+.usu-contenido a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
+.usu:hover .usu-contenido {
+    display: block;
+}
 
-        .chart-container {
-            position: relative;
-            height: 200px;
-        }
+/* ==================== CONTENIDO PRINCIPAL ==================== */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto; /* Para contenido que exceda el ancho */
+}
 
-        /* Notifications section */
-        .notifications-title {
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
 
-        .notification-card {
-            background-color: #f0f2ff;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    cursor: pointer;
+    margin-left: auto;
+}
 
-        .notification-card.active {
-            border-left: 4px solid var(--primary);
-        }
+.profile-img {
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
 
-        .notification-user {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+/* Sección de bienvenida */
+.welcome {
+    margin-bottom: 20px;
+}
 
-        .notification-avatar {
-            width: 30px;
-            height: 30px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.8rem;
-            margin-right: 10px;
-        }
+/* Contenedor del dashboard */
+.dashboard-content {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
 
-        .notification-name {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
+/* ==================== ESTADÍSTICAS DE HABITACIONES ==================== */
+.room-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
 
-        .notification-message {
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            color: #555;
-        }
+.room-category {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
 
-        .notification-room {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--primary);
-        }
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
 
-        .notification-list {
-            margin-top: 20px;
-        }
+.stat-box {
+    background-color: #f0f2ff;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
 
-        .notification-item a{
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            gap: 10px;
-        }
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
 
-        .notification-item a{
-            text-decoration: none;
-            display: flex;
-
-        }   
-
-        .notification-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .notification-item:last-child {
-            border-bottom: none;
-        }
-
-        .notification-item-avatar {
-            width: 30px;
-            height: 30px;
-            background-color: #e8eaf6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-        }
-
-        .notification-item-content {
-            flex: 0.95;
-        }
-
-        .notification-item-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .notification-item-room {
-            font-size: 0.8rem;
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .notification-item-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        .action-icon {
-            padding-left: 120px;
-            color: #999;
-            cursor: pointer;
-        }
-
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .close-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .modal label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .modal input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .save-button {
-            padding: 8px 15px;
-            background-color: var(--success);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .reservas {
+/* ==================== SECCIÓN DE RESERVAS ==================== */
+.reservas {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     margin-top: 30px;
-    width: 100%;
 }
 
-#reservasChart {
-    width: 80% !important;
-    max-width: 600px;
-    height: 200px !important;
-    margin: 0 auto;
-    display: block;
+.reservas-header {
+    margin-bottom: 20px;
+    text-align: center;
 }
-/* CSS */
+
+.chart-container {
+    position: relative;
+    height: 200px;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+/* Filtro de fechas */
 .date-filter {
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
 }
 
-.date-filter input[type="date"] {
-    padding: 8px;
+.date-filter input[type="date"],
+.date-filter button {
+    padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 0.9rem;
 }
 
-.boton-filtrar {
-    background-color: #4a47a3;
+.date-filter button {
+    background-color: var(--primary);
     color: white;
-    padding: 8px 16px;
     border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.boton-filtrar:hover {
-    background-color: #6c63ff;
-}
-.reservas-header h3 {
-    text-align: center;
-    width: 100%;
+.date-filter button:hover {
+    background-color: var(--secondary);
 }
 
+/* ==================== MEDIA QUERIES PARA RESPONSIVO ==================== */
+@media (max-width: 992px) {
+    body {
+        flex-direction: column;
+    }
+    
+    .barra-lateral {
+        width: 100%;
+        min-height: auto;
+        padding: 15px;
+    }
+    
+    .menu-item, .logout {
+        margin: 10px 0;
+        font-size: 16px;
+    }
+    
+    .dashboard-content {
+        flex-direction: column;
+    }
+}
 
+@media (max-width: 768px) {
+    .room-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .date-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .date-filter input,
+    .date-filter button {
+        width: 100%;
+    }
+}
 
+@media (max-width: 576px) {
+    .profile {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

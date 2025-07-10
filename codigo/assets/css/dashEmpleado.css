@@ -1,3 +1,4 @@
+/* ==================== VARIABLES GLOBALES ==================== */
 :root {
     --primary: #4a47a3;
     --secondary: #6c63ff;
@@ -7,9 +8,14 @@
     --danger: #e63946;
     --warning: #ffc107;
     --info: #17a2b8;
+    --sidebar-bg: #402E7A;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --text-muted: #6c757d;
 }
 
-/* Estilos base */
+/* ==================== RESET Y ESTILOS BASE ==================== */
 * {
     margin: 0;
     padding: 0;
@@ -23,84 +29,60 @@ body {
     background-color: #f5f5f5;
 }
 
-/* Barra lateral */
+/* ==================== BARRA LATERAL ==================== */
 .barra-lateral {
     width: 250px;
-    background-color: #402E7A;
+    background-color: var(--sidebar-bg);
     color: white;
     padding: 20px;
     position: fixed;
     height: 100%;
     transition: all 0.3s;
+    z-index: 100;
 }
 
 .logo img {
     max-width: 100%;
     height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
-.menu-item {
+.menu-item, .logout {
     padding: 12px 15px;
     margin: 10px 0;
     cursor: pointer;
     transition: all 0.3s;
-    color: #ffffff;
+    color: white;
     border-radius: 8px;
     font-size: 16px;
     font-weight: 400;
-    animation: slideIn 0.5s ease-out;
+    text-decoration: none;
+    display: block;
 }
 
-.menu-item:hover {
+.menu-item:hover, .logout:hover {
     background-color: rgba(255, 255, 255, 0.1);
     transform: translateX(5px);
 }
 
 .logout {
-    padding: 12px 15px;
-    margin-top: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-    color: #ffffff;
-    border-radius: 8px;
-    font-size: 16px;
+    margin-top: auto;
     position: absolute;
     bottom: 20px;
     width: calc(100% - 40px);
 }
 
-.logout:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Botón de clientes */
-.usu button {
-    padding: 12px 20px;
-    background: transparent;
-    color: #fff;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-    text-align: left;
-    margin: 10px 0;
-}
-
-.usu button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Contenido principal */
+/* ==================== CONTENIDO PRINCIPAL ==================== */
 .main-content {
     flex: 1;
     padding: 20px;
     margin-left: 250px;
     width: calc(100% - 250px);
+    transition: margin 0.3s;
 }
 
-/* Perfil */
+/* Perfil de usuario */
 .profile {
     display: flex;
     align-items: center;
@@ -121,10 +103,6 @@ body {
     font-weight: bold;
 }
 
-.profile-name {
-    font-weight: 500;
-}
-
 /* Mensaje de bienvenida */
 .welcome h2 {
     color: var(--dark);
@@ -132,7 +110,7 @@ body {
     font-size: 24px;
 }
 
-/* Estadísticas de habitaciones */
+/* ==================== ESTADÍSTICAS DE HABITACIONES ==================== */
 .room-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -144,12 +122,13 @@ body {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s;
 }
 
 .room-category:hover {
     transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
 .room-category h3 {
@@ -165,7 +144,7 @@ body {
 }
 
 .stat-box {
-    background-color: #f8f9fa;
+    background-color: var(--light);
     padding: 15px;
     border-radius: 8px;
     text-align: center;
@@ -185,28 +164,27 @@ body {
 
 .stat-label {
     font-size: 14px;
-    color: #6c757d;
+    color: var(--text-muted);
 }
 
-/* Notificaciones - Nueva sección modificada */
+/* ==================== NOTIFICACIONES ==================== */
 .notificaciones-container {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px; /* Ancho máximo reducido */
-    margin: 0 auto; /* Centrado horizontal */
-    width: 100%; /* Ocupa el ancho máximo definido */
+    box-shadow: var(--shadow-md);
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
 }
 
-/* Ajustar el contenedor de notificaciones */
 #contenedor-notificaciones {
     max-height: 500px;
     overflow-y: auto;
     padding-right: 5px;
 }
 
-/* Personalizar scrollbar */
+/* Scrollbar personalizada */
 #contenedor-notificaciones::-webkit-scrollbar {
     width: 6px;
 }
@@ -231,30 +209,30 @@ body {
 
 .no-notifications {
     text-align: center;
-    color: #6c757d;
+    color: var(--text-muted);
     padding: 20px;
 }
 
 /* Tarjetas de notificación */
-/* Ajustar tarjetas de notificación al nuevo ancho */
 .notificacion-card {
     background-color: white;
     border-radius: 10px;
     margin-bottom: 15px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
     border-left: 4px solid var(--primary);
     transition: all 0.3s;
-    width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
 
 .notificacion-card:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
 }
 
-/* Ajustar header de notificación */
 .notificacion-header {
     padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .avatar-circle {
@@ -278,11 +256,10 @@ body {
 
 .mensaje {
     font-size: 14px;
-    color: #6c757d;
+    color: var(--text-muted);
     margin-top: 2px;
 }
 
-/* Ajustar detalles para el nuevo ancho */
 .detalle-notificacion {
     padding: 0 15px 15px 70px;
     display: none;
@@ -296,7 +273,6 @@ body {
 
 .producto-item:last-child {
     border-bottom: none;
-    margin-bottom: 15px;
 }
 
 .total-compra {
@@ -308,9 +284,13 @@ body {
 
 .btn-leido {
     padding: 6px 12px;
+    background-color: var(--success);
+    color: white;
+    border: none;
+    border-radius: 4px;
     font-size: 14px;
-    width: auto;
-    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s;
     margin-top: 10px;
 }
 
@@ -318,7 +298,7 @@ body {
     background-color: #218838;
 }
 
-/* Animaciones */
+/* ==================== ANIMACIONES ==================== */
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -327,5 +307,50 @@ body {
     to {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+/* ==================== RESPONSIVIDAD ==================== */
+@media (max-width: 992px) {
+    .barra-lateral {
+        transform: translateX(-100%);
+    }
+    
+    .barra-lateral.active {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .room-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .room-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .notificaciones-container {
+        padding: 15px;
+    }
+    
+    .detalle-notificacion {
+        padding: 0 15px 15px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile {
+        flex-direction: column;
+        align-items: flex-end;
     }
 }

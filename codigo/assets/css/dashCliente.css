@@ -1,53 +1,68 @@
-   /* (mantenemos el CSS anterior para la barra, tarjetas, etc.) */
-   * {
+/* ==================== VARIABLES GLOBALES ==================== */
+:root {
+    --primary-color: #402E7A;
+    --secondary-color: #3DC2EC;
+    --accent-color: #273cfa;
+    --text-light: #ffffff;
+    --text-dark: #444;
+    --bg-gradient: linear-gradient(180deg, #402E7A, #3DC2EC);
+    --sidebar-gradient: linear-gradient(180deg, #3DC2EC, #3DC2EC, #3DC2EC, #1F7DF5, #402E7A);
+    --shadow: 0 3px 15px 1px #4B70F5;
+}
+
+/* ==================== RESET Y ESTILOS BASE ==================== */
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
-  }
-  body {
+}
+
+body {
     display: flex;
     min-height: 100vh;
-    background: #f5f7fa;
-  }
+    background: var(--bg-gradient);
+}
 
-  /* BARRA LATERAL */
-  .barra-lateral {
+/* ==================== BARRA LATERAL ==================== */
+.barra-lateral {
     position: fixed;
     left: 0;
     top: 40px;
     width: 250px;
     height: calc(100vh - 80px);
-    background: linear-gradient(180deg, #3DC2EC, #3DC2EC, #3DC2EC, #1F7DF5, #402E7A);
+    background: var(--sidebar-gradient);
     border-radius: 30px;
     padding: 25px;
-    box-shadow: 0 3px 15px 1px #4B70F5;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+    z-index: 100;
+    transition: transform 0.3s ease;
+}
 
-  /* LOGO */
-  .barra-lateral .logo {
+.barra-lateral .logo {
     margin-bottom: 40px;
     text-align: center;
     width: 100%;
-  }
-  .barra-lateral .logo img {
+}
+
+.barra-lateral .logo img {
     max-width: 180px;
     height: auto;
     display: inline-block;
-  }
+}
 
-  /* NAV */
-  .barra-lateral nav {
+.barra-lateral nav {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  .barra-lateral nav a {
-    color: white;
+}
+
+.barra-lateral nav a {
+    color: var(--text-light);
     font-weight: 600;
     font-size: 18px;
     text-decoration: none;
@@ -57,151 +72,182 @@
     padding: 10px 20px;
     border-radius: 15px;
     transition: background-color 0.3s ease;
-  }
-  .barra-lateral nav a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
+}
 
-  .sesion{
-    color: white;
+.barra-lateral nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sesion {
+    color: var(--text-light);
     font-weight: 600;
     font-size: 18px;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 20px 10px -13px;
+    padding: 10px 20px;
     border-radius: 15px;
-  }
-  
+}
 
-  /*CONTENIDO PRINCIPAL*/
-  .main {
+/* ==================== CONTENIDO PRINCIPAL ==================== */
+.main {
     margin-left: 270px;
     flex: 1;
     padding: 40px;
     overflow-y: auto;
-  }
-  .main-header {
+    transition: margin 0.3s ease;
+}
+
+.main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-  }
-  .main-header h1 {
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.main-header h1 {
     font-size: 24px;
-    color: #273cfa;
-  }
-  .btn-group button {
+    color: var(--text-light);
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-group button {
     padding: 8px 16px;
-    margin-left: 10px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .btn-edit { background: #f1f1f1; }
-  .btn-edit:hover { background: #ddd; }
-  .btn-save { background: #273cfa; color: white; }
-  .btn-save:disabled { background: #a0a8f7; cursor: not-allowed; }
+    transition: all 0.3s ease;
+}
 
-  /* TARJETAS */
-  .card {
+.btn-edit {
+    background: #f1f1f1;
+}
+
+.btn-edit:hover {
+    background: #ddd;
+}
+
+.btn-save {
+    background: var(--accent-color);
+    color: var(--text-light);
+}
+
+.btn-save:disabled {
+    background: #a0a8f7;
+    cursor: not-allowed;
+}
+
+/* ==================== TARJETAS DE INFORMACIÓN ==================== */
+.card {
     background: white;
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     margin-bottom: 30px;
-  }
-  .card h2 {
+}
+
+.card h2 {
     font-size: 20px;
     margin-bottom: 20px;
-    color: #273cfa;
-  }
-  .card .group {
+    color: var(--accent-color);
+}
+
+.card .group {
     display: flex;
     gap: 40px;
     flex-wrap: wrap;
-  }
-  .card .group .col {
+}
+
+.card .group .col {
     flex: 1;
     min-width: 280px;
-  }
-  .card .group .col.display p,
-  .card .group .col.display span {
+}
+
+/* Estilos para la columna de visualización */
+.card .group .col.display p,
+.card .group .col.display span {
     margin-bottom: 12px;
     font-size: 15px;
-  }
-  .card .group .col.display p strong {
+}
+
+.card .group .col.display p strong {
     width: 140px;
     display: inline-block;
-  }
-  .card .group .col.edit label {
+}
+
+/* Estilos para la columna de edición */
+.card .group .col.edit label {
     display: block;
     margin-top: 12px;
     font-weight: bold;
-  }
-  .card .group .col.edit input {
+}
+
+.card .group .col.edit input {
     width: 100%;
     padding: 8px;
     margin-top: 6px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
-    transition: border-color 0.3s ease;
-  }
-  .card .group .col.edit input.invalid {
+    transition: all 0.3s ease;
+}
+
+.card .group .col.edit input.invalid {
     border-color: #f44336;
     background-color: #ffe6e6;
-  }
+}
 
-  /* HISTORIAL */
-  .history {
+/* ==================== HISTORIAL DE RESERVAS ==================== */
+.history {
     background: white;
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-  .history h2 {
+    overflow-x: auto;
+}
+
+.history h2 {
     font-size: 20px;
     margin-bottom: 20px;
-    color: #273cfa;
-  }
-  .history table {
+    color: var(--accent-color);
+}
+
+.history table {
     width: 100%;
     border-collapse: collapse;
-  }
-  .history th, .history td {
+    min-width: 600px;
+}
+
+.history th, .history td {
     padding: 12px 10px;
     border-bottom: 1px solid #e0e0e0;
     text-align: center;
     font-size: 14px;
-  }
-  .history th {
+}
+
+.history th {
     background: #f7faff;
-    color: #273cfa;
-  }
-  .history tr:last-child td {
+    color: var(--accent-color);
+}
+
+.history tr:last-child td {
     border-bottom: none;
-  }
+}
 
-  @media(max-width:768px){
-    .barra-lateral {
-      display: none;
-    }
-    .main {
-      margin-left: 0;
-      padding: 20px;
-    }
-    .card .group {
-      flex-direction: column;
-    }
-  }
-
-  /* MODAL */
-  .modal {
+/* ==================== MODAL ==================== */
+.modal {
     position: fixed;
-    top:0; left:0; right:0; bottom:0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
@@ -210,40 +256,113 @@
     pointer-events: none;
     transition: opacity 0.3s ease;
     z-index: 9999;
-  }
-  .modal.active {
+}
+
+.modal.active {
     opacity: 1;
     pointer-events: auto;
-  }
-  .modal-content {
+}
+
+.modal-content {
     background: white;
     padding: 30px 40px;
     border-radius: 15px;
-    max-width: 400px;
+    max-width: 90%;
+    width: 400px;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    position: relative;
-  }
-  .modal-content h3 {
+}
+
+.modal-content h3 {
     margin-bottom: 20px;
-    color: #273cfa;
-  }
-  .modal-content p {
+    color: var(--accent-color);
+}
+
+.modal-content p {
     font-size: 16px;
     margin-bottom: 30px;
-    color: #444;
-  }
-  .modal-content button {
+    color: var(--text-dark);
+}
+
+.modal-content button {
     padding: 10px 25px;
-    background: #273cfa;
-    color: white;
+    background: var(--accent-color);
+    color: var(--text-light);
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
     font-size: 15px;
     transition: background-color 0.3s ease;
-  }
-  .modal-content button:hover {
+}
+
+.modal-content button:hover {
     background: #1a29b8;
-  }
+}
+
+/* ==================== MENÚ HAMBURGUESA (PARA MÓVIL) ==================== */
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 101;
+    background: #4B70F5;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* ==================== MEDIA QUERIES ==================== */
+@media (max-width: 992px) {
+    .barra-lateral {
+        transform: translateX(-100%);
+        top: 0;
+        height: 100vh;
+        border-radius: 0;
+    }
+    
+    .barra-lateral.active {
+        transform: translateX(0);
+    }
+    
+    .main {
+        margin-left: 0;
+        padding: 20px;
+    }
+    
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 320px;
+    }
+    
+    .card .group {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .btn-group {
+        width: 100%;
+    }
+    
+    .btn-group button {
+        flex: 1;
+    }
+    
+    .modal-content {
+        padding: 20px;
+    }
+}
