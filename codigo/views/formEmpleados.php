@@ -99,65 +99,70 @@ $empleados = !empty($rol)
     <!-- ==============================================
          MODAL PARA AGREGAR NUEVO EMPLEADO
          ============================================== -->
-    <div id="modalEmpleado" class="modal" style="display: none;">
-        <div class="modal-contenido">
-            <span class="cerrar" onclick="cerrarModal()">&times;</span>
-            <h2>Registrar nuevo empleado</h2>
-            <form id="formEmpleado" method="POST" action="../controller/guardarEmpleado.php">
-                <div class="form-columnas">
-                    <div class="columna">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" required>
+<div id="modalEmpleado" class="modal" style="display: none;">
+    <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal()">&times;</span>
+        <h2>Registrar nuevo empleado</h2>
+        <form id="formEmpleado" method="POST" action="../controller/guardarEmpleado.php">
+            <div class="form-columnas">
+                <div class="columna">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
 
-                        <label for="apellido">Apellido:</label>
-                        <input type="text" id="apellido" name="apellido" required>
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" name="apellido" required>
 
-                        <label for="tipoDocumento">Tipo de Documento:</label>
-                        <select id="tipoDocumento" name="tipoDocumento" required>
-                            <option value="">Seleccione un tipo de documento</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="PPP">Pasaporte</option>
-                        </select>
+                    <label for="tipoDocumento">Tipo de Documento:</label>
+                    <select id="tipoDocumento" name="tipoDocumento" required>
+                        <option value="">Seleccione un tipo de documento</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="PPP">Pasaporte</option>
+                    </select>
 
-                        <label for="numeroDocumento">Número de Documento:</label>
-                        <input type="text" id="numeroDocumento" name="numeroDocumento" required>
+                    <label for="numeroDocumento">Número de Documento:</label>
+                    <input type="text" id="numeroDocumento" name="numeroDocumento"
+                           pattern="^\d{6,12}$" maxlength="12" title="Ingrese entre 6 y 12 números" required>
 
-                        <label for="numeroTelefono">Teléfono:</label>
-                        <input type="tel" id="numeroTelefono" name="numeroTelefono" required>
-                    </div>
-
-                    <div class="columna">
-                        <label for="email">Correo:</label>
-                        <input type="email" id="email" name="email" required>
-
-                        <label for="rol">Rol:</label>
-                        <select id="rol" name="usu_idrol" required>
-                            <option value="">Seleccione un rol</option>
-                            <option value="3">Recepcionista</option>
-                            <option value="4">Cocinero</option>
-                            <option value="5">Camarero</option>
-                        </select>
-
-                        <label for="estado">Estado:</label>
-                        <select id="estado" name="estado" required>
-                            <option value="">Seleccione un estado</option>
-                            <option value="en turno">En turno</option>
-                            <option value="vacaciones">Vacaciones</option>
-                            <option value="fuera de turno">Fuera de turno</option>
-                            <option value="capacitacion">Capacitación</option>
-                        </select>
-
-                        <label for="password">Contraseña:</label>
-                        <input type="password" id="password" name="password" required>
-
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" name="direccion" required>
-                    </div>
+                    <label for="numeroTelefono">Teléfono:</label>
+                    <input type="tel" id="numeroTelefono" name="numeroTelefono"
+                           pattern="^\d{7,10}$" maxlength="10" title="Ingrese un número de teléfono válido de 7 a 10 dígitos" required>
                 </div>
-                <button type="submit" class="btn btn-success" name="guardarEmpleado">Guardar</button>
-            </form>
-        </div>
+
+                <div class="columna">
+                    <label for="email">Correo:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="rol">Rol:</label>
+                    <select id="rol" name="usu_idrol" required>
+                        <option value="">Seleccione un rol</option>
+                        <option value="3">Recepcionista</option>
+                        <option value="4">Cocinero</option>
+                        <option value="5">Camarero</option>
+                    </select>
+
+                    <label for="estado">Estado:</label>
+    <select id="estado" name="estado" required>
+    <option value="">Seleccione un estado</option>
+    <option value="en turno">En turno</option>
+    <option value="fuera de turno">Fuera de turno</option>
+    <option value="vacaciones">Vacaciones</option>
+    </select>
+
+
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                           title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números" required>
+
+                    <label for="direccion">Dirección:</label>
+                    <input type="text" id="direccion" name="direccion" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success" name="guardarEmpleado">Guardar</button>
+        </form>
     </div>
+</div>
+
         <!-- ==============================================
          MODAL PARA EDITAR EMPLEADO (CUADRO GRANDE)
          ============================================== -->
@@ -202,12 +207,12 @@ $empleados = !empty($rol)
                         </select>
 
                         <label for="edit_estado">Estado:</label>
-                        <select id="edit_estado" name="estado" required>
-                            <option value="en turno">En turno</option>
-                            <option value="vacaciones">Vacaciones</option>
-                            <option value="fuera de turno">Fuera de turno</option>
-                            <option value="capacitacion">Capacitación</option>
-                        </select>
+        <select id="edit_estado" name="estado" required>
+    <option value="en turno">En turno</option>
+    <option value="fuera de turno">Fuera de turno</option>
+    <option value="vacaciones">Vacaciones</option>
+</select>
+
 
                         <label for="edit_direccion">Dirección:</label>
                         <input type="text" id="edit_direccion" name="direccion" required>
@@ -512,6 +517,32 @@ document.addEventListener("DOMContentLoaded", function() {
     // Configurar event listeners
     setupEventListeners();
 });
+// === EVENTO PARA EL FORMULARIO DE EDITAR EMPLEADO ===
+document.getElementById('formEditarEmpleado').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevenir el envío tradicional
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            mostrarModalSuccess(data.message);  // Muestra mensaje visual
+            cerrarModalEditar();               // Cierra el modal
+            setTimeout(() => window.location.reload(), 1500); // Recarga página
+        } else {
+            mostrarModalError(data.message);   // Muestra error si viene del servidor
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        mostrarModalError('Error inesperado al actualizar');
+    });
+});
+
 </script>
 
 </body>

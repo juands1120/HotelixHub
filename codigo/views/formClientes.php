@@ -2,17 +2,23 @@
 // ==============================================
 // SECCIÓN DE SEGURIDAD Y CONTROL DE ACCESO
 // ==============================================
-require_once __DIR__ . '/../services/sessionManager.php';
 
-// Verifica si el usuario está logueado
+require_once __DIR__ . '/../services/sessionManager.php';
+require_once __DIR__ . '/../config/conexionbd.php';
+
+
+// Verificar sesión y roles
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../views/login.php');
     exit();
 }
 
-$rolId = $_SESSION['usuario']['usu_idrol'];
+// Verificar que el rol sea administrador 
+if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
+    header('Location: ../views/login.php'); // O página de acceso denegado
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -47,7 +53,7 @@ $rolId = $_SESSION['usuario']['usu_idrol'];
 
           <!-- HABITACIONES (solo admin) -->
           <?php if ($rolId === 1): ?>
-              <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
+              <a href="habitacion.php"><div class="menu-item">Habitaciones</div></a>
           <?php endif; ?>
 
           <!-- SUBMENÚ USUARIOS -->

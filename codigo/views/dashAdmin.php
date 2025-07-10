@@ -51,9 +51,13 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
         
         <!-- Menú de navegación -->
         <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
+<<<<<<< HEAD
+        
         
         <!-- Menú desplegable de Usuarios -->
+=======
+        <a href="habitacion.php"><div class="menu-item">Habitaciones</div></a>
+>>>>>>> f81e779fcf9fa802c8c38acd8ded961c89cd42b8
         <div class="usu">
             <button id="usuario">Usuarios</button>
             <div class="usu-contenido">

@@ -1,3 +1,20 @@
+
+<?php
+require_once __DIR__ . '/../services/sessionManager.php';
+require_once __DIR__ . '/../config/conexionbd.php';
+
+// Verificar sesión y roles
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../views/login.php');
+    exit();
+}
+
+// Verificar que el rol sea administrador 
+if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
+    header('Location: ../views/login.php'); // O página de acceso denegado
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,21 +27,21 @@
     <div class="barra-lateral">
         <!-- LOGO DEL HOTEL CON ENLACE AL HOME -->
         <div class="logo">
-            <a href="Home.html"><img src="../assets/img/imgHabitacion/Copia de Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+            <a href="Home.php"><img src="../assets/img/imgHabitacion/Copia de Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
         </div>
         <br><br>
         <div></div>
         
         <!-- ELEMENTOS DEL MENÚ -->
         <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a> <!-- Elemento activo actual -->
+        <a href="habitacion.php"><div class="menu-item">Habitaciones</div></a> <!-- Elemento activo actual -->
 
         <!-- MENÚ DESPLEGABLE DE USUARIOS -->
         <div class="usu">
             <button id="usuario">Usuarios</button>
             <div class="usu-contenido">
-                <a href="DashEmpleados.html">Empleados</a>
-                <a href="DashClientes.html">Clientes</a>
+                <a href="dashEmpleados.php">Empleados</a>
+                <a href="dashClientes.php">Clientes</a>
             </div>
         </div>
         

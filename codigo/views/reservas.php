@@ -1,3 +1,18 @@
+<?php
+require_once __DIR__ . '/../services/sessionManager.php';
+
+
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../views/login.php');
+    exit();
+}
+
+// Verificar que el rol sea cliente
+if ($_SESSION['usuario']['usu_idrol'] != 2) {
+    header('Location: ../views/login.php'); // O a una página de error
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
