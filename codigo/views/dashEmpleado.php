@@ -1,4 +1,5 @@
 <?php
+// Verificación de sesión y permisos
 require_once __DIR__ . '/../services/sessionManager.php';
 require_once __DIR__ . '/../config/conexionbd.php';
 require_once __DIR__ . '/../models/habitacionesdash.php';
@@ -8,9 +9,9 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Verificar que el rol sea empleado
+// Verificar que el rol sea empleado (roles 3, 4 o 5)
 if (!in_array($_SESSION['usuario']['usu_idrol'], [3, 4, 5])) {
-    header('Location: ../views/login.php'); // O página de acceso denegado
+    header('Location: ../views/login.php');
     exit();
 }
 
@@ -30,6 +31,7 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
 </head>
 
 <body>
+    <!-- Barra lateral de navegación -->
     <div class="barra-lateral">
         <div class="logo">
             <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
@@ -46,7 +48,9 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
         <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
     </div>    
 
+    <!-- Contenido principal -->
     <div class="main-content">
+        <!-- Perfil del usuario -->
         <div class="profile" id="profile">
             <span class="profile-name">
                 <?php echo htmlspecialchars($_SESSION['usuario']['nombre']. ' ' . $_SESSION['usuario']['apellido']); ?>
@@ -54,14 +58,17 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
             <div class="profile-img">👤</div>
         </div>
 
+        <!-- Mensaje de bienvenida -->
         <div class="welcome">
             <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']. ' ' . $_SESSION['usuario']['apellido']); ?></h2>
         </div>
 
+        <!-- Contenido del dashboard -->
         <div class="dashboard-content">
             <div class="dashboard-left">
+                <!-- Estadísticas de habitaciones -->
                 <div class="room-stats">
-                    <!-- Habitaciones Piso 2 -->
+                    <!-- Secciones por piso (2 al 5) -->
                     <div class="room-category">
                         <h3>Habitaciones Piso 2</h3>
                         <div class="stats-grid">
@@ -72,7 +79,6 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                         </div>
                     </div>
 
-                    <!-- Habitaciones Piso 3 -->
                     <div class="room-category">
                         <h3>Habitaciones Piso 3</h3>
                         <div class="stats-grid">
@@ -83,7 +89,6 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                         </div>
                     </div>
 
-                    <!-- Habitaciones Piso 4 -->
                     <div class="room-category">
                         <h3>Habitaciones Piso 4</h3>
                         <div class="stats-grid">
@@ -94,7 +99,6 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                         </div>
                     </div>
 
-                    <!-- Habitaciones Piso 5 -->
                     <div class="room-category">
                         <h3>Habitaciones Piso 5</h3>
                         <div class="stats-grid">
@@ -106,40 +110,144 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
                     </div>
                 </div>
 
-                <!-- 🔔 NOTIFICACIONES AQUÍ -->
-                <div class="notificaciones-box">
-                    <h3 class="notifications-title">Notificaciones</h3>
-
-                    <div class="notification-card active">
-                        <div class="notification-user">
-                            <div class="notification-avatar">J</div>
-                            <div class="notification-name">Juan Mauricio Perez Florez</div>
-                        </div>
-                        <div class="notification-message">
-                            El huésped ordenó almuerzo del día a la habitación.
-                        </div>
-                        <div class="notification-room">Habitación: 301</div>
-                        <div class="notification-category">Categoría: Cocina</div>
-                        <button class="mark-read-btn">Marcar como leído</button>
-                    </div>
-
-                    <div class="notification-list">
-                        <div class="notification-item">
-                            <div class="notification-item-avatar">J</div>
-                            <div class="notification-item-content">
-                                <div class="notification-item-name">Juan Mauricio Perez Florez</div>
-                                <div class="notification-item-room">301</div>
-                                <div class="notification-item-category">Categoría: Aseo</div>
-                            </div>
-                            <div class="notification-item-actions">
-                                <button class="mark-read-btn small">✔</button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Sección de notificaciones mejorada -->
+                <div class="notificaciones-container">
+                    <h3 class="notifications-title">Notificaciones Recientes</h3>
+                    <div id="contenedor-notificaciones"></div>
                 </div>
-                <!-- 🔔 FIN NOTIFICACIONES -->
             </div>
         </div>
     </div>
+
+    <!-- Script para manejar notificaciones -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            obtenerNotificaciones();
+
+            function obtenerNotificaciones() {
+                fetch('../controller/compraController.php?accion=notificaciones')
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        console.log('Datos recibidos:', data); // Para depuración
+                        if (data.error) {
+                            console.error('Error del servidor:', data.error);
+                            mostrarMensajeError();
+                        } else {
+                            mostrarNotificacionesAgrupadas(data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al cargar notificaciones:", error);
+                        mostrarMensajeError();
+                    });
+            }
+
+            function mostrarMensajeError() {
+                const contenedor = document.getElementById('contenedor-notificaciones');
+                contenedor.innerHTML = '<div class="no-notifications">Error al cargar notificaciones</div>';
+            }
+
+            function mostrarNotificacionesAgrupadas(notificaciones) {
+                const contenedor = document.getElementById('contenedor-notificaciones');
+                contenedor.innerHTML = '';
+
+                if (!Array.isArray(notificaciones)){
+                    console.error('Las notificaciones no son un array:', notificaciones);
+                    contenedor.innerHTML = '<div class="no-notifications">Formato de datos incorrecto</div>';
+                    return;
+                }
+
+                if (notificaciones.length === 0) {
+                    contenedor.innerHTML = '<div class="no-notifications">No hay notificaciones nuevas</div>';
+                    return;
+                }
+
+                const agrupadas = {};
+
+                notificaciones.forEach(n => {
+                    const clave = `${n.id_compra}_${n.id_habitacion || '0'}`;
+                    if (!agrupadas[clave]) {
+                        agrupadas[clave] = {
+                            cliente: n.nombre_cliente || 'Cliente desconocido',
+                            habitacion: n.nombre_habitacion || 'No asignada',
+                            productos: []
+                        };
+                    }
+
+                    agrupadas[clave].productos.push({
+                        nombre: n.nombre_producto || 'Producto sin nombre',
+                        cantidad: n.cantidad || 0,
+                        precio: n.precio || 0,
+                        categoria: n.nombre_categoria || 'Sin categoría'
+                    });
+                });
+
+                Object.entries(agrupadas).forEach(([clave, datos]) => {
+                    const idCompra = clave.split('_')[0];
+                    const totalCompra = datos.productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'notificacion-card';
+                    tarjeta.innerHTML = `
+                        <div class="notificacion-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                            <div class="avatar-circle">${datos.cliente.charAt(0)}</div>
+                            <div>
+                                <div class="nombre-cliente">${datos.cliente}</div>
+                                <div class="mensaje">Habitación: ${datos.habitacion}</div>
+                            </div>
+                        </div>
+                        <div class="detalle-notificacion" style="display:none;">
+                            <div class="detalle-info">
+                                ${datos.productos.map(p => `
+                                    <div class="producto-item">
+                                        <strong>${p.nombre}</strong> (${p.categoria})<br>
+                                        Cantidad: ${p.cantidad}<br>
+                                        Precio: ${parseFloat(p.precio).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                                    </div>
+                                `).join('')}
+                                <div class="total-compra">
+                                    <strong>Total:</strong> ${parseFloat(totalCompra).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                                </div>
+                            </div>
+                            <button class="btn-leido" data-id="${idCompra}">Marcar como leída</button>
+                        </div>
+                    `;
+
+                    tarjeta.querySelector('.btn-leido').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        marcarComoLeida(idCompra, tarjeta);
+                    });
+
+                    contenedor.appendChild(tarjeta);
+                });
+            }
+
+            function marcarComoLeida(idCompra, tarjetaElemento) {
+                fetch('../controller/compraController.php?accion=marcarLeida', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: idCompra })
+                })
+                .then(res => res.json())
+                .then(resp => {
+                    if (resp.mensaje) {
+                        tarjetaElemento.style.opacity = '0.5';
+                        setTimeout(() => tarjetaElemento.remove(), 300);
+                    } else {
+                        alert("Error al marcar como leída: " + (resp.error || ''));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error al marcar como leída");
+                });
+            }
+        });
+    </script>
 </body>
 </html>

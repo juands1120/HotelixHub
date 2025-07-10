@@ -28,7 +28,6 @@ if (!isset($_SESSION['usuario'])) {
             <a href="dashCliente.php"><button class="menu-btn" id="btnProductos">Inicio</button></a>
             <a href="reservas.php"><button class="menu-btn" id="btnProductos">Reservas</button></a>
             <a href="productosClientes.php"><button class="menu-btn" id="btnProductos">Productos</button></a>
-            <a href=""><button class="menu-btn" id="btnProductos">Ajustes</button></a>
             <a href="../controller/logout.php"><button class="cerrar-s">Cerrar Sesion</button></a>
         </div>
 

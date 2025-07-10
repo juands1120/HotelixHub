@@ -2,58 +2,16 @@ Array
 (
     [0] => Array
         (
-            [id_reserva] => 5
-            [fecha_reserva] => 2025-07-10 01:12:26
-            [fecha_entrada] => 2025-07-30
-            [fecha_salida] => 2025-07-31
-            [num_huespedes] => 2
-            [precio_total] => 470000.00
+            [id_reserva] => 6
+            [fecha_reserva] => 2025-07-10 05:53:32
+            [fecha_entrada] => 2025-07-20
+            [fecha_salida] => 2025-07-21
+            [num_huespedes] => 3
+            [precio_total] => 300000.00
             [estado] => Pendiente
-            [servicios_adicionales] => ["Spa","Desayuno Buffet","Parqueadero"]
+            [servicios_adicionales] => []
             [nombre_habitacion] => 402
             [tipoHabitacion] => Triple
-        )
-
-    [1] => Array
-        (
-            [id_reserva] => 3
-            [fecha_reserva] => 2025-07-08 15:34:16
-            [fecha_entrada] => 2025-07-30
-            [fecha_salida] => 2025-07-31
-            [num_huespedes] => 1
-            [precio_total] => 150000.00
-            [estado] => Confirmada
-            [servicios_adicionales] => []
-            [nombre_habitacion] => 201
-            [tipoHabitacion] => Sencilla
-        )
-
-    [2] => Array
-        (
-            [id_reserva] => 2
-            [fecha_reserva] => 2025-07-08 14:47:05
-            [fecha_entrada] => 2025-07-09
-            [fecha_salida] => 2025-07-25
-            [num_huespedes] => 1
-            [precio_total] => 2480000.00
-            [estado] => Confirmada
-            [servicios_adicionales] => ["Spa"]
-            [nombre_habitacion] => 201
-            [tipoHabitacion] => Sencilla
-        )
-
-    [3] => Array
-        (
-            [id_reserva] => 1
-            [fecha_reserva] => 2025-07-07 22:21:00
-            [fecha_entrada] => 2025-07-07
-            [fecha_salida] => 2025-07-08
-            [num_huespedes] => 1
-            [precio_total] => 150000.00
-            [estado] => Confirmada
-            [servicios_adicionales] => []
-            [nombre_habitacion] => 201
-            [tipoHabitacion] => Sencilla
         )
 
 )

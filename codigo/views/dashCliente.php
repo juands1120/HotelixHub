@@ -33,8 +33,8 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
     </div>
     <nav>
       <a href="dashCliente.php"><i class="fa fa-home"></i>Inicio</a>
-      <a href="reservas.html"><i class="fa fa-bed"></i>Reservas</a>
-      <a href="#"><i class="fa fa-box"></i>Productos</a>
+      <a href="reservas.php"><i class="fa fa-bed"></i>Reservas</a>
+      <a href="productosClientes.php"><i class="fa fa-box"></i>Productos</a>
       <a href="../controller/logout.php"><i class="sesion"></i>Cerrar Sesion</a>
     </nav>
   </aside>

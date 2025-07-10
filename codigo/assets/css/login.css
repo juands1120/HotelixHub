@@ -1,236 +1,162 @@
-/* Estilos generales */
+/* ========== ESTILOS GENERALES ========== */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-/* Contenedor principal */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 90%;
-    max-width: 1200px;
-    min-height: 80vh;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-    flex-wrap: wrap;
-    margin: 80px 0 20px;
-}
-
-/* Sección de login/bienvenida */
-.login-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    color: white;
-    padding: 20px;
-    background-image: url('../img/imgHome/cuadro.jpg');
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    min-height: 300px;
-    flex: 1 1 300px;
-}
-
-/* Sección de registro */
-.register-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    text-align: center;
-    padding: 40px;
-    flex: 1 1 300px;
-}
-
-/* Header con logo */
-.header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
+/* Logo principal */
 .logo {
-    width: 220px;
-    height: auto;
-    max-width: 100%;
-    object-fit: contain;
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  width: 200px;
+  height: auto;
+  z-index: 1000;
 }
 
-/* Formulario */
-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
+/* ========== CONTENEDOR PRINCIPAL ========== */
+.container {
+  display: flex;
+  width: 60%;
+  max-width: 800px;
+  height: 500px;
+  background: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
+/* ========== CAJA DE LOGIN ========== */
+.login-box {
+  padding: 40px;
+  flex: 1;
 }
 
-.password-requirements {
-    display: block;
-    font-size: 0.8rem;
-    color: #666;
-    margin: 5px 0 10px;
-    text-align: left;
+/* Estilos para formulario */
+.form-group {
+  margin-bottom: 15px;
 }
 
-/* Botones */
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    font-size: 16px;
-    background-color: #4A2884;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
 }
 
-button:hover {
-    background-color: #3A206A;
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    background-color: #cccccc;
+/* Estilos para botones */
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4c318f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
 }
 
-.btn1 {
-    background-color: #3A206A;
-    width: 60%;
-    max-width: 200px;
+.btn:hover {
+  background-color: #3a256b;
 }
 
-/* Modal */
+.btn-light {
+  background-color: white;
+  color: #4c318f;
+  border: 1px solid #4c318f;
+}
+
+.btn-light:hover {
+  background-color: #eee;
+}
+
+/* Enlace olvidó contraseña */
+.text-end {
+  text-align: right;
+  font-size: 0.9em;
+}
+
+.text-end a {
+  color: #4c318f;
+  text-decoration: none;
+}
+
+.text-end a:hover {
+  text-decoration: underline;
+}
+
+/* ========== CAJA DE BIENVENIDA ========== */
+.welcome-box {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  background: url('../img/imgHome/cuadro.jpg') no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 40px;
+  flex-direction: column;
+}
+
+.welcome-box h3,
+.welcome-box p,
+.welcome-box .btn {
+  position: relative;
+  z-index: 2;
+}
+
+/* ========== MODAL ========== */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    overflow: auto;
-    padding-top: 60px;
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 5px;
-    position: relative;
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
 }
 
+/* Botón de cerrar modal */
 .close {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.close:hover {
-    color: black;
-}
-
-.modal-header {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    padding-right: 20px;
-}
-
-.modal-body {
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-/* Mensajes de error */
-.error-message {
-    color: #d32f2f;
-    background-color: #fde8e8;
-    padding: 10px 15px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .login-section, .register-section {
-        width: 100%;
-        padding: 30px;
-    }
-
-    .logo {
-        width: 180px;
-    }
-
-    .btn1 {
-        width: 80%;
-    }
-}
-
-@media (max-width: 480px) {
-    .logo {
-        width: 150px;
-    }
-
-    .btn1 {
-        width: 100%;
-        max-width: none;
-    }
-
-    .modal-content {
-        width: 90%;
-        padding: 15px;
-    }
-
-    input, select, button {
-        padding: 10px;
-    }
+.close:hover,
+.close:focus {
+  color: black;
 }

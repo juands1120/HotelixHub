@@ -105,56 +105,78 @@ document.addEventListener('DOMContentLoaded', () => {
         inicializarBotones();
     }
 
-    // ========================== BOTONES CANTIDAD Y AGREGAR ==========================
-    function inicializarBotones() {
-        document.querySelectorAll('.btn-cantidad').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const cantidadSpan = btn.parentElement.querySelector('.cantidad');
-                let cantidad = parseInt(cantidadSpan.textContent);
-                cantidad += (btn.textContent === '+' ? 1 : -1);
-                cantidadSpan.textContent = Math.max(cantidad, 1);
-            });
+// ========================== BOTONES CANTIDAD Y AGREGAR ==========================
+function inicializarBotones() {
+    document.querySelectorAll('.btn-cantidad').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cantidadSpan = btn.parentElement.querySelector('.cantidad');
+            let cantidad = parseInt(cantidadSpan.textContent);
+            cantidad += (btn.textContent === '+' ? 1 : -1);
+            cantidadSpan.textContent = Math.max(cantidad, 1);
         });
+    });
 
-        document.querySelectorAll('.btn-agregar').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tarjeta = btn.closest('.tarjeta-producto');
-                const nombre = tarjeta.querySelector('.contenido-producto h3').textContent;
-                const precioText = tarjeta.querySelector('.precio').textContent;
-                const precio = parseInt(precioText.replace(/[^0-9]/g, ''));
-                const cantidad = parseInt(tarjeta.querySelector('.cantidad').textContent);
-                const imgSrc = tarjeta.querySelector('.img-producto').getAttribute('src');
+    document.querySelectorAll('.btn-agregar').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tarjeta = btn.closest('.tarjeta-producto');
+            const nombre = tarjeta.querySelector('.contenido-producto h3').textContent;
+            const producto = productos.find(p => p.nombre === nombre);
+            if (!producto) return;
+            
+            const precio = parseFloat(producto.precio);
+            const cantidad = parseInt(tarjeta.querySelector('.cantidad').textContent);
+            const imgSrc = tarjeta.querySelector('.img-producto').getAttribute('src');
 
+            const itemExistente = carrito.find(item => item.nombre === nombre);
+            if (itemExistente) {
+                itemExistente.cantidad += cantidad;
+            } else {
                 carrito.push({ nombre, precio, cantidad, imgSrc });
+            }
+
+            actualizarCarrito(); // <- ESTA LÍNEA NECESITA QUE actualizarCarrito ESTÉ EN EL SCOPE GLOBAL
+        });
+    });
+}
+
+// ========================== ACTUALIZAR CARRITO ==========================
+function actualizarCarrito() {
+    listaCarrito.innerHTML = '';
+    let subtotal = 0;
+
+    carrito.forEach(item => {
+        subtotal += item.precio * item.cantidad;
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('item-carrito');
+        itemDiv.innerHTML = `
+            <img src="${item.imgSrc}" alt="${item.nombre}">
+            <p>${item.nombre}</p>
+            <p>${(item.precio * item.cantidad).toLocaleString('es-CO',{style:'currency',currency:'COP'})} x ${item.cantidad}</p>
+            <button class="btn-eliminar-item" data-nombre="${item.nombre}">Quitar</button>
+        `;
+
+        listaCarrito.appendChild(itemDiv);
+    });
+
+    document.querySelectorAll('.btn-eliminar-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const nombreProducto = btn.getAttribute('data-nombre');
+            const index = carrito.findIndex(item => item.nombre === nombreProducto);
+            if (index !== -1) {
+                carrito.splice(index, 1);
                 actualizarCarrito();
-            });
+            }
         });
-    }
+    });
 
-    // ========================== ACTUALIZAR CARRITO ==========================
-    function actualizarCarrito() {
-        listaCarrito.innerHTML = '';
-        let subtotal = 0;
+    const iva = subtotal * 0.19;
+    const total = subtotal + iva;
 
-        carrito.forEach(item => {
-            subtotal += item.precio * item.cantidad;
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('item-carrito');
-            itemDiv.innerHTML = `
-                <img src="${item.imgSrc}" alt="${item.nombre}">
-                <p>${item.nombre}</p>
-                <p>${(item.precio * item.cantidad).toLocaleString('es-CO',{style:'currency',currency:'COP'})} x ${item.cantidad}</p>
-            `;
-            listaCarrito.appendChild(itemDiv);
-        });
+    subtotalSpan.textContent = subtotal.toLocaleString('es-CO',{style:'currency',currency:'COP'});
+    ivaSpan.textContent = iva.toLocaleString('es-CO',{style:'currency',currency:'COP'});
+    totalSpan.textContent = total.toLocaleString('es-CO',{style:'currency',currency:'COP'});
+}
 
-        const iva = subtotal * 0.19;
-        const total = subtotal + iva;
-
-        subtotalSpan.textContent = subtotal.toLocaleString('es-CO',{style:'currency',currency:'COP'});
-        ivaSpan.textContent = iva.toLocaleString('es-CO',{style:'currency',currency:'COP'});
-        totalSpan.textContent = total.toLocaleString('es-CO',{style:'currency',currency:'COP'});
-    }
 
     // ========================== MODAL COMPRA ==========================
     document.querySelector('.btnCompra').addEventListener('click', () => {
