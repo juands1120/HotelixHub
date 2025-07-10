@@ -1,0 +1,15 @@
+DELIMITER //
+
+CREATE PROCEDURE sp_reservas_completadas_por_fecha(IN fecha_inicio DATE, IN fecha_fin DATE)
+BEGIN
+    SELECT 
+        DATE(fecha_reserva) AS fecha, 
+        COUNT(*) AS total
+    FROM reserva
+    WHERE estado = 'Confirmada'
+      AND DATE(fecha_reserva) BETWEEN fecha_inicio AND fecha_fin
+    GROUP BY DATE(fecha_reserva)
+    ORDER BY fecha ASC;
+END //
+
+DELIMITER ;

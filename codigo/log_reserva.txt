@@ -1,5 +1,22 @@
 Array
 (
-    [accion] => eliminar
-    [id_reserva] => 2
+    [accion] => crear
+    [nombre] => fabio
+    [apellido] => sanchez
+    [tipoDocumento] => CC
+    [numeroDocumento] => 79632311
+    [telefono] => 6565655656
+    [email] => fabio@gmail.com
+    [huesped] => 2
+    [tipoHabitacion] => triple
+    [checkIn] => 2025-07-30
+    [checkOut] => 2025-07-31
+    [servicios] => Array
+        (
+            [0] => Spa
+            [1] => Desayuno Buffet
+            [2] => Parqueadero
+        )
+
+    [id_habitacion] => 3
 )

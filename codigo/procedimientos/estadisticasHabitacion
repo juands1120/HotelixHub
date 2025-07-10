@@ -1,0 +1,12 @@
+DELIMITER //
+CREATE PROCEDURE sp_estadisticas_habitaciones(IN piso_param INT)
+BEGIN
+    SELECT
+        COUNT(*) AS total,
+        SUM(CASE WHEN estado = 'disponible' THEN 1 ELSE 0 END) AS disponibles,
+        SUM(CASE WHEN estado = 'ocupada' THEN 1 ELSE 0 END) AS ocupadas,
+        SUM(CASE WHEN estado = 'mantenimiento' THEN 1 ELSE 0 END) AS mantenimiento
+    FROM habitacion
+    WHERE piso = piso_param;
+END //
+DELIMITER ;

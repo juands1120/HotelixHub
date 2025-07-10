@@ -35,7 +35,6 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
       <a href="dashCliente.php"><i class="fa fa-home"></i>Inicio</a>
       <a href="reservas.html"><i class="fa fa-bed"></i>Reservas</a>
       <a href="#"><i class="fa fa-box"></i>Productos</a>
-      <a href=""><i class="fa fa-cog"></i>Ajustes</a>
       <a href="../controller/logout.php"><i class="sesion"></i>Cerrar Sesion</a>
     </nav>
   </aside>
@@ -127,16 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(response => response.json())
     .then(data => {
       if (data.status === "success") {
-        const historial = data.data;
+        const cliente = data.cliente;
+        const reservas = data.reservas;
         const tbody = document.getElementById('tablaReservasBody');
         tbody.innerHTML = '';
 
-        // Si no hay reservas
-        if (historial.length === 0) {
+        // Mostrar reservas en tabla
+        if (reservas.length === 0) {
           tbody.innerHTML = '<tr><td colspan="5">No hay reservas registradas.</td></tr>';
         } else {
-          // Mostrar reservas en tabla
-          historial.forEach(reserva => {
+          reservas.forEach(reserva => {
             const tr = document.createElement('tr');
             const fechaReserva = reserva.fecha_reserva ? reserva.fecha_reserva.substring(0, 10) : '';
             const fechaEntrada = reserva.fecha_entrada ? reserva.fecha_entrada.substring(0, 10) : '';
@@ -153,9 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
 
-        // Mostrar datos del cliente (de la primera reserva)
-        if (historial.length > 0) {
-          const cliente = historial[0];
+        // Mostrar datos personales del cliente
+        if (cliente) {
           document.getElementById('dispNombre').textContent = cliente.nombre + " " + cliente.apellido;
           document.getElementById('dispTipo').textContent = cliente.tipoDocumento;
           document.getElementById('dispNum').textContent = cliente.numeroDocumento;
@@ -170,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('inpPais').value = cliente.paisProcedencia;
           document.getElementById('inpEmail').value = cliente.email;
           document.getElementById('inpTel').value = cliente.numeroTelefono;
+        } else {
+          openModal("Aviso", "No se encontraron datos del cliente.");
         }
 
       } else {
@@ -181,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
       openModal("Error", "Error al cargar datos.");
     });
 });
-
 
 /* ========== 2. FUNCIONALIDAD DEL MODAL DE MENSAJE ========== */
 const modal = document.getElementById('modal');
@@ -199,7 +198,6 @@ modalCloseBtn.addEventListener('click', () => {
   modal.classList.remove('active');
 });
 
-
 /* ========== 3. FUNCIONES DE VALIDACIÓN ========== */
 function validarEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -208,7 +206,6 @@ function validarEmail(email) {
 function validarTelefono(tel) {
   return /^[\d+\s]+$/.test(tel.trim());
 }
-
 
 /* ========== 4. BOTÓN EDITAR: SOLO HABILITA EMAIL Y TELÉFONO ========== */
 editBtn.addEventListener('click', () => {
@@ -224,7 +221,6 @@ editBtn.addEventListener('click', () => {
   editBtn.disabled = true;
   saveBtn.disabled = false;
 });
-
 
 /* ========== 5. BOTÓN GUARDAR: VALIDAR Y ACTUALIZAR EN SERVIDOR ========== */
 saveBtn.addEventListener('click', () => {
@@ -283,6 +279,7 @@ saveBtn.addEventListener('click', () => {
   });
 });
 </script>
+
 
 </body>
 </html>

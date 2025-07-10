@@ -35,6 +35,44 @@ class ClienteModelo {
     return $stmt->execute();
 }
 
+public function obtenerClienteConReservas($idUsuario) {
+    $stmt = $this->pdo->prepare("CALL sp_obtener_clientes()");
+    $stmt->execute();
+    $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $datosCliente = null;
+    $reservas = [];
+
+    foreach ($clientes as $cliente) {
+        if ($cliente['id_usuario'] == $idUsuario) {
+            if (!$datosCliente) {
+                // Guardamos los datos básicos del cliente (de la primera coincidencia)
+                $datosCliente = [
+                    'nombre' => $cliente['nombre'],
+                    'apellido' => $cliente['apellido'],
+                    'tipoDocumento' => $cliente['tipoDocumento'],
+                    'numeroDocumento' => $cliente['numeroDocumento'],
+                    'numeroTelefono' => $cliente['numeroTelefono'],
+                    'paisProcedencia' => $cliente['paisProcedencia'],
+                    'email' => $cliente['email']
+                ];
+            }
+
+            // Si tiene reserva asociada
+            if ($cliente['id_habitacion']) {
+                $reservas[] = [
+                    'fecha_reserva' => $cliente['fecha_reserva'],
+                    'fecha_entrada' => $cliente['fecha_entrada'],
+                    'fecha_salida' => $cliente['fecha_salida'],
+                    'estado' => $cliente['estado'],
+                    'nombre_hotel' => $cliente['nombre_habitacion']
+                ];
+            }
+        }
+    }
+
+    return ['cliente' => $datosCliente, 'reservas' => $reservas];
+}
 
 }
 ?>

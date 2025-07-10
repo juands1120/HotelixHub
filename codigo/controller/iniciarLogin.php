@@ -14,8 +14,6 @@ if (isset($_POST['login'])) {
     if ($user) {
         $_SESSION['usuario'] = $user;
 
-
-
         // Redireccionar según rol
         switch ($user['usu_idrol']) {
             case 1:
@@ -25,17 +23,13 @@ if (isset($_POST['login'])) {
                 header('Location: ../views/dashCliente.php');
                 break;
             case 3:
-                header('Location: ../views/dashAdmin.php');
-                break;
             case 4:
-                header('Location: ../views/dashAdmin.php');
-                break;
             case 5:
                 header('Location: ../views/dashAdmin.php');
                 break;
             default:
                 session_destroy();
-                echo "Rol de usuario no válido.";
+                header('Location: ../views/login.php?error=Rol de usuario no válido');
                 exit;
         }
         exit;
@@ -43,11 +37,12 @@ if (isset($_POST['login'])) {
         // Verificar si el correo existe
         $stmt = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE email = :email");
         $stmt->execute(['email' => $email]);
+        
         if ($stmt->fetch()) {
-            echo "Contraseña incorrecta.";
+            header('Location: ../views/login.php?error=Contraseña incorrecta');
         } else {
-            echo "El correo no está registrado.";
+            header('Location: ../views/login.php?error=El correo no está registrado');
         }
+        exit;
     }
 }
-

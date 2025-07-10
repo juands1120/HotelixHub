@@ -14,9 +14,8 @@ $idUsuario = $_SESSION['usuario']['id_usuario'];
 $clienteModelo = new ClienteModelo($pdo);
 
 try {
-    $historial = $clienteModelo->obtenerHistorialReservasCliente($idUsuario);
-
-    echo json_encode(["status" => "success", "data" => $historial]);
+    $resultado = $clienteModelo->obtenerClienteConReservas($idUsuario);
+    echo json_encode(["status" => "success", "cliente" => $resultado['cliente'], "reservas" => $resultado['reservas']]);
 } catch (PDOException $e) {
     echo json_encode(["status" => "error", "message" => $e->getMessage()]);
 }
@@ -24,4 +23,5 @@ try {
 
 
 
-?>
+
+

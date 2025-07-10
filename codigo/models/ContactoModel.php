@@ -24,4 +24,6 @@ class ContactoModel {
             ':mensaje' => $datos['mensaje']
         ]);
     }
+
+    
 }
