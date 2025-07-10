@@ -36,7 +36,7 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
         </div>
         <br><br>
         <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
+        <a href="habitacion.php"><div class="menu-item">Habitaciones</div></a>
         <div class="usu">
             <button id="usuario">Usuarios</button>
             <div class="usu-contenido">

@@ -3,7 +3,9 @@ require_once __DIR__ . '/../config/conexionbd.php';
 require_once __DIR__ . '/../models/empleadoRegistro.php';
 require_once __DIR__ . '/../services/sessionManager.php';
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Configurar cabeceras para JSON
 header('Content-Type: application/json');
@@ -18,10 +20,7 @@ try {
     }
 
     // Obtener datos del POST
-    $input = json_decode(file_get_contents('php://input'), true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception('Formato de datos incorrecto', 400);
-    }
+    $input = $_POST;
 
     // Validar campos requeridos
     $requiredFields = ['id', 'email', 'numeroTelefono'];
@@ -49,14 +48,11 @@ try {
         'estado' => $esAdministrador ? ($input['estado'] ?? '') : ($_SESSION['usuario']['estado'] ?? '')
     ];
 
-    // Validaciones adicionales para empleado editando su perfil
+    // Validaciones adicionales
     if ($edicionPropioPerfil) {
-        // Verificar que el email no esté en uso (excepto por sí mismo)
         if ($empleadoModel->emailPerteneceAOtroUsuario($data['email'], $data['id'])) {
             throw new Exception('El correo electrónico ya está en uso por otro usuario', 400);
         }
-        
-        // Verificar que el teléfono no esté en uso (excepto por sí mismo)
         if ($empleadoModel->telefonoPerteneceAOtroUsuario($data['numeroTelefono'], $data['id'])) {
             throw new Exception('El número de teléfono ya está en uso por otro usuario', 400);
         }
@@ -64,15 +60,14 @@ try {
 
     // Actualizar empleado
     $result = $empleadoModel->actualizarEmpleado($data);
-    
+
     if ($result) {
-        // Si es el propio empleado, actualizar datos en sesión
         if ($edicionPropioPerfil) {
             $_SESSION['usuario']['numeroTelefono'] = $data['numeroTelefono'];
             $_SESSION['usuario']['email'] = $data['email'];
             $_SESSION['usuario']['direccion'] = $data['direccion'];
         }
-        
+
         echo json_encode([
             'status' => 'success',
             'message' => 'Datos actualizados correctamente'
