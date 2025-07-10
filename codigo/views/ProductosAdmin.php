@@ -1,247 +1,129 @@
-<?php
-require_once __DIR__ . '/../services/sessionManager.php';
-
-
-if (!isset($_SESSION['usuario'])) {
-    header('Location: ../views/login.php');
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Nuevo Producto</title>
-    <link rel="stylesheet" href="../assets/css/productosAdmin.css">
+    <title>Administrar Productos</title>
+    <link rel="stylesheet" href="/HotelixHub/codigo/assets/css/productosAdmin.css">
 </head>
 <body>
-            <div class="barra-lateral">
-
-            <div class="logo">
-                <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
-            </div>
-            <br><br>
-            
-            <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-            <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a>
-
-            <div class="usu">
-                <button id="usuario">Usuarios</button>
-                <div class="usu-contenido">
-                    <a href="formEmpleados.php">Empleados   </a>
-                    <a href="formClientes.php">Clientes</a>
-                </div>
-            </div>
-            <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
-            <a href="../controller/logout.php"><div class="logout">Cerrar Sesión</div></a>
+    <div class="barra-lateral">
+        <!-- LOGO DEL HOTEL CON ENLACE AL HOME -->
+        <div class="logo">
+            <a href="Home.html"><img src="../assets/img/imgHabitacion/Copia de Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
         </div>
-    
-    <div class="main-content">
-        <div class="header">
-            <h1>Crear Nuevo Producto</h1>
-            <button class="agregar-btn" onclick="enviarFormularios()">Guardar Producto</button>
+        <br><br>
+        <div></div>
+        
+        <!-- ELEMENTOS DEL MENÚ -->
+        <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
+        <a href="habitacion.html"><div class="menu-item">Habitaciones</div></a> <!-- Elemento activo actual -->
+
+        <!-- MENÚ DESPLEGABLE DE USUARIOS -->
+        <div class="usu">
+            <button id="usuario">Usuarios</button>
+            <div class="usu-contenido">
+                <a href="DashEmpleados.html">Empleados</a>
+                <a href="DashClientes.html">Clientes</a>
+            </div>
         </div>
         
+        <!-- ENLACE A MÓDULO DE PRODUCTOS -->
+        <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Gestión de Productos</h1>
+            <div>
+                <button id="btnAgregarCategoria" class="agregar-btn">Agregar Categoría</button>
+                <button id="btnAgregar" class="agregar-btn"> Agregar Producto</button>
+                <button id="exportPDF" class="agregar-btn">Exportar PDF</button>
+            </div>
+        </div>
+
         <div class="content">
-            <div class="section image-section">
-                <div class="section-title">Productos</div>
-                <div class="grid">
-                    <div class="box" onclick="agregarFormulario()">
-                        <div class="box-icon">➕</div>
-                        <div>Agregar Producto</div>
-                    </div>
-                    <div class="box">
-                        <img src="/api/placeholder/40/60" alt="Botella naranja" class="product-bottle" style="background-color: orange; border-radius: 8px;">
-                    </div>
-                    <div class="box">
-                        <img src="/api/placeholder/40/60" alt="Botella azul" class="product-bottle" style="background-color: cyan; border-radius: 8px;">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section category-section">
-                <div class="section-title">Categoría</div>
-                <div class="grid">
-                    <div class="category-box">
-                        <div class="category-icon">📦</div>
-                        <div>Aseo</div>
-                        <div class="item-count">100 items</div>
-                    </div>
-                    <div class="category-box">
-                        <div class="category-icon">🍾</div>
-                        <div>Bebidas</div>
-                        <div class="item-count">100 items</div>
-                    </div>
-                    <div class="category-box">
-                        <div class="category-icon">🍽</div>
-                        <div>Comida</div>
-                        <div class="item-count">100 items</div>
-                    </div>
-                    <div class="category-box" onclick="abrirModalCategoria()">
-                        <div class="box-icon">➕</div>
-                        <div>Agregar</div>
-                        <div>categoría</div>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="section details-section">
-                <div class="section-title">Detalles del Producto</div>
-                <div id="formularios"></div>
-            </div>
+            <div id="filtrosCategorias" style="margin-bottom:15px;"></div>
+
+            <!-- Aquí antes estaba tu tabla -->
+            <!-- Ahora es un div que contendrá las tarjetas -->
+            <div id="tablaProductos" class="tabla-productos"></div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="myModal" class="modal">
+    <!-- Modal Producto -->
+    <div id="modalProducto" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <p id="modalMessage"></p>
+            <span class="close" id="cerrarModal">&times;</span>
+            <h2 id="tituloModal">Nuevo Producto</h2>
+            <form id="formProducto" enctype="multipart/form-data">
+                <input type="hidden" id="productoId" name="id">
+                <input type="hidden" id="imagenActual" name="imagen_actual">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="nombre" name="nombre" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="number" id="precio" name="precio" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="descripcion" name="descripcion" class="form-textarea" required></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="number" id="stock" name="stock" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="categoria" name="id_categoria" class="form-input" required></select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Imagen</label>
+                        <input type="file" id="imagen" name="imagen" class="form-input">
+                    </div>
+                </div>
+                <button type="submit" class="agregar-btn">Guardar</button>
+            </form>
         </div>
     </div>
 
-    <!-- Modal para Agregar Categoría -->
-    <div id="modalCategoria" class="modal-categoria">
-        <div class="modal-categoria-content">
-          <span class="close-categoria" onclick="cerrarModalCategoria()">&times;</span>
-          <h2>Agregar Categoría</h2>
-          <label for="nombreCategoria">Nombre de la categoría</label>
-          <input type="text" id="nombreCategoria" class="input-categoria" placeholder="Ingrese el nombre de la categoría">
-          
-          <div class="modal-categoria-botones">
-            <button class="btn-guardar" onclick="guardarCategoria()">Guardar</button>
-            <button class="btn-cancelar" onclick="cerrarModalCategoria()">Cancelar</button>
-          </div>
+    <!-- Modal Categoría -->
+    <div id="modalCategoria" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrarModalCategoria">&times;</span>
+            <h2>Administrar Categorías</h2>
+            <form id="formCategoria">
+                <input type="hidden" id="categoriaId">
+                <input type="text" id="nombreCategoria" class="form-input" placeholder="Nombre categoría" required>
+                <button type="submit" class="agregar-btn">Guardar</button>
+            </form>
+            <div id="listaCategorias" style="margin-top:20px;"></div>
         </div>
-      </div>
-      
+    </div>
 
-
-    <script>
-
-        function abrirModalCategoria() {
-            document.getElementById('modalCategoria').style.display = 'block';
-        }
-
-        function cerrarModalCategoria() {
-            document.getElementById('modalCategoria').style.display = 'none';
-        }
-
-        function agregarCategoria() {
-            const nombre = document.getElementById('nombreCategoria').value.trim();
-            const icono = document.getElementById('iconoCategoria').value.trim();
-
-            if (!nombre || !icono) {
-                showModal("Por favor, completa todos los campos de categoría.");
-                return;
-            }
-
-            // Crear la nueva categoría visualmente
-            const nuevaCategoria = document.createElement('div');
-            nuevaCategoria.classList.add('category-box');
-            nuevaCategoria.innerHTML = `
-                <div class="category-icon">${icono}</div>
-                <div>${nombre}</div>
-                <div class="item-count">0 items</div>
-            `;
-
-            // Insertar antes del último (el botón de agregar)
-            const grid = document.querySelector('.category-section .grid');
-            grid.insertBefore(nuevaCategoria, grid.lastElementChild);
-
-            // Limpiar y cerrar modal
-            document.getElementById('nombreCategoria').value = '';
-            document.getElementById('iconoCategoria').value = '';
-            cerrarModalCategoria();
-        }
-
-        function agregarFormulario() {
-            const container = document.getElementById('formularios');
+    <script src="/HotelixHub/codigo/assets/js/productosAdmin.js"></script>
     
-            const div = document.createElement('div');
-            div.classList.add('product-form');
+    <div id="toast-container"></div>
     
-            div.innerHTML = ` 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" class="form-input" placeholder="Ingrese el Nombre del Producto">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Marca</label>
-                        <input type="text" class="form-input" placeholder="Ingrese la Marca del Producto">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Precio</label>
-                        <input type="text" class="form-input" placeholder="Ingrese el Valor del Producto">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Cantidad</label>
-                        <input type="text" class="form-input" placeholder="Ingrese la Cantidad del Producto">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripción</label>
-                    <textarea class="form-textarea" placeholder="Ingrese una Breve Descripción del Producto"></textarea>
-                </div>
-                <button class="remove-btn" onclick="this.parentNode.remove()">Eliminar</button>
-            `;
-    
-            container.appendChild(div);
-        }
-    
-        function enviarFormularios() {
-            const formularios = document.querySelectorAll('.product-form');
-            const productos = [];
-    
-            formularios.forEach(formulario => {
-                const nombre = formulario.querySelector('input[placeholder="Ingrese el Nombre del Producto"]').value.trim();
-                const marca = formulario.querySelector('input[placeholder="Ingrese la Marca del Producto"]').value.trim();
-                const precio = formulario.querySelector('input[placeholder="Ingrese el Valor del Producto"]').value.trim();
-                const cantidad = formulario.querySelector('input[placeholder="Ingrese la Cantidad del Producto"]').value.trim();
-                const descripcion = formulario.querySelector('textarea[placeholder="Ingrese una Breve Descripción del Producto"]').value.trim();
-    
-                if (nombre && marca && precio && cantidad && descripcion) {
-                    productos.push({ nombre, marca, precio, cantidad, descripcion });
-                } else {
-                    showModal("Por favor, completa todos los campos antes de enviar.");
-                    return;
-                }
-            });
-    
-            if (productos.length === 0) {
-                showModal("No hay productos para enviar.");
-                return;
-            }
-    
-            // Simulación de envío a la consola (puedes reemplazar esto con fetch())
-            console.log("Productos a enviar:", productos);
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <p id="confirm-text">¿Estás seguro?</p>
+            <div style="display:flex; justify-content: flex-end; gap:10px; margin-top:20px;">
+                <button id="confirm-yes" class="agregar-btn">Sí</button>
+                <button id="confirm-no" class="remove-btn">No</button>
+            </div>
+        </div>
+    </div>
 
-            showModal("¡Producto(s) guardado(s) correctamente!");
-
-    
-            // Aquí podrías hacer un POST a una API real...
-        }
-
-        function showModal(message) {
-            const modal = document.getElementById("myModal");
-            const modalMessage = document.getElementById("modalMessage");
-            modalMessage.innerText = message;
-            modal.style.display = "block";
-
-            setTimeout(() => {
-            modal.style.display = "none";
-        }, 2000); // Se cierra en 2 segundos
-        }
-
-        function closeModal() {
-            const modal = document.getElementById("myModal");
-            modal.style.display = "none";
-        }
-    </script>
 </body>
 </html>
