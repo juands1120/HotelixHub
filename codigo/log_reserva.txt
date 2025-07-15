@@ -1,21 +1,21 @@
 Array
 (
     [accion] => crear
-    [nombre] => Mario
-    [apellido] => Perez
+    [nombre] => Laura
+    [apellido] => Portillo
     [tipoDocumento] => CC
-    [numeroDocumento] => 1014663221
-    [telefono] => +573208002679
-    [email] => marito12crak@gmail.com
-    [huesped] => 3
-    [tipoHabitacion] => triple
-    [checkIn] => 2025-10-24
-    [checkOut] => 2025-10-27
+    [numeroDocumento] => 124567890
+    [telefono] => 123456789
+    [email] => lauportillo@cliente.com
+    [huesped] => 1
+    [tipoHabitacion] => sencilla
+    [checkIn] => 2025-07-15
+    [checkOut] => 2025-07-23
     [servicios] => Array
         (
             [0] => Spa
-            [1] => Lavandería
+            [1] => Desayuno Buffet
         )
 
-    [id_habitacion] => 3
+    [id_habitacion] => 1
 )

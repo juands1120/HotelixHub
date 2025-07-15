@@ -37,7 +37,7 @@ if (isset($_SESSION['usuario'])) {
 
 <body>
   <!-- Logo principal -->
-  <img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub" width="500" height="400" class="logo">
+  <a href="home.php"><img src="../assets/img/imghome/Logo Principal.png" alt="HotelixHub"  class="logo"></a>
 
   <!-- Contenedor principal -->
   <div class="container">

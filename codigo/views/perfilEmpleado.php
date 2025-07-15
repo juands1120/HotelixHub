@@ -1,3 +1,8 @@
+
+
+
+
+
 <?php
 require_once __DIR__ . '/../services/sessionManager.php';
 
@@ -24,7 +29,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [3, 4, 5])) {
   <!-- BARRA LATERAL -->
   <div class="barra-lateral">
     <div class="logo">
-      <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
+      <a href="dashEmpleado.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
     </div><br><br>
     <a href="dashEmpleado.php"><div class="menu-item">Inicio</div></a>
     <a href="formClientes.php"><div class="menu-item">Clientes</div></a>     

@@ -2,16 +2,16 @@ Array
 (
     [0] => Array
         (
-            [id_reserva] => 11
-            [fecha_reserva] => 2025-07-10 16:20:22
-            [fecha_entrada] => 2025-10-24
-            [fecha_salida] => 2025-10-27
-            [num_huespedes] => 3
-            [precio_total] => 1037500.00
+            [id_reserva] => 7
+            [fecha_reserva] => 2025-07-15 10:34:44
+            [fecha_entrada] => 2025-07-15
+            [fecha_salida] => 2025-07-23
+            [num_huespedes] => 1
+            [precio_total] => 1315000.00
             [estado] => Pendiente
-            [servicios_adicionales] => ["Spa","Lavander\u00eda"]
-            [nombre_habitacion] => 402
-            [tipoHabitacion] => Triple
+            [servicios_adicionales] => ["Spa","Desayuno Buffet"]
+            [nombre_habitacion] => 201
+            [tipoHabitacion] => Sencilla
         )
 
 )

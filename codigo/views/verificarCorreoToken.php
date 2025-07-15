@@ -16,7 +16,7 @@ require_once __DIR__ . '/../services/sessionManager.php';
 
   <!-- Logo -->
   <div class="logo-container">
-    <img src="../assets/img/imgHome/Logo principal.png" alt="HotelixHub" class="logo">
+    <a href="home.php"><img src="../assets/img/imghome/Logo Principal.png" alt="HotelixHub"  class="logo"></a>
   </div>
 
   <!-- Contenedor principal -->

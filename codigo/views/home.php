@@ -14,7 +14,7 @@
         <!-- NAV -->
         <nav>
             <!--Imagen de Logo, redirecciona al Home Page-->
-            <a href="Home.html"><img src="../assets/img/imgHome/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+            <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
             
             <!-- Botón de menú para móviles -->
             <button class="menu-toggle" aria-label="Toggle menu">
@@ -24,7 +24,7 @@
             </button>
             
             <ul class="nav-menu">        
-                <a href="#">Inicio</a>
+                <a href="#nosotros">Inicio</a>
                 <a href="#reservas">Reservas</a>
                 <a href="#servicios">Servicios</a>
                 <a href="#contacto">Contacto</a>
@@ -117,7 +117,7 @@
                             </p>
 
                             <!-- BOTON RESERVAR, redirigue al reservas-->
-                            <a href="Reservas.html" class="btn-reserva"><strong>¡Haz tu reserva ya!</strong></a>
+                            <a href="reservas.php" class="btn-reserva"><strong>¡Haz tu reserva ya!</strong></a>
                         </article>
                     </div>                 
                 </div>
@@ -129,9 +129,7 @@
                     <article>
                         <h4><strong>Buscar Habitaciones</strong></h4>
                         <p>
-                            Encuentra opciones según
-                            fechas, huéspedes y
-                            tipo de habitación.
+                            Filtra por fechas, tipo de habitación y cantidad de huéspedes para encontrar justo lo que buscas.
                         </p>
                     </article>
                     
@@ -139,8 +137,7 @@
                     <article>
                         <h4><strong>Confirmar Reserva</strong></h4>
                         <p>
-                            Selecciona, confirma y paga
-                            directamente en la plataforma.
+                            Elige, confirma y realiza el pago directamente desde nuestra plataforma, sin intermediarios.
                         </p>
                     </article>
 
@@ -148,7 +145,7 @@
                     <article>
                         <h4><strong>Gestión de Reservas</strong></h4>
                         <p>
-                            Modifica o cancela reservas fácilmente.
+                            Modifica, consulta o cancela tus reservas en cualquier momento con total facilidad.
                         </p>
                     </article>
 
@@ -156,8 +153,7 @@
                     <article>
                         <h4><strong>Notificaciones Automáticas</strong></h4>
                         <p>
-                            Recibe confirmaciones y 
-                            actualizaciones del estado de la reserva.
+                            Recibe alertas, confirmaciones y recordatorios sobre tu reserva en tiempo real.
                         </p>
                     </article>
                 </div>
@@ -192,32 +188,27 @@
                 <!-- SERVICIO 1-->
                 <article>
                     <img src="../assets/img/imgHome/Component 3.png" alt="gestion de reservas">
-                    <h4><strong>gestion de reservas</strong></h4>
+                    <h4><strong>Gestion de reservas</strong></h4>
                     <p>
-                        Busca disponibilidad, filtra 
-                        opciones y confirma reservas 
-                        fácilmente.
+                        Accede a disponibilidad, personaliza tu búsqueda y confirma tu reserva en segundos.
                     </p>
                 </article>
 
                 <!-- SERVICIO 2-->
                 <article>
                     <img src="../assets/img/imgHome/Component 4.png" alt="ventas desde la habitacion">
-                    <h4><strong>ventas desde la habitacion</strong></h4>
+                    <h4><strong>Ventas desde la habitacion</strong></h4>
                     <p>
-                        Catálogo interactivo para adquirir 
-                        productos y servicios con un clic.
+                        Explora un catálogo digital para adquirir productos y servicios sin salir de tu habitación.
                     </p>
                 </article>
 
                 <!-- SERVICIO 3-->
                 <article>
                     <img src="../assets/img/imgHome/Component 5.png" alt="#">
-                    <h4><strong>#</strong></h4>
+                    <h4><strong>AdminSuite</strong></h4>
                     <p>
-                        Dashboard intuitivo con herramientas 
-                        para administrar usuarios, reservas 
-                        y productos.
+                        Administra fácilmente usuarios, habitaciones y ventas desde un panel moderno e intuitivo.
                     </p>    
                 </article>
 
@@ -226,8 +217,7 @@
                     <img src="../assets/img/imgHome/Component 6.png" alt="panel de control">
                     <h4><strong>Notificaciones Automáticas</strong></h4>
                     <p>
-                        Atención eficiente con chat en tiempo 
-                        real y tickets de solicitud.
+                        Mejora la atención al cliente con notificaciones instantáneas, chats en línea y seguimiento de solicitudes.
                     </p>
                 </article>
             </div>

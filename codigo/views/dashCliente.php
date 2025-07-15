@@ -38,7 +38,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
     <!-- ==================== BARRA LATERAL ==================== -->
     <aside class="barra-lateral" id="sidebar">
         <div class="logo">
-            <img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo">
+            <a href="home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
         </div>
         <nav>
             <a href="dashCliente.php"><i class="fa fa-home"></i>Inicio</a>

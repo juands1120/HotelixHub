@@ -27,7 +27,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
     <div class="barra-lateral">
         <!-- LOGO DEL HOTEL CON ENLACE AL HOME -->
         <div class="logo">
-            <a href="Home.php"><img src="../assets/img/imgHabitacion/Copia de Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+            <a href="dashAdmin.php"><img src="../assets/img/imgHabitacion/Copia de Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
         </div>
         <br><br>
         <div></div>

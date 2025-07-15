@@ -18,8 +18,8 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
     exit();
 }
 
-// Definir el rolId para usarlo en la vista
-$rolId = $_SESSION['usuario']['usu_idrol'];
+// Definir el usu_idrol para usarlo en la vista
+$usu_idrol = $_SESSION['usuario']['usu_idrol'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -40,21 +40,21 @@ $rolId = $_SESSION['usuario']['usu_idrol'];
       <div class="barra-lateral">
           <!-- LOGO DEL HOTEL -->
           <div class="logo">
-              <a href="<?php echo $rolId === 1 ? 'dashAdmin.php' : 'dashEmpleado.php'; ?>">
+              <a href="<?php echo $usu_idrol === 1 ? 'dashAdmin.php' : 'dashEmpleado.php'; ?>">
                   <img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo">
               </a>
           </div>
           <br><br>
 
           <!-- BOTÓN INICIO -->
-          <?php if ($rolId === 1): ?>
+          <?php if ($usu_idrol === 1): ?>
               <a href="dashAdmin.php"><div class="menu-item">Inicio</div></a>
-          <?php elseif (in_array($rolId, [3, 4, 5])): ?>
+          <?php elseif (in_array($usu_idrol, [3, 4, 5])): ?>
               <a href="dashEmpleado.php"><div class="menu-item">Inicio</div></a>
           <?php endif; ?>
 
           <!-- HABITACIONES (solo admin) -->
-          <?php if ($rolId === 1): ?>
+          <?php if ($usu_idrol === 1): ?>
               <a href="habitacion.php"><div class="menu-item">Habitaciones</div></a>
           <?php endif; ?>
 
@@ -62,22 +62,22 @@ $rolId = $_SESSION['usuario']['usu_idrol'];
           <div class="usu">
               <button id="usuario">Usuarios</button>
               <div class="usu-contenido">
-                  <?php if ($rolId === 1): ?>
+                  <?php if ($usu_idrol === 1): ?>
                       <a href="formEmpleados.php">Empleados</a>
                       <a href="formClientes.php">Clientes</a>
-                  <?php elseif (in_array($rolId, [3, 4, 5])): ?>
+                  <?php elseif (in_array($usu_idrol, [3, 4, 5])): ?>
                       <a href="formClientes.php">Clientes</a>
                   <?php endif; ?>
               </div>
           </div>
 
           <!-- PRODUCTOS (solo admin) -->
-          <?php if ($rolId === 1): ?>
+          <?php if ($usu_idrol === 1): ?>
               <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
           <?php endif; ?>
 
           <!-- PERFIL (solo empleado) -->
-          <?php if (in_array($rolId, [3, 4, 5])): ?>
+          <?php if (in_array($usu_idrol, [3, 4, 5])): ?>
               <a href="perfilEmpleado.php"><div class="menu-item">Perfil</div></a>
           <?php endif; ?>
 

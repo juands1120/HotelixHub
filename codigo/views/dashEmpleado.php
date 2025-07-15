@@ -51,7 +51,7 @@ $piso5 = obtenerEstadisticasPiso(5, $pdo);
     <!-- ==================== BARRA LATERAL ==================== -->
     <div class="barra-lateral" id="sidebar">
         <div class="logo">
-            <a href="Home.php">
+            <a href="dashEmpleado.php">
                 <img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo">
             </a>
         </div>

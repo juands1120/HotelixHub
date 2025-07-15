@@ -23,7 +23,7 @@ if (!isset($_SESSION['usuario'])) {
         <!--BARRA LATERAL-->    
         <div class="barra-lateral">
             <div class="logo">
-                <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+                <a href="dashCliente.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
             </div>
             <a href="dashCliente.php"><button class="menu-btn" id="btnProductos">Inicio</button></a>
             <a href="reservas.php"><button class="menu-btn" id="btnProductos">Reservas</button></a>

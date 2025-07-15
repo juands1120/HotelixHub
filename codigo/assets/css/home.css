@@ -9,7 +9,7 @@ html {
 header {
     width: 100%;
     min-height: 100vh;
-    background: url("../img_Home/Backgrount_home.png");
+    background: url('/HotelixHub/codigo/assets/img/imgHome/BackgrountHome.png') no-repeat center center;
     background-size: cover;
     padding-top: 50px;
 }

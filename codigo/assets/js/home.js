@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (isValid) {
-                const url = `/HotelixHub/codigo/views/reservas.html?checkin=${checkin.value}&checkout=${checkout.value}&huespedes=${invitados.value}`;
+                const url = `/HotelixHub/codigo/views/reservas.php?checkin=${checkin.value}&checkout=${checkout.value}&huespedes=${invitados.value}`;
                 window.location.href = url;
             }
         });

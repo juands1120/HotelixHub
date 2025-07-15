@@ -38,7 +38,7 @@ $empleados = !empty($rol)
      ============================================== -->
 <div class="barra-lateral">
     <div class="logo">
-      <a href="Home.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
+      <a href="dashEmpleado.php"><img src="../assets/img/imgHome/Logo Positivo.png" alt="HotelixHub" class="logo"></a>
     </div>
     <br><br>
             

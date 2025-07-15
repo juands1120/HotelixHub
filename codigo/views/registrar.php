@@ -44,7 +44,7 @@ if (isset($_SESSION['usuario'])) {
 </head>
 <body>
     <div class="header">
-        <img src="../assets/img/imghome/Logo Principal.png" alt="HotelixHub"  class="logo">
+        <a href="home.php"><img src="../assets/img/imghome/Logo Principal.png" alt="HotelixHub"  class="logo"></a>
     </div>
     <div class="container">
         <div class="login-section">

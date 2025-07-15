@@ -28,7 +28,7 @@ if ($_SESSION['usuario']['usu_idrol'] != 2) {
         <div class="nav">
             <!-- Logo y enlace a Home -->
             <div class="nav-izquierda">
-                <a href="Home.html"><img src="../assets/img/imgReservas/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
+                <a href="dashCliente.php"><img src="../assets/img/imgReservas/Logo Positivo.png" alt="Logo" width="200px" height="60px"></a>
             </div>
           
             <!-- Título y subtítulo de la página -->
