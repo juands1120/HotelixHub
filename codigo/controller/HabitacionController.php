@@ -20,15 +20,20 @@ class HabitacionController {
         switch ($accion) {
             case 'crear':
                 $datos = $this->recogerDatosFormulario();
-                $exito = $this->model->crearHabitacion($datos);
+                try {
+                    $exito = $this->model->crearHabitacion($datos);
 
-                if ($exito) {
-                    $habitacionCreada = $this->model->obtenerHabitacionPorNumero($datos['numero']);
-                    echo json_encode(['exito' => true, 'datos' => $habitacionCreada]);
-                } else {
-                    echo json_encode(['exito' => false]);
+                    if ($exito) {
+                        $habitacionCreada = $this->model->obtenerHabitacionPorNumero($datos['numero']);
+                        echo json_encode(['exito' => true, 'datos' => $habitacionCreada]);
+                    } else {
+                        echo json_encode(['exito' => false, 'error' => 'No se pudo crear la habitación.']);
+                    }
+                } catch (Exception $e) {
+                    echo json_encode(['exito' => false, 'error' => $e->getMessage()]);
                 }
                 break;
+
 
             case 'editar':
                 $datos = $this->recogerDatosFormulario();

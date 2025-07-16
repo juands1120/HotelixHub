@@ -114,3 +114,23 @@ Array
         )
 
 )
+Array
+(
+    [nombre] => daniel domenicoaasdasdasdiadhiasihdaihsdihasdihasdihasdihasihdaihsdih
+    [email] => danieldmejias@gmail.com
+    [metodo] => debito
+    [tarjeta] => 1231231231231231
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 2
+                    [nombre] => galletas festival
+                    [precio] => 3500
+                    [cantidad] => 5
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/686f715ac8c0a-Copia de habitacion_doble.webp
+                )
+
+        )
+
+)

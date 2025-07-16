@@ -11,32 +11,40 @@ switch($accion) {
         break;
 
     case 'guardar':
-        $nombreArchivo = subirImagen();
-        $data = [
-            'nombre' => $_POST['nombre'],
-            'precio' => $_POST['precio'],
-            'descripcion' => $_POST['descripcion'],
-            'imagen' => $nombreArchivo,
-            'stock' => $_POST['stock'],
-            'id_categoria' => $_POST['id_categoria']
-        ];
-        $res = $model->insert($data);
-        echo json_encode(['mensaje' => $res ? 'Producto guardado' : 'Error al guardar']);
+        try {
+            $nombreArchivo = subirImagen();
+            $data = [
+                'nombre' => $_POST['nombre'],
+                'precio' => $_POST['precio'],
+                'descripcion' => $_POST['descripcion'],
+                'imagen' => $nombreArchivo,
+                'stock' => $_POST['stock'],
+                'id_categoria' => $_POST['id_categoria']
+            ];
+            $res = $model->insert($data);
+            echo json_encode(['mensaje' => $res ? 'Producto guardado' : 'Error al guardar']);
+        } catch (Exception $e) {
+            echo json_encode(['mensaje' => $e->getMessage()]);
+        }
         break;
 
     case 'editar':
-        $nombreArchivo = subirImagen();
-        $data = [
-            'nombre' => $_POST['nombre'],
-            'precio' => $_POST['precio'],
-            'descripcion' => $_POST['descripcion'],
-            'imagen' => $nombreArchivo ?: $_POST['imagen_actual'],
-            'stock' => $_POST['stock'],
-            'id_categoria' => $_POST['id_categoria'],
-            'id' => $_POST['id']
-        ];
-        $res = $model->update($data);
-        echo json_encode(['mensaje' => $res ? 'Producto actualizado' : 'Error al actualizar']);
+        try {
+            $nombreArchivo = subirImagen();
+            $data = [
+                'nombre' => $_POST['nombre'],
+                'precio' => $_POST['precio'],
+                'descripcion' => $_POST['descripcion'],
+                'imagen' => $nombreArchivo ?: $_POST['imagen_actual'],
+                'stock' => $_POST['stock'],
+                'id_categoria' => $_POST['id_categoria'],
+                'id' => $_POST['id']
+            ];
+            $res = $model->update($data);
+            echo json_encode(['mensaje' => $res ? 'Producto actualizado' : 'Error al actualizar']);
+        } catch (Exception $e) {
+            echo json_encode(['mensaje' => $e->getMessage()]);
+        }
         break;
 
     case 'eliminar':
@@ -50,14 +58,28 @@ switch($accion) {
 }
 
 function subirImagen() {
-    if(isset($_FILES['imagen']) && $_FILES['imagen']['name'] != '') {
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['name'] != '') {
         $carpeta = __DIR__ . '/../uploads/productos/';
-        if(!file_exists($carpeta)) mkdir($carpeta, 0777, true);
-        $nombre = uniqid() . '-' . $_FILES['imagen']['name'];
-        move_uploaded_file($_FILES['imagen']['tmp_name'], $carpeta . $nombre);
-        return 'uploads/productos/' . $nombre;
+        if (!file_exists($carpeta)) mkdir($carpeta, 0777, true);
+
+        $nombreOriginal = $_FILES['imagen']['name'];
+        $nombreTmp = $_FILES['imagen']['tmp_name'];
+        $tipoMime = mime_content_type($nombreTmp);
+        $extension = strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION));
+
+        $extensionesPermitidas = ['jpg', 'jpeg', 'png'];
+        $tiposPermitidos = ['image/jpeg', 'image/png'];
+
+        if (!in_array($extension, $extensionesPermitidas) || !in_array($tipoMime, $tiposPermitidos)) {
+            throw new Exception("Solo se permiten imágenes JPG o PNG.");
+        }
+
+        $nombreFinal = uniqid() . '-' . basename($nombreOriginal);
+        move_uploaded_file($nombreTmp, $carpeta . $nombreFinal);
+        return 'uploads/productos/' . $nombreFinal;
     }
     return '';
 }
+
 
 ?>

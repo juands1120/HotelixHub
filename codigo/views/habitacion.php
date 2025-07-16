@@ -51,6 +51,8 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
             
             <!-- ENLACE A MÓDULO DE PRODUCTOS -->
             <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
+
+            <a href="../controller/logout.php"><button class="menu-item">Cerrar Sesion</button></a>
         </div>
 
         <!-- CONTENIDO PRINCIPAL DE LA PÁGINA -->
@@ -122,7 +124,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
                 
                 <!-- SUBIDA DE IMAGEN DE LA HABITACIÓN -->
                 <label><strong>Imagen de la habitacion:</strong></label>
-                <input type="file" id="imagenHabitacion" name="imagen" accept="image/*" required />
+                <input type="file" id="imagenHabitacion" name="imagen" accept=".jpg,.jpeg,.png" required />
                 
                 <!-- BOTÓN PARA GUARDAR -->
                 <button type="submit" id="guardarBtn" name="guardarBtn">Guardar Habitación</button>

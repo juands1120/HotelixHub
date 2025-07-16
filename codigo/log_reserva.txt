@@ -1,21 +1,21 @@
 Array
 (
     [accion] => crear
-    [nombre] => Laura
-    [apellido] => Portillo
-    [tipoDocumento] => CC
-    [numeroDocumento] => 124567890
-    [telefono] => 123456789
-    [email] => lauportillo@cliente.com
-    [huesped] => 1
-    [tipoHabitacion] => sencilla
-    [checkIn] => 2025-07-15
-    [checkOut] => 2025-07-23
+    [nombre] => daniel domenicoaasdasdasdiadhiasihdaihsdihasdihasdihasdihasihdaihsdih
+    [apellido] => mejias saavedrahasudhuahsdhuasdhuasduhaushdauhsduhasduasduashudauhsduahsduhasdhu
+    [tipoDocumento] => PA
+    [numeroDocumento] => 521521512312
+    [telefono] => 123123123123123
+    [email] => danieldmejias@gmail.com
+    [huesped] => 2
+    [tipoHabitacion] => triple
+    [checkIn] => 2025-07-17
+    [checkOut] => 2025-07-30
     [servicios] => Array
         (
-            [0] => Spa
-            [1] => Desayuno Buffet
+            [0] => Parqueadero
+            [1] => Lavandería
         )
 
-    [id_habitacion] => 1
+    [id_habitacion] => 3
 )

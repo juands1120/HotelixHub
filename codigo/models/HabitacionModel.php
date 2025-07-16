@@ -64,11 +64,26 @@ class HabitacionModel {
     private function procesarImagen($datos) {
         if (isset($datos['imagen']) && $datos['imagen']['error'] === UPLOAD_ERR_OK) {
             $nombreTemporal = $datos['imagen']['tmp_name'];
-            $nombreFinal = uniqid() . "_" . basename($datos['imagen']['name']);
+            $nombreOriginal = $datos['imagen']['name'];
+            $tipoMime = mime_content_type($nombreTemporal);
+            $extension = strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION));
+
+            $extensionesPermitidas = ['jpg', 'jpeg', 'png'];
+            $tiposPermitidos = ['image/jpeg', 'image/png'];
+
+            // Validar extensión y tipo MIME
+            if (!in_array($extension, $extensionesPermitidas) || !in_array($tipoMime, $tiposPermitidos)) {
+                throw new Exception("Tipo de imagen no permitido. Solo se permiten .jpg y .png.");
+            }
+
+            $nombreFinal = uniqid() . "_" . basename($nombreOriginal);
             $rutaDestino = "../uploads/habitaciones/" . $nombreFinal;
 
-            move_uploaded_file($nombreTemporal, $rutaDestino);
-            return "uploads/habitaciones/" . $nombreFinal;
+            if (move_uploaded_file($nombreTemporal, $rutaDestino)) {
+                return "uploads/habitaciones/" . $nombreFinal;
+            } else {
+                throw new Exception("Error al mover la imagen al servidor.");
+            }
         }
 
         return $datos['imagenRuta'] ?? 'uploads/habitaciones/no-imagen.png';

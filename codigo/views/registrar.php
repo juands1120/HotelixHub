@@ -57,8 +57,8 @@ if (isset($_SESSION['usuario'])) {
         <div class="register-section">
             <h2>Registro</h2>
             <form id="registro" method="POST" action="../controller/guardarRegistro.php">
-                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su Nombre Completo" required>  
-                <input type="text" id="apellido" name="apellido" placeholder="Ingrese su Apellido Completo" required> 
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su Nombre Completo" maxlength="30" required>  
+                <input type="text" id="apellido" name="apellido" placeholder="Ingrese su Apellido Completo" maxlength="30" required> 
                 <select id="tipodocumento" name="tipodocumento" required>
                     <option value="">Seleccione Tipo de Documento</option>
                     <option value="CC">Cédula de Ciudadanía</option>
@@ -83,6 +83,17 @@ if (isset($_SESSION['usuario'])) {
     </div>
 </div>
 
+<div id="modalDuplicado" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="document.getElementById('modalDuplicado').style.display='none'">&times;</span>
+        <div class="modal-header">¡Error!</div>
+        <div class="modal-body">
+            El correo, número de documento o teléfono ya están registrados.
+        </div>
+    </div>
+</div>
+
+
 
 
 <script>
@@ -90,20 +101,35 @@ if (isset($_SESSION['usuario'])) {
 document.getElementById('iniciarSesionBtn').addEventListener('click', function () {
     window.location.href = 'login.php';
 });
+
 document.addEventListener('DOMContentLoaded', function () {
+
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (isset($_SESSION['registro_error'])) {
+    $mensaje = $_SESSION['registro_error'];
+    echo "showModal('Error de Registro', '" . addslashes($mensaje) . "');";
+    unset($_SESSION['registro_error']);
+}
+?>
+
     const form = document.getElementById('registrarse');
 
     // Validación de formato en tiempo real
 
-    //validacion de solo letras en el campo nombre
+    // Validación de solo letras en nombre (máx 30)
     document.getElementById('nombre').addEventListener('input', function () {
-        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '').slice(0, 30);
     });
-    //validacion de solo letras en el campo apellido
+
+    // Validación de solo letras en apellido (máx 30)
     document.getElementById('apellido').addEventListener('input', function () {
-        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '').slice(0, 30);
     });
-    //validacion de solo numeros en el campo numeroDocumento
+
+    // Validación para número de documento
     document.getElementById('numeroDocumento').addEventListener('input', function () {
         const tipoDoc = document.getElementById('tipodocumento').value;
         if (tipoDoc === 'PA') {
@@ -112,17 +138,16 @@ document.addEventListener('DOMContentLoaded', function () {
             this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);
         }
     });
-    //validacion de solo numeros en el campo numeroTelefono
+
+    // Validación para número de teléfono
     document.getElementById('numeroTelefono').addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9+\s]/g, '').slice(0, 15);
     });
 
+    // Validación de solo letras en país
     document.getElementById('paisProcedencia').addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     });
-
-
-
 
     if (form) {
         form.addEventListener('submit', function (e) {
@@ -151,10 +176,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
+            // Validación de longitud de nombre y apellido
+            if (nombre.length > 30 || apellido.length > 30) {
+                e.preventDefault();
+                showModal("Error de Registro", "Nombre y Apellido no pueden tener más de 30 caracteres.");
+                return;
+            }
 
-            // Validaciónes del formato depues de enviar
-
-            // validacion del correo 
+            // Validación de correo
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!emailRegex.test(email)) {
                 e.preventDefault();
@@ -162,13 +191,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Validación de la contraseña
+            // Validación de contraseña
             if (password.length < 8) {
                 e.preventDefault();
                 showModal("Error de Registro", "La contraseña debe tener al menos 8 caracteres.");
                 return;
             }
-            
 
             // Si pasa todas las validaciones, el formulario se envía
         });
@@ -183,21 +211,21 @@ document.addEventListener('DOMContentLoaded', function () {
         modalHeader.textContent = titulo;
         modalBody.textContent = mensaje;
         modal.style.display = "block";
-        modal.focus(); // mejora UX en modales largos
+        modal.focus();
 
-        // Cierra al dar clic en la X
+        // Cierra con la X
         closeModal.onclick = function () {
             modal.style.display = "none";
         };
 
-        // Cierra al dar clic fuera del modal
+        // Cierra al hacer clic fuera del modal
         window.onclick = function (event) {
             if (event.target === modal) {
                 modal.style.display = "none";
             }
         };
 
-        // Cierra al presionar ESC
+        // Cierra con la tecla ESC
         document.addEventListener('keydown', function (event) {
             if (event.key === "Escape") {
                 modal.style.display = "none";
@@ -206,6 +234,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
+
 
 
 </body>

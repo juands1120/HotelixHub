@@ -1,8 +1,40 @@
 <?php
-require_once __DIR__ . '/../models/usuarioRegistro.php';
-require_once __DIR__ . '/../config/conexionbd.php';
-require_once __DIR__ . '/../services/ServicioEmail.php'; 
 session_start();
+require_once __DIR__ . '/../config/conexionbd.php';
+
+$correo = $_POST['email'];
+$documento = $_POST['numeroDocumento'];
+$telefono = $_POST['numeroTelefono'];
+
+// Verificar si el correo ya existe
+$stmt = $pdo->prepare("SELECT 1 FROM usuarios WHERE email = ?");
+$stmt->execute([$correo]);
+if ($stmt->fetch()) {
+    $_SESSION['registro_error'] = "El correo electrónico ya está registrado.";
+    header("Location: ../views/registrar.php");
+    exit();
+}
+
+// Verificar si el número de documento ya existe
+$stmt = $pdo->prepare("SELECT 1 FROM usuarios WHERE numeroDocumento = ?");
+$stmt->execute([$documento]);
+if ($stmt->fetch()) {
+    $_SESSION['registro_error'] = "El número de documento ya está registrado.";
+    header("Location: ../views/registrar.php");
+    exit();
+}
+
+// Verificar si el número de teléfono ya existe
+$stmt = $pdo->prepare("SELECT 1 FROM usuarios WHERE numeroTelefono = ?");
+$stmt->execute([$telefono]);
+if ($stmt->fetch()) {
+    $_SESSION['registro_error'] = "El número de teléfono ya está registrado.";
+    header("Location: ../views/registrar.php");
+    exit();
+}
+
+require_once __DIR__ . '/../models/usuarioRegistro.php';
+require_once __DIR__ . '/../services/ServicioEmail.php';
 
 $usuario = new UsuarioRegistro($pdo);
 
@@ -17,7 +49,7 @@ if (isset($_POST['registrarse'])) {
         'numeroTelefono' => $_POST['numeroTelefono'],
         'paisProcedencia' => $_POST['paisProcedencia'],
         'email' => $_POST['email'],
-        'password' => $_POST['password'],
+        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
     ];
 
     // Llamada al método con valores individuales
@@ -30,7 +62,7 @@ if (isset($_POST['registrarse'])) {
         $data['numeroTelefono'],
         $data['paisProcedencia'],
         $data['email'],
-        $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT),
+        $data['password'],
         null, // reset_token
         null  // token_expires
     );
@@ -47,3 +79,4 @@ if (isset($_POST['registrarse'])) {
     header('Location: ../views/login.php');
     exit;
 }
+?>

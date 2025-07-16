@@ -12,11 +12,6 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Verificar que el rol sea administrador 
-if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
-    header('Location: ../views/login.php'); // O página de acceso denegado
-    exit();
-}
 
 // Definir el usu_idrol para usarlo en la vista
 $usu_idrol = $_SESSION['usuario']['usu_idrol'];

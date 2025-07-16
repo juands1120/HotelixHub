@@ -47,6 +47,8 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
         
         <!-- ENLACE A MÓDULO DE PRODUCTOS -->
         <a href="ProductosAdmin.php"><div class="menu-item">Productos</div></a>
+
+        <a href="../controller/logout.php"><button class="menu-item">Cerrar Sesion</button></a>
     </div>
 
     <div class="main-content">
@@ -75,7 +77,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
             <h2 id="tituloModal">Nuevo Producto</h2>
             <form id="formProducto" enctype="multipart/form-data">
                 <input type="hidden" id="productoId" name="id">
-                <input type="hidden" id="imagenActual" name="imagen_actual">
+                <input type="hidden" id="imagenActual" name="imagen_actual" accept=".jpg,.jpeg,.png">
 
                 <div class="form-row">
                     <div class="form-group">
@@ -106,7 +108,7 @@ if (!in_array($_SESSION['usuario']['usu_idrol'], [1])) {
                 <div class="form-row">
                     <div class="form-group">
                         <label>Imagen</label>
-                        <input type="file" id="imagen" name="imagen" class="form-input">
+                        <input type="file" id="imagen" name="imagen" class="form-input" accept=".jpg,.jpeg,.png">
                     </div>
                 </div>
                 <button type="submit" class="agregar-btn">Guardar</button>

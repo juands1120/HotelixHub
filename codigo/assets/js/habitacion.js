@@ -147,6 +147,15 @@ form.addEventListener("submit", async function (e) {
         isValid = false;
     }
 
+    if (!habitacionEditando && file) {
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            mostrarError("imagenHabitacion", "Solo se permiten imágenes JPG o PNG.");
+            isValid = false;
+        }
+    }
+
+
     if (!isValid) return;
 
     const nuevaHabitacion = {

@@ -35,6 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     formProducto.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        const imagenInput = document.getElementById('imagen');
+        const file = imagenInput?.files[0];
+
+        if (file) {
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const allowedExt = ['jpg', 'jpeg', 'png'];
+            const ext = file.name.split('.').pop().toLowerCase();
+
+            if (!allowedTypes.includes(file.type) || !allowedExt.includes(ext)) {
+                mostrarMensaje("Solo se permiten imágenes JPG o PNG", "error");
+                return;
+            }
+        }
+
         if (!validarFormularioProducto()) return;
 
         const id = document.getElementById('productoId').value;
