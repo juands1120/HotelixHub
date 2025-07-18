@@ -42,6 +42,33 @@ class ReservaController {
             file_put_contents(__DIR__ . '/../log_reserva.txt', print_r($datos, true));
         }
 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($datos['accion']) && $datos['accion'] === 'editar') {
+            file_put_contents(__DIR__ . '/../debug_editar.txt', print_r($datos, true));
+            try {
+                $id = $datos['id_reserva'];
+                $nuevaEntrada = $datos['checkIn'];
+                $nuevaSalida = $datos['checkOut'];
+                $idHabitacion = $datos['id_habitacion'];
+
+                if ($this->model->habitacionOcupada($idHabitacion, $nuevaEntrada, $nuevaSalida, $id)) {
+                    echo json_encode(['success' => false, 'error' => 'La habitación ya está reservada en ese rango']);
+                    return;
+                }
+
+                $resultado = $this->model->editarReserva($id, $nuevaEntrada, $nuevaSalida);
+
+                if ($resultado) {
+                    echo json_encode(['success' => true, 'mensaje' => 'Reserva actualizada con éxito']);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Error al actualizar reserva']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => 'Excepción: ' . $e->getMessage()]);
+            }
+            return;
+        }
+
+
         switch ($accion) {
             case 'crear':
                 $camposRequeridos = ['nombre', 'telefono', 'email', 'huesped', 'tipoHabitacion', 'checkIn', 'checkOut', 'id_habitacion'];
@@ -91,12 +118,30 @@ class ReservaController {
                     "Transporte" => 60000
                 ];
 
-                $precioTotal = $preciosHabitacion[strtolower($datos['tipoHabitacion'])] * $noches;
+                // 1. Precio habitación por noches
+                $precioBasePorNoche = $preciosHabitacion[strtolower($datos['tipoHabitacion'])];
+                $subtotalHabitacion = $precioBasePorNoche * $noches;
+                $ivaHabitacion = $subtotalHabitacion * 0.19;
+                $totalHabitacion = $subtotalHabitacion + $ivaHabitacion;
+
+                // 2. Precio servicios seleccionados
+                $precioServicios = 0;
                 foreach ($servicios as $servicio) {
-                    if (isset($preciosServicios[$servicio])) {
-                        $precioTotal += $preciosServicios[$servicio];
+                    if ($servicio === "Desayuno Buffet") {
+                        $precioServicios += 35000 * (int)$datos['huesped'];
+                    } elseif ($servicio === "Parqueadero") {
+                        $precioServicios += 20000 * $noches;
+                    } elseif (isset($preciosServicios[$servicio])) {
+                        $precioServicios += $preciosServicios[$servicio];
                     }
                 }
+                $ivaServicios = $precioServicios * 0.19;
+                $totalServicios = $precioServicios + $ivaServicios;
+
+                // 3. Total general
+                $precioTotal = $totalHabitacion + $totalServicios;
+
+
 
                 $datosReserva = [
                     'id_usuario' => $id_usuario,
@@ -140,6 +185,40 @@ class ReservaController {
 
                 echo json_encode(['success' => $success]);
                 return;
+
+            case 'obtener':
+                if (!isset($_GET['id'])) {
+                    echo json_encode(['success' => false, 'error' => 'ID no proporcionado']);
+                    return;
+                }
+
+                $id = (int)$_GET['id'];
+                $reserva = $this->model->obtenerReservaPorId($id);
+
+                if (!$reserva) {
+                    echo json_encode(['success' => false, 'error' => 'Reserva no encontrada']);
+                    return;
+                }
+
+                echo json_encode(['success' => true, 'reserva' => $reserva]);
+                return;
+
+            case 'editar':
+                $idReserva = $_POST['id_reserva'] ?? null;
+                $idHabitacion = $_POST['id_habitacion'] ?? null;
+                $fechaEntrada = $_POST['checkIn'] ?? null;
+                $fechaSalida = $_POST['checkOut'] ?? null;
+
+                if (!$idReserva || !$idHabitacion || !$fechaEntrada || !$fechaSalida) {
+                    echo json_encode(['success' => false, 'error' => 'Datos incompletos']);
+                    exit;
+                }
+
+                $result = $reservaModel->editarReservaFechas($idReserva, $idHabitacion, $fechaEntrada, $fechaSalida);
+                echo json_encode($result);
+                break;
+
+
             
             default:
                 echo json_encode(['error' => 'Acción no válida']);

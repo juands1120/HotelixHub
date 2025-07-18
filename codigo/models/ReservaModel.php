@@ -84,4 +84,59 @@ class ReservaModel {
         return $resultado && $resultado['disponible'] == 1;
     }
 
+    public function habitacionOcupada($idHabitacion, $entrada, $salida, $idReservaActual) {
+        $stmt = $this->pdo->prepare("
+            SELECT COUNT(*) FROM reserva
+            WHERE id_habitacion = ? AND id_reserva != ? 
+            AND fecha_entrada < ? AND fecha_salida > ?
+            AND estado = 'Confirmada'
+        ");
+        $stmt->execute([$idHabitacion, $idReservaActual, $salida, $entrada]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function editarReserva($id, $entrada, $salida) {
+        $stmt = $this->pdo->prepare("UPDATE reserva SET fecha_entrada = ?, fecha_salida = ? WHERE id_reserva = ?");
+        return $stmt->execute([$entrada, $salida, $id]);
+    }
+
+    public function obtenerReservaPorId($id) {
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                r.id_reserva,
+                r.id_habitacion,
+                r.fecha_entrada,
+                r.fecha_salida,
+                r.num_huespedes,
+                r.servicios_adicionales,
+                h.nombre AS nombre_habitacion,
+                h.tipoHabitacion
+            FROM reserva r
+            INNER JOIN habitacion h ON r.id_habitacion = h.id_habitacion
+            WHERE r.id_reserva = :id
+        ");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+    public function editarReservaFechas($idReserva, $idHabitacion, $fechaEntrada, $fechaSalida)
+    {
+        try {
+            $stmt = $this->pdo->prepare("CALL SP_EditarReserva(:id, :habitacion, :entrada, :salida)");
+            $stmt->bindParam(':id', $idReserva, PDO::PARAM_INT);
+            $stmt->bindParam(':habitacion', $idHabitacion, PDO::PARAM_INT);
+            $stmt->bindParam(':entrada', $fechaEntrada);
+            $stmt->bindParam(':salida', $fechaSalida);
+            $stmt->execute();
+            return ['success' => true];
+        } catch (PDOException $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+
+
 }

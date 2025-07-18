@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 10-07-2025 a las 16:45:49
+-- Tiempo de generación: 18-07-2025 a las 06:46:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -109,6 +109,32 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EditarHabitacion` (IN `p_numero`
     SET tipoHabitacion = p_tipo, piso = p_piso, precio = p_precio,
         serviciosIncluidos = p_servicios, estado = p_estado, imagen = p_imagen
     WHERE nombre = p_numero;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_EditarReserva` (IN `p_id_reserva` INT, IN `p_id_habitacion` INT, IN `p_fecha_entrada` DATE, IN `p_fecha_salida` DATE)   BEGIN
+    -- Validar si hay cruce con otras reservas (excluyendo la misma)
+    IF EXISTS (
+        SELECT 1
+        FROM reserva
+        WHERE id_habitacion = p_id_habitacion
+          AND id_reserva != p_id_reserva
+          AND estado IN ('Confirmada', 'Pendiente')
+          AND (
+              (p_fecha_entrada BETWEEN fecha_entrada AND fecha_salida)
+              OR
+              (p_fecha_salida BETWEEN fecha_entrada AND fecha_salida)
+              OR
+              (fecha_entrada BETWEEN p_fecha_entrada AND p_fecha_salida)
+          )
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Fechas no disponibles para esta habitación';
+    ELSE
+        -- Actualizar fechas
+        UPDATE reserva
+        SET fecha_entrada = p_fecha_entrada,
+            fecha_salida = p_fecha_salida
+        WHERE id_reserva = p_id_reserva;
+    END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_editar_categoria` (IN `p_id_categoria` INT, IN `p_nombre_categoria` VARCHAR(100))   BEGIN
@@ -245,6 +271,25 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ObtenerHabitacionPorNumero` (IN `p_numero` VARCHAR(50))   BEGIN
     SELECT * FROM habitacion WHERE nombre = p_numero;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ObtenerIdUsuario` (IN `p_email` VARCHAR(100))   BEGIN
+    SELECT id_usuario FROM usuarios WHERE email = p_email;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ObtenerReservaPorId` (IN `p_id` INT)   BEGIN
+    SELECT 
+        r.id_reserva,
+        r.id_habitacion,
+        r.fecha_entrada,
+        r.fecha_salida,
+        r.num_huespedes,
+        r.servicios_adicionales,
+        h.nombre AS nombre_habitacion,
+        h.tipoHabitacion
+    FROM reserva r
+    INNER JOIN habitacion h ON r.id_habitacion = h.id_habitacion
+    WHERE r.id_reserva = p_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_clientes` ()   BEGIN
@@ -390,6 +435,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_reservas_completadas_por_fecha` 
     ORDER BY fecha ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ValidarHabitacionOcupada` (IN `p_id_habitacion` INT, IN `p_id_reserva_actual` INT, IN `p_fecha_entrada` DATE, IN `p_fecha_salida` DATE)   BEGIN
+    SELECT COUNT(*) AS total_ocupadas
+    FROM reserva
+    WHERE id_habitacion = p_id_habitacion
+      AND id_reserva != p_id_reserva_actual
+      AND fecha_entrada < p_fecha_salida
+      AND fecha_salida > p_fecha_entrada
+      AND estado = 'Confirmada';
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_VerificarDisponibilidad` (IN `p_id_habitacion` INT, IN `p_fecha_entrada` DATE, IN `p_fecha_salida` DATE)   BEGIN
     SELECT 
         COUNT(*) = 0 AS disponible
@@ -419,9 +474,7 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id_categoria`, `nombre_categoria`) VALUES
-(1, 'aseo'),
-(2, 'comida'),
-(3, 'miniBar');
+(4, 'pene');
 
 -- --------------------------------------------------------
 
@@ -445,7 +498,9 @@ CREATE TABLE `compras` (
 --
 
 INSERT INTO `compras` (`id`, `id_usuario`, `nombre`, `email`, `metodo_pago`, `numero_tarjeta`, `fecha`, `leida`) VALUES
-(23, 34, 'Laura', 'lauportillo@cliente.com', 'debito', '98765433456789', '2025-07-10 09:30:30', 0);
+(23, 34, 'Laura', 'lauportillo@cliente.com', 'debito', '98765433456789', '2025-07-10 09:30:30', 0),
+(24, 34, 'Laura', 'lauportillo@cliente.com', 'debito', '12345678932157', '2025-07-15 10:38:04', 0),
+(25, 35, 'daniel domenicoaasdasdasdiadhiasihdaihsdihasdihasdihasdihasihdaihsdih', 'danieldmejias@gmail.com', 'debito', '1231231231231231', '2025-07-16 08:39:49', 0);
 
 -- --------------------------------------------------------
 
@@ -486,7 +541,11 @@ CREATE TABLE `detalle_compras` (
 
 INSERT INTO `detalle_compras` (`id`, `id_compra`, `id_producto`, `nombre_producto`, `precio`, `cantidad`) VALUES
 (29, 23, 1, 'cepillo dientes', 6000.00, 1),
-(30, 23, 2, 'galletas festival', 3500.00, 1);
+(30, 23, 2, 'galletas festival', 3500.00, 1),
+(31, 24, 1, 'cepillo dientes', 6000.00, 1),
+(32, 24, 2, 'galletas festival', 3500.00, 1),
+(33, 24, 3, 'gaseosa', 4000.00, 1),
+(34, 25, 2, 'galletas festival', 3500.00, 5);
 
 -- --------------------------------------------------------
 
@@ -523,8 +582,7 @@ CREATE TABLE `habitacion` (
 --
 
 INSERT INTO `habitacion` (`id_habitacion`, `nombre`, `tipoHabitacion`, `piso`, `precio`, `serviciosIncluidos`, `estado`, `imagen`) VALUES
-(1, '201', 'Sencilla', 2, 120000, 'wifi', 'Ocupada', 'uploads/habitaciones/686c8e6914986_Copia de habitacion_doble.webp'),
-(2, '301', 'Doble', 3, 280000, 'wifi', 'Disponible', 'uploads/habitaciones/686ec6df889bd_Copia de habitacion_triple.webp'),
+(1, '201', 'Sencilla', 2, 120000, 'wifi1111', 'Disponible', 'uploads/habitaciones/6877c060888c8_guardarRegistro_FINAL.php'),
 (3, '402', 'Triple', 4, 400000, 'wifi', 'Disponible', 'uploads/habitaciones/686f596c27c19_Copia de suite.jpg');
 
 -- --------------------------------------------------------
@@ -548,9 +606,9 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `nombre`, `precio`, `descripcion`, `imagen`, `stock`, `id_categoria`) VALUES
-(1, 'cepillo dientes', 6000.00, 'marca oral B', 'uploads/productos/686f7116d6b16-Copia de habitacion_triple.webp', 4, 1),
-(2, 'galletas festival', 3500.00, 'sabor limon', 'uploads/productos/686f715ac8c0a-Copia de habitacion_doble.webp', 4, 2),
-(3, 'gaseosa', 4000.00, 'En Colombia, \"gaseosa\" se refiere a una bebida carbonatada, o refresco, usualmente con sabor y edulcorantes, y que se sirve fría. Es decir, es una bebida no alcohólica que contiene dióxido de carbono disuelto, lo que le da su característica efervescenci', 'uploads/productos/686f805f50fb8-Copia de habitacion_doble.webp', 2, 3);
+(1, 'cepillo dientes', 6000.00, 'marca oral B', 'uploads/productos/686f7116d6b16-Copia de habitacion_triple.webp', 3, NULL),
+(2, 'galletas festival', 3500.00, 'sabor limon', 'uploads/productos/686f715ac8c0a-Copia de habitacion_doble.webp', 0, NULL),
+(3, 'gaseosa', 4000.00, 'En Colombia, \"gaseosa\" se refiere a una bebida carbonatada, o refresco, usualmente con sabor y edulcorantes, y que se sirve fría. Es decir, es una bebida no alcohólica que contiene dióxido de carbono disuelto, lo que le da su característica efervescenci', 'uploads/productos/686f805f50fb8-Copia de habitacion_doble.webp', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -570,6 +628,13 @@ CREATE TABLE `reserva` (
   `estado` enum('Pendiente','Confirmada','Cancelada','Sin reserva') DEFAULT 'Pendiente',
   `fecha_reserva` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `reserva`
+--
+
+INSERT INTO `reserva` (`id_reserva`, `id_usuario`, `id_habitacion`, `fecha_entrada`, `fecha_salida`, `num_huespedes`, `servicios_adicionales`, `precio_total`, `estado`, `fecha_reserva`) VALUES
+(10, 34, 3, '2025-07-17', '2025-07-28', 2, '[\"Spa\",\"Desayuno Buffet\"]', 4105500.00, 'Pendiente', '2025-07-18 04:30:42');
 
 -- --------------------------------------------------------
 
@@ -621,8 +686,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `usu_idrol`, `nombre`, `apellido`, `tipoDocumento`, `numeroDocumento`, `numeroTelefono`, `paisProcedencia`, `email`, `password`, `reset_token`, `token_expires`, `estado`, `direccion`) VALUES
-(33, 1, 'Laura', 'Portillo', 'CC', '12456789', '1234567890', 'Colombia', 'lauportillo@administrador.com', '$2y$10$U5My4DbtlVJC90hwsZzVdO4zslIvjBqLqMFSYZw/FhjlsJSKNM/Xa', NULL, NULL, NULL, ''),
-(34, 2, 'Laura', 'Portillo', 'CC', '124567890', '123456789', 'Colombia', 'lauportillo@cliente.com', '$2y$10$84/p7U1e7l3exZVKALfoJeSde48RrbueGOMaskndI3DMlEi7.x70m', NULL, NULL, NULL, '');
+(33, 1, 'Laura', 'Portillo', 'CC', '12456789', '1234567890', 'Colombia', 'lauportillo@administrador.com', '$2y$10$U5My4DbtlVJC90hwsZzVdO4zslIvjBqLqMFSYZw/FhjlsJSKNM/Xa', '4bbf8b388a29a2ec237b8f04f097ac4c', '2025-07-16 18:12:22', NULL, ''),
+(34, 2, 'Laura', 'Portillo', 'CC', '124567890', '123456789', 'Colombia', 'lauportillo@cliente.com', '$2y$10$84/p7U1e7l3exZVKALfoJeSde48RrbueGOMaskndI3DMlEi7.x70m', NULL, NULL, 'fuera de turno', 'dasdas12542');
 
 --
 -- Índices para tablas volcadas
@@ -706,13 +771,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `contacto`
@@ -724,7 +789,7 @@ ALTER TABLE `contacto`
 -- AUTO_INCREMENT de la tabla `detalle_compras`
 --
 ALTER TABLE `detalle_compras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `fecha_evento`
@@ -736,19 +801,19 @@ ALTER TABLE `fecha_evento`
 -- AUTO_INCREMENT de la tabla `habitacion`
 --
 ALTER TABLE `habitacion`
-  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -760,48 +825,17 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `compras`
---
-ALTER TABLE `compras`
-  ADD CONSTRAINT `compras_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
 -- Filtros para la tabla `contacto`
 --
 ALTER TABLE `contacto`
   ADD CONSTRAINT `contacto_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `detalle_compras`
---
-ALTER TABLE `detalle_compras`
-  ADD CONSTRAINT `detalle_compras_ibfk_1` FOREIGN KEY (`id_compra`) REFERENCES `compras` (`id`);
-
---
--- Filtros para la tabla `productos`
---
-ALTER TABLE `productos`
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `reserva`
---
-ALTER TABLE `reserva`
-  ADD CONSTRAINT `reserva_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
-  ADD CONSTRAINT `reserva_ibfk_2` FOREIGN KEY (`id_habitacion`) REFERENCES `habitacion` (`id_habitacion`);
-
---
--- Filtros para la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`usu_idrol`) REFERENCES `rol` (`id_rol`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

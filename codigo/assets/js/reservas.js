@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+
     // Configura validación de fechas (entrada debe ser hoy o después)
     function setupDateValidation() {
         const checkIn = document.getElementById('check-in');
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (notificacion.parentNode) {
                 notificacion.parentNode.removeChild(notificacion);
             }
-        }, 7000);
+        }, 60000);
     }
 
     // ============= VALIDACION DE CORREO Y TELEFONO EN TIMEPO REAL ================
@@ -217,8 +218,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
 
-            const fechaEntrada = new Date(reserva.fecha_entrada).toLocaleDateString();
-            const fechaSalida = new Date(reserva.fecha_salida).toLocaleDateString();
+            const fechaEntrada = new Date(reserva.fecha_entrada + 'T00:00:00').toLocaleDateString('es-CO');
+            const fechaSalida = new Date(reserva.fecha_salida + 'T00:00:00').toLocaleDateString('es-CO');
             const fechaReserva = new Date(reserva.fecha_reserva).toLocaleString();
 
             const reservaItem = document.createElement('div');
@@ -235,6 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="botones-reserva">
                     <button class="btn-eliminar" data-id="${reserva.id_reserva}">Cancelar</button>
                     <a href="/HotelixHub/codigo/pdf/generarRecibo.php?id=${reserva.id_reserva}" target="_blank" class="btn-descargar"> Ver Recibo</a>
+                    <button class="btn-editar" data-id='${reserva.id_reserva}'>Editar</button>
                 </div>
             `;
             reservaItem.querySelector('.btn-eliminar').addEventListener('click', async function () {
@@ -261,11 +263,51 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            const btnEditar = reservaItem.querySelector('.btn-editar');
+            btnEditar.addEventListener('click', function () {
+                const idReserva = this.getAttribute('data-id');
+                cargarDatosReservaParaEditar(idReserva);
+            });
+
+
             contenedor.appendChild(reservaItem);
         });
     }
 
+    async function cargarDatosReservaParaEditar(idReserva) {
+        try {
+            const res = await fetch(`/HotelixHub/codigo/controller/ReservaController.php?accion=obtener&id=${idReserva}`);
+            const json = await res.json();
 
+            if (!json.success) {
+                mostrarNotificacion("Error: " + (json.error || "No se pudo cargar la reserva"), "error");
+                return;
+            }
+
+            const data = json.reserva; // <- ahora accedes desde aquí
+
+
+            // Autorrellenar el formulario solo con fechas
+            document.getElementById('check-in').value = data.fecha_entrada || '';
+            document.getElementById('check-out').value = data.fecha_salida || '';
+            document.getElementById('id_habitacion_asignada').value = data.id_habitacion || '';
+            document.getElementById('habitacionAsignada').value = data.nombre_habitacion || '';
+
+            const tipo = data.tipoHabitacion || data.tipo_habitacion || data.tipo || '';
+            document.getElementById('tipo-habitacion').value = tipo.toLowerCase();
+
+            // Guardar la reserva completa en localStorage para usarla tras redirección
+            localStorage.setItem('reserva_editar', JSON.stringify(data));
+
+            // Redirigir al formulario principal
+            window.location.href = '/HotelixHub/codigo/views/reservas.php';
+
+
+        } catch (error) {
+            console.error("Error al cargar datos para edición:", error);
+            mostrarNotificacion("Error interno al cargar datos", "error");
+        }
+    }
 
     // ========== CÁLCULO DE PRECIO ==========
     // ---------------------------
@@ -273,68 +315,74 @@ document.addEventListener('DOMContentLoaded', function () {
     // Incluye habitación + servicios adicionales
     // ---------------------------
     function calcularPrecio() {
-        // Obtener valores clave desde el formulario
-        const tipo = tipoHabitacion.value;
-        const checkIn = document.getElementById('check-in').value;
-        const checkOut = document.getElementById('check-out').value;
-        const huespedes = parseInt(document.getElementById('huesped').value) || 1;
+    const tipo = tipoHabitacion.value;
+    const checkIn = document.getElementById('check-in').value;
+    const checkOut = document.getElementById('check-out').value;
+    const huespedes = parseInt(document.getElementById('huesped').value) || 1;
 
-        // Obtener lista de servicios seleccionados
-        const serviciosSeleccionados = Array.from(
-            document.querySelectorAll('input[name="servicios"]:checked')
-        ).map(cb => cb.value);
+    if (!tipo || !checkIn || !checkOut) return;
 
-        // Solo calcular si hay tipo de habitación y fechas válidas
-        if (!tipo || !checkIn || !checkOut) return;
+    const preciosHabitacion = {
+        sencilla: 150000,
+        doble: 220000,
+        triple: 300000
+    };
 
-        // Precios base por noche según tipo de habitación
-        const preciosHabitacion = {
-            sencilla: 150000,
-            doble: 220000,
-            triple: 300000
-        };
+    const precioServicios = {
+        "Spa": 80000,
+        "Desayuno Buffet": 35000 * huespedes,
+        "Parqueadero": 20000,
+        "Lavandería": 45000,
+        "Transporte": 60000
+    };
 
-        // Precios fijos de los servicios adicionales
-        const precioServicios = {
-            "Spa": 80000,
-            "Desayuno Buffet": 35000 * huespedes,       // Por persona
-            "Parqueadero": 20000,                       // Por noche
-            "Lavandería": 45000,
-            "Transporte": 60000
-        };
+    const fechaInicio = new Date(checkIn);
+    const fechaFin = new Date(checkOut);
+    const noches = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
 
-        // Calcular número de noches entre check-in y check-out
-        const fechaInicio = new Date(checkIn);
-        const fechaFin = new Date(checkOut);
-        const noches = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24); // Diferencia en días
+    if (noches < 1) return;
 
-        // Calcular precio base por noches
-        let total = preciosHabitacion[tipo] * noches;
+    // ================= HABITACIÓN =================
+    const subtotalHabitacion = preciosHabitacion[tipo] * noches;
+    const ivaHabitacion = subtotalHabitacion * 0.19;
+    const totalHabitacion = subtotalHabitacion + ivaHabitacion;
 
-        // Agregar precio de servicios seleccionados
-        for (const servicio of serviciosSeleccionados) {
-            if (servicio === "Parqueadero") {
-                total += precioServicios[servicio] * noches; // Por noche
-            } else {
-                total += precioServicios[servicio]; // Precio fijo o por persona
-            }
+    // ================= SERVICIOS =================
+    const serviciosSeleccionados = Array.from(
+        document.querySelectorAll('input[name="servicios"]:checked')
+    ).map(cb => cb.value);
+
+    let subtotalServicios = 0;
+
+    for (const servicio of serviciosSeleccionados) {
+        if (servicio === "Parqueadero") {
+            subtotalServicios += precioServicios[servicio] * noches;
+        } else {
+            subtotalServicios += precioServicios[servicio];
         }
-
-        // Mostrar resultado debajo del formulario
-        let precioElement = document.getElementById('precio-total');
-        if (!precioElement) {
-            precioElement = document.createElement('div');
-            precioElement.id = 'precio-total';
-            precioElement.className = 'precio-total';
-            form.insertBefore(precioElement, form.querySelector('button[type="submit"]'));
-        }
-
-        // Formatear en pesos colombianos y mostrar
-        precioElement.innerHTML = `
-            <strong>Total estimado:</strong> ${total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
-            <small>(${noches} noches x habitación + servicios)</small>
-        `;
     }
+
+    const ivaServicios = subtotalServicios * 0.19;
+    const totalServicios = subtotalServicios + ivaServicios;
+
+    // ================= TOTAL =================
+    const total = totalHabitacion + totalServicios;
+
+    // Mostrar el resultado
+    let precioElement = document.getElementById('precio-total');
+    if (!precioElement) {
+        precioElement = document.createElement('div');
+        precioElement.id = 'precio-total';
+        precioElement.className = 'precio-total';
+        form.insertBefore(precioElement, form.querySelector('button[type="submit"]'));
+    }
+
+    precioElement.innerHTML = `
+        <strong>Total estimado:</strong> ${total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+        <br><small>(${noches} noches, incluye IVA del 19%)</small>
+    `;
+}
+
 
 
     
@@ -663,6 +711,74 @@ document.addEventListener('DOMContentLoaded', function () {
     // ================= CARGAR HABITACIONES DINÁMICAS =================
 
     let habitacionesDisponibles = []; // Variable global
+    const reservaEditar = localStorage.getItem('reserva_editar');
+    if (reservaEditar) {
+        const data = JSON.parse(reservaEditar);
+
+        // Autocompletar campos permitidos
+        document.getElementById('check-in').value = data.fecha_entrada;
+        document.getElementById('check-out').value = data.fecha_salida;
+        document.getElementById('id_habitacion_asignada').value = data.id_habitacion;
+        document.getElementById('habitacionAsignada').value = data.nombre_habitacion || '';
+        document.getElementById('tipo-habitacion').value = data.tipoHabitacion?.toLowerCase() || '';
+        document.getElementById('huesped').value = data.num_huespedes;
+
+        // Restaurar servicios seleccionados (solo visual)
+        try {
+            const servicios = JSON.parse(data.servicios_adicionales || '[]');
+            servicios.forEach(servicio => {
+                const checkbox = document.querySelector(`input[name="servicios"][value="${servicio}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        } catch (e) {
+            console.warn("Error al parsear servicios adicionales:", e);
+        }
+
+        // BLOQUEAR todos los inputs menos check-in y check-out
+        const editableIds = ['check-in', 'check-out'];
+        document.querySelectorAll('.reserva-form input, .reserva-form select, .reserva-form textarea').forEach(input => {
+            if (!editableIds.includes(input.id)) {
+                input.setAttribute('disabled', true);
+            }
+        });
+
+        // Deshabilitar servicios adicionales
+        document.querySelectorAll('input[name="servicios"]').forEach(cb => cb.setAttribute('disabled', true));
+
+        // Deshabilitar botones de "Reservar" en las tarjetas de habitaciones
+        document.querySelectorAll('.btn-reservar').forEach(btn => btn.setAttribute('disabled', true));
+
+        // Mostrar aviso visual (opcional pero recomendable)
+        const form = document.querySelector('.reserva-form');
+        const aviso = document.createElement('div');
+        aviso.textContent = 'Estás editando una reserva. Solo puedes cambiar las fechas de entrada y salida.';
+        aviso.style.background = '#fff3cd';
+        aviso.style.border = '1px solid #ffeeba';
+        aviso.style.color = '#856404';
+        aviso.style.padding = '10px';
+        aviso.style.marginBottom = '20px';
+        aviso.style.borderRadius = '6px';
+        form.insertBefore(aviso, form.firstChild);
+
+        // Establecer atributo de edición para enviar luego
+        form.setAttribute('data-editar-id', data.id_reserva);
+
+        setTimeout(() => {
+            // Reasignar y asegurar que los campos se autocompleten correctamente
+            document.getElementById('tipo-habitacion').value = data.tipoHabitacion?.toLowerCase() || '';
+            document.getElementById('habitacionAsignada').value = data.nombre_habitacion || '';
+            document.getElementById('id_habitacion_asignada').value = data.id_habitacion;
+
+            // Bloquear para que no puedan ser editados
+            document.getElementById('habitacionAsignada').setAttribute('disabled', true);
+            document.getElementById('tipo-habitacion').setAttribute('disabled', true);
+        }, 300); // Esperamos 300ms para asegurarnos de que no lo sobrescriba otra función
+
+        // Limpiar localStorage para no repetir al recargar
+        localStorage.removeItem('reserva_editar');
+    }
+
+
 
     async function cargarHabitaciones() {
         try {
@@ -720,6 +836,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     document.getElementById('btn-confirmar').addEventListener('click', async () => {
+        const idEditar = form.getAttribute('data-editar-id');
+        const esEdicion = !!idEditar;
+
         const idHab = document.getElementById('id_habitacion_asignada').value;
 
         if (!idHab) {
@@ -764,7 +883,10 @@ document.addEventListener('DOMContentLoaded', function () {
             checkIn: document.getElementById("check-in").value,
             checkOut: document.getElementById("check-out").value,
             servicios: Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map(cb => cb.value),
-            id_habitacion: idHab
+            id_habitacion: idHab,
+            accion: esEdicion ? "editar" : "crear",
+            id_reserva: idEditar || undefined,
+
         };
 
         try {
@@ -780,7 +902,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const resultado = await response.json();
 
             if (resultado.success) {
-                mostrarNotificacion("Reserva confirmada con éxito");
+                mostrarNotificacion(esEdicion ? "Reserva editada exitosamente" : "Reserva confirmada con éxito");
 
                 // Cerrar el modal de resumen
                 document.getElementById('modal-confirmacion').style.display = 'none';

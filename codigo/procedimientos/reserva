@@ -80,3 +80,100 @@ BEGIN
 END //
 
 DELIMITER ;
+
+=====================================================================================
+
+DELIMITER //
+
+CREATE PROCEDURE SP_EditarReserva(
+    IN p_id_reserva INT,
+    IN p_id_habitacion INT,
+    IN p_fecha_entrada DATE,
+    IN p_fecha_salida DATE
+)
+BEGIN
+    -- Validar si hay cruce con otras reservas (excluyendo la misma)
+    IF EXISTS (
+        SELECT 1
+        FROM reserva
+        WHERE id_habitacion = p_id_habitacion
+          AND id_reserva != p_id_reserva
+          AND estado IN ('Confirmada', 'Pendiente')
+          AND (
+              (p_fecha_entrada BETWEEN fecha_entrada AND fecha_salida)
+              OR
+              (p_fecha_salida BETWEEN fecha_entrada AND fecha_salida)
+              OR
+              (fecha_entrada BETWEEN p_fecha_entrada AND p_fecha_salida)
+          )
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Fechas no disponibles para esta habitación';
+    ELSE
+        -- Actualizar fechas
+        UPDATE reserva
+        SET fecha_entrada = p_fecha_entrada,
+            fecha_salida = p_fecha_salida
+        WHERE id_reserva = p_id_reserva;
+    END IF;
+END //
+
+DELIMITER ;
+
+=====================================================================================
+
+-- 1. Obtener ID de usuario por email
+DROP PROCEDURE IF EXISTS SP_ObtenerIdUsuario;
+DELIMITER //
+CREATE PROCEDURE SP_ObtenerIdUsuario(IN p_email VARCHAR(100))
+BEGIN
+    SELECT id_usuario FROM usuarios WHERE email = p_email;
+END;
+//
+DELIMITER ;
+
+=====================================================================================
+
+-- 2. Validar si habitación está ocupada (excepto la reserva actual)
+DROP PROCEDURE IF EXISTS SP_ValidarHabitacionOcupada;
+DELIMITER //
+CREATE PROCEDURE SP_ValidarHabitacionOcupada(
+    IN p_id_habitacion INT,
+    IN p_id_reserva_actual INT,
+    IN p_fecha_entrada DATE,
+    IN p_fecha_salida DATE
+)
+BEGIN
+    SELECT COUNT(*) AS total_ocupadas
+    FROM reserva
+    WHERE id_habitacion = p_id_habitacion
+      AND id_reserva != p_id_reserva_actual
+      AND fecha_entrada < p_fecha_salida
+      AND fecha_salida > p_fecha_entrada
+      AND estado = 'Confirmada';
+END;
+//
+DELIMITER ;
+
+=====================================================================================
+
+-- 3. Obtener reserva por ID (incluye tipo y nombre de habitación)
+DROP PROCEDURE IF EXISTS SP_ObtenerReservaPorId;
+DELIMITER //
+CREATE PROCEDURE SP_ObtenerReservaPorId(IN p_id INT)
+BEGIN
+    SELECT 
+        r.id_reserva,
+        r.id_habitacion,
+        r.fecha_entrada,
+        r.fecha_salida,
+        r.num_huespedes,
+        r.servicios_adicionales,
+        h.nombre AS nombre_habitacion,
+        h.tipoHabitacion
+    FROM reserva r
+    INNER JOIN habitacion h ON r.id_habitacion = h.id_habitacion
+    WHERE r.id_reserva = p_id;
+END;
+//
+DELIMITER ;
+

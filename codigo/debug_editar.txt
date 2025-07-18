@@ -1,6 +1,6 @@
 Array
 (
-    [accion] => crear
+    [accion] => editar
     [nombre] => Laura
     [apellido] => Portillo
     [tipoDocumento] => CC
@@ -9,8 +9,8 @@ Array
     [email] => lauportillo@cliente.com
     [huesped] => 2
     [tipoHabitacion] => triple
-    [checkIn] => 2025-07-17
-    [checkOut] => 2025-07-28
+    [checkIn] => 2025-07-19
+    [checkOut] => 2025-07-31
     [servicios] => Array
         (
             [0] => Spa
@@ -18,4 +18,5 @@ Array
         )
 
     [id_habitacion] => 3
+    [id_reserva] => 9
 )
