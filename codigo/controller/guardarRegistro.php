@@ -68,13 +68,25 @@ if (isset($_POST['registrarse'])) {
     );
 
     if ($registroExitoso) {
-        // Enviar correo de bienvenida
-        $correo = $data['email'];
-        $nombre = $data['nombre'];
+        // Obtener el ID del usuario recién creado
+        $stmt = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE email = ?");
+        $stmt->execute([$data['email']]);
+        $usuarioInsertado = $stmt->fetch();
 
+        if ($usuarioInsertado) {
+            $idUsuario = $usuarioInsertado['id_usuario'];
+
+            // Insertar fecha de registro usando el modelo de fechas
+            require_once __DIR__ . '/../models/FechaModelo.php';
+            $fechaModel = new FechaModelo($pdo);
+            $fechaModel->registrarFecha($idUsuario, 'registro');
+        }
+
+        // Enviar correo de bienvenida
         $servicioEmail = new ServicioEmail();
         $servicioEmail->enviarCorreoBienvenida($correo, $nombre);
     }
+
 
     header('Location: ../views/login.php');
     exit;

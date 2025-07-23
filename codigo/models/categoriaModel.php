@@ -2,8 +2,8 @@
 class CategoriaModel {
     private $pdo;
 
-    public function __construct() {
-        $this->pdo = require dirname(__DIR__) . '/config/conexionbd.php';
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
     }
 
     public function getAll() {
@@ -25,5 +25,10 @@ class CategoriaModel {
         $stmt = $this->pdo->prepare("CALL sp_eliminar_categoria(?)");
         return $stmt->execute([$id]);
     }
+    public function editar($id, $nombre) {
+    $query = "UPDATE categoria SET nombre = ? WHERE id_categoria = ?";
+    $stmt = $this->pdo->prepare($query);
+    return $stmt->execute([$nombre, $id]);
+}
 }
 ?>

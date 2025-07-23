@@ -1,22 +1,22 @@
 Array
 (
     [accion] => editar
-    [nombre] => Laura
-    [apellido] => Portillo
+    [nombre] => natali
+    [apellido] => velosa
     [tipoDocumento] => CC
-    [numeroDocumento] => 124567890
-    [telefono] => 123456789
-    [email] => lauportillo@cliente.com
+    [numeroDocumento] => 585858585855
+    [telefono] => 121212121211
+    [email] => nv@gmail.com
     [huesped] => 2
-    [tipoHabitacion] => triple
-    [checkIn] => 2025-07-19
-    [checkOut] => 2025-07-31
+    [tipoHabitacion] => doble
+    [checkIn] => 2025-07-29
+    [checkOut] => 2025-07-30
     [servicios] => Array
         (
             [0] => Spa
             [1] => Desayuno Buffet
         )
 
-    [id_habitacion] => 3
-    [id_reserva] => 9
+    [id_habitacion] => 7
+    [id_reserva] => 12
 )

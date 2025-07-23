@@ -57,9 +57,23 @@ if (isset($_POST['guardarEmpleado'])) {
     );
 
     if ($registroExitoso) {
+        // Obtener el ID del usuario recién creado
+        $stmt = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE email = ?");
+        $stmt->execute([$data['email']]);
+        $usuarioInsertado = $stmt->fetch();
+
+        if ($usuarioInsertado) {
+            // Registrar la acción del administrador (quien hizo el registro)
+            require_once __DIR__ . '/../models/FechaModelo.php';
+            $fechaModel = new FechaModelo($pdo);
+            $fechaModel->registrarFecha($_SESSION['usuario']['id_usuario'], 'registro');
+        }
+
+        // Enviar correo de bienvenida
         $servicioEmail = new ServicioEmail();
-        $servicioEmail->enviarCorreoBienvenida($data['email'], $data['nombre']);
+        $servicioEmail->enviarCorreoBienvenida($correo, $nombre);
     }
+
 
     header('Location: ../views/formEmpleados.php?registro=exitoso');
     exit;

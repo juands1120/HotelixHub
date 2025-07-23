@@ -43,30 +43,38 @@ class ReservaController {
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($datos['accion']) && $datos['accion'] === 'editar') {
-            file_put_contents(__DIR__ . '/../debug_editar.txt', print_r($datos, true));
-            try {
-                $id = $datos['id_reserva'];
-                $nuevaEntrada = $datos['checkIn'];
-                $nuevaSalida = $datos['checkOut'];
-                $idHabitacion = $datos['id_habitacion'];
+    file_put_contents(__DIR__ . '/../debug_editar.txt', print_r($datos, true));
+    try {
+        $id = $datos['id_reserva'];
+        $nuevaEntrada = $datos['checkIn'];
+        $nuevaSalida = $datos['checkOut'];
+        $idHabitacion = $datos['id_habitacion'];
+        $id_usuario = $this->model->obtenerIdUsuarioPorEmail($datos['email'] ?? '');
 
-                if ($this->model->habitacionOcupada($idHabitacion, $nuevaEntrada, $nuevaSalida, $id)) {
-                    echo json_encode(['success' => false, 'error' => 'La habitación ya está reservada en ese rango']);
-                    return;
-                }
-
-                $resultado = $this->model->editarReserva($id, $nuevaEntrada, $nuevaSalida);
-
-                if ($resultado) {
-                    echo json_encode(['success' => true, 'mensaje' => 'Reserva actualizada con éxito']);
-                } else {
-                    echo json_encode(['success' => false, 'error' => 'Error al actualizar reserva']);
-                }
-            } catch (Exception $e) {
-                echo json_encode(['success' => false, 'error' => 'Excepción: ' . $e->getMessage()]);
-            }
+        if (!$id_usuario) {
+            echo json_encode(['success' => false, 'error' => 'Usuario no encontrado']);
             return;
         }
+
+        if ($this->model->habitacionOcupada($idHabitacion, $nuevaEntrada, $nuevaSalida, $id)) {
+            echo json_encode(['success' => false, 'error' => 'La habitación ya está reservada en ese rango']);
+            return;
+        }
+
+        $resultado = $this->model->editarReserva($id, $nuevaEntrada, $nuevaSalida);
+
+        if ($resultado) {
+            $this->model->registrarFecha($id_usuario, 'edición');
+            echo json_encode(['success' => true, 'mensaje' => 'Reserva actualizada con éxito']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Error al actualizar reserva']);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => 'Excepción: ' . $e->getMessage()]);
+    }
+    return;
+}
+
 
 
         switch ($accion) {

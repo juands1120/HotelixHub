@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../config/conexionbd.php';
-
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -20,8 +19,13 @@ if (!$email || !$telefono) {
 }
 
 try {
+    // 1. Actualizar los datos del usuario
     $stmt = $pdo->prepare("UPDATE usuarios SET email = ?, numeroTelefono = ? WHERE id_usuario = ?");
     $stmt->execute([$email, $telefono, $idUsuario]);
+
+    // 2. Registrar la fecha de edición en la tabla fechas
+    $insertFecha = $pdo->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'edición')");
+    $insertFecha->execute([$idUsuario]);
 
     echo json_encode(['status' => 'success']);
 } catch (PDOException $e) {

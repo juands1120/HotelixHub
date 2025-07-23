@@ -75,6 +75,12 @@ try {
     } else {
         throw new Exception('No se realizaron cambios en los datos', 400);
     }
+
+        // 2. Registrar la fecha de edición en la tabla fechas
+    $insertFecha = $pdo->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'edición')");
+    $insertFecha->execute([$_SESSION['usuario']['id_usuario']]);
+
+
 } catch (PDOException $e) {
     error_log("PDOException en actualizarEmpleado: " . $e->getMessage());
     http_response_code(500);

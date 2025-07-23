@@ -68,6 +68,10 @@ try {
         throw new Exception('No se realizaron cambios en la contraseña', 400);
     }
 
+    $insertFecha = $pdo->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'edición')");
+    $insertFecha->execute([$idUsuario]);
+
+
     echo json_encode([
         'status' => 'success',
         'message' => 'Contraseña actualizada correctamente'

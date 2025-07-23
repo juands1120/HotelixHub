@@ -1,11 +1,13 @@
 <?php
 require_once '../models/productoModel.php';
+require_once '../config/conexionbd.php'; // Asegúrate que tiene la clase Conexion
+session_start();
 
 header('Content-Type: application/json');
 $accion = $_GET['accion'] ?? '';
 $model = new ProductoModel();
 
-switch($accion) {
+switch ($accion) {
     case 'listar':
         echo json_encode($model->getAll());
         break;
@@ -22,6 +24,17 @@ switch($accion) {
                 'id_categoria' => $_POST['id_categoria']
             ];
             $res = $model->insert($data);
+
+            // Registro en tabla fechas
+            if ($res) {
+                $idUsuario = $_SESSION['usuario']['id_usuario'] ?? null;
+                if ($idUsuario) {
+                    $conn = require '../config/conexionbd.php';
+                    $stmt = $conn->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'registro')");
+                    $stmt->execute([$idUsuario]);
+                }
+            }
+
             echo json_encode(['mensaje' => $res ? 'Producto guardado' : 'Error al guardar']);
         } catch (Exception $e) {
             echo json_encode(['mensaje' => $e->getMessage()]);
@@ -41,6 +54,16 @@ switch($accion) {
                 'id' => $_POST['id']
             ];
             $res = $model->update($data);
+
+            if ($res) {
+                $idUsuario = $_SESSION['usuario']['id_usuario'] ?? null;
+                if ($idUsuario) {
+                    $conn = require '../config/conexionbd.php';
+                    $stmt = $conn->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'edición')");
+                    $stmt->execute([$idUsuario]);
+                }
+            }
+
             echo json_encode(['mensaje' => $res ? 'Producto actualizado' : 'Error al actualizar']);
         } catch (Exception $e) {
             echo json_encode(['mensaje' => $e->getMessage()]);
@@ -50,6 +73,16 @@ switch($accion) {
     case 'eliminar':
         $data = json_decode(file_get_contents('php://input'), true);
         $res = $model->delete($data['id']);
+
+        if ($res) {
+            $idUsuario = $_SESSION['usuario']['id_usuario'] ?? null;
+            if ($idUsuario) {
+                $conn = require '../config/conexionbd.php';
+                $stmt = $conn->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'eliminacion')");
+                $stmt->execute([$idUsuario]);
+            }
+        }
+
         echo json_encode(['mensaje' => $res ? 'Producto eliminado' : 'Error al eliminar']);
         break;
 
@@ -80,6 +113,4 @@ function subirImagen() {
     }
     return '';
 }
-
-
 ?>

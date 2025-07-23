@@ -137,6 +137,16 @@ class ReservaModel {
         }
     }
 
-
+public function registrarFecha($id_usuario, $tipo)
+{
+    try {
+        $stmt = $this->pdo->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (:id_usuario, NOW(), :tipo)");
+        $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt->bindParam(':tipo', $tipo);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        return false;
+    }
+}
 
 }

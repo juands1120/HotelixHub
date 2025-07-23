@@ -134,3 +134,23 @@ Array
         )
 
 )
+Array
+(
+    [nombre] => natali
+    [email] => nv@gmail.com
+    [metodo] => efectivo
+    [tarjeta] => 
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6
+                    [nombre] => Cepillo Dientes
+                    [precio] => 4000
+                    [cantidad] => 1
+                    [imgSrc] => /HotelixHub/codigo/uploads/productos/687fb83f0dcf4-cepillo dientes.png
+                )
+
+        )
+
+)

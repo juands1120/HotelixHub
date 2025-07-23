@@ -60,6 +60,10 @@ try {
         $idUsuario
     ]);
 
+    $insertFecha = $pdo->prepare("INSERT INTO fechas (id_usuario, fecha, tipo) VALUES (?, NOW(), 'edición')");
+    $insertFecha->execute([$idUsuario]);
+
+
     // Actualizar datos en sesión
     $_SESSION['usuario']['email'] = $input['email'];
     $_SESSION['usuario']['numeroTelefono'] = $input['numeroTelefono'];
